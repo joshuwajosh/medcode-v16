@@ -1,0 +1,46 @@
+# ── Core ──────────────────────────────────────────────────────────────
+omophub>=1.7.1
+python-dotenv>=1.0.0
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+pydantic>=2.0.0
+httpx>=0.27.0
+aiohttp>=3.9.0
+requests>=2.31.0
+
+# ── LLM ────────────────────────────────────────────────────────────────
+openai>=1.0.0
+
+# ── Data ────────────────────────────────────────────────────────────────
+pandas>=2.0.0
+aiosqlite>=0.20.0
+
+# ── CLI ────────────────────────────────────────────────────────────────
+rich>=13.0.0
+typer>=0.12.0
+
+# ── Web ────────────────────────────────────────────────────────────────
+jinja2>=3.1.0
+python-multipart>=0.0.9
+sse-starlette>=2.0.0
+
+# ── Dev / Testing ──────────────────────────────────────────────────────
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+
+# ── Security (V19 HIPAA) ─────────────────────────────────────────────
+cryptography>=42.0.0
+PyJWT>=2.8.0
+slowapi>=0.1.9
+passlib>=1.7.4
+python-multipart>=0.0.9
+
+# TLS
+certifi>=2024.0.0
+
+# ── ML / NLP (v5 additions - pure Python, no GPU required) ─────────────
+# Note: ml/clinical_nlp.py uses zero external deps (pure Python stdlib math).
+# Optional: install these for future embedding-based search upgrades:
+# scikit-learn>=1.4.0    # TF-IDF vectorizer, calibration
+# sentence-transformers>=2.7.0  # Dense embeddings for semantic search
+# spacy>=3.7.0           # NLP pipeline (en_core_web_sm model)
