@@ -9,22 +9,40 @@ pipeline = MedcodeDeterministicPipelineV15()
 
 test_cases = [
     {
-        "name": "Case 3: PICU Infant RSV",
-        "note": "4-month-old infant admitted to PICU with severe RSV bronchiolitis requiring mechanical ventilation. Pediatric intensivist provides initial-day comprehensive critical care management.",
+        "name": "Case 1: Principal Care Management",
+        "note": "Principal Care Management services for advanced Parkinson's disease. 75 minutes of qualifying time including ongoing monitoring, medication adjustment, and care coordination with neurology team and home health services.",
+        "expected_cpt": ["99491"],
+        "expected_icd": ["G20"],
+    },
+    {
+        "name": "Case 2: Neonatal Critical Care",
+        "note": "45-day-old infant admitted to PICU with severe neonatal bacterial sepsis and secondary respiratory failure. Active resuscitation CPR, emergency intubation, umbilical venous catheter. Stabilized and admitted to PICU.",
         "expected_cpt": ["99291"],
-        "expected_icd": ["J21.0"],
+        "expected_icd": ["A41.52", "P28.10"],
     },
     {
-        "name": "Case 4: Severe Depression",
-        "note": "35-year-old female established patient at family medicine clinic. Severe depression and suicidal ideation. One acute illness with systemic symptoms. External mental-health records reviewed. Metabolic panel ordered. Critical decision regarding hospitalization evaluated. SSRI therapy initiated.",
-        "expected_cpt": ["99215"],
-        "expected_icd": ["F32.2"],
-    },
-    {
-        "name": "Case 5: AF Follow-up",
-        "note": "72-year-old female established patient at cardiology clinic. Follow-up of stable atrial fibrillation. Total time spent on date of encounter is 27 minutes including chart review 5 min, face-to-face 15 min, prescription review 4 min, documentation 3 min. Low level of MDM documented.",
-        "expected_cpt": ["99213"],
+        "name": "Case 3: Outpatient Cardiology Follow-up",
+        "note": "72-year-old female established patient at cardiology clinic. Routine annual follow-up. Cardiologist performs focused evaluation, reviews lab workup and imaging. Cardiac medication regimen stable. Moderate MDM.",
+        "expected_cpt": ["99214"],
         "expected_icd": ["I48.91"],
+    },
+    {
+        "name": "Case 4: Office Endocrinology Consultation",
+        "note": "50-year-old male established type 2 diabetes referred to endocrinologist for office consultation regarding glycemic control. Comprehensive history, comprehensive physical examination. Adjusts insulin regimen. Written report to referring physician.",
+        "expected_cpt": ["99243"],
+        "expected_icd": ["E11.65"],
+    },
+    {
+        "name": "Case 5: Home Visit for Mobility Limitations",
+        "note": "65-year-old new patient. Primary care physician performs home visit due to severe mobility limitations following recent hip fracture. Detailed evaluation, care plan with home health referral and new prescriptions.",
+        "expected_cpt": ["99350"],
+        "expected_icd": ["M97.11"],
+    },
+    {
+        "name": "Case 6: Independent Medical Evaluation",
+        "note": "Adult sent to primary care clinic by employer's workers' compensation carrier for independent medical evaluation following workplace injury. Evaluating physician has never treated this patient before. Comprehensive evaluation.",
+        "expected_cpt": ["99455"],
+        "expected_icd": ["M54.5"],
     },
     {
         "name": "Case 83: Sepsis E.coli",
@@ -37,24 +55,6 @@ test_cases = [
         "note": "78-year-old female with left hip pain following minor trauma. Emergency department evaluation reveals hip fracture due to age-related osteoporosis.",
         "expected_cpt": ["27230"],
         "expected_icd": ["S72.001A", "M80.061"],
-    },
-    {
-        "name": "Case 1: Continuous Visit",
-        "note": "Hospital inpatient. A continuous patient visit and evaluation spans the transition of two calendar dates. The visit started at 11:30 PM and continued past midnight.",
-        "expected_cpt": ["99221"],
-        "expected_icd": ["R69"],
-    },
-    {
-        "name": "Case 84: Hypertensive Heart CKD",
-        "note": "65-year-old female admitted with hypertensive heart and chronic kidney disease. Manifestations include acute on chronic systolic heart failure alongside end-stage renal disease requiring dialysis.",
-        "expected_cpt": [],
-        "expected_icd": ["I11.0", "N18.6"],
-    },
-    {
-        "name": "Case 59: Asthma ED",
-        "note": "28-year-old female presenting to emergency department with severe asthma and acute respiratory distress. Provider administers continuous positive airway pressure and breathing treatments.",
-        "expected_cpt": ["99284"],
-        "expected_icd": ["J45.41"],
     },
 ]
 
@@ -79,7 +79,7 @@ for i, case in enumerate(test_cases, 1):
     cpt_match = any(ec in cpt_codes for ec in case["expected_cpt"]) if case["expected_cpt"] else True
     
     # Check ICD
-    icd_match = any(ei in icd_codes for ei in case["expected_icd"]) if case["expected_icd"] else True
+    icd_match = all(ei in icd_codes for ei in case["expected_icd"]) if case["expected_icd"] else True
     
     status = "PASS" if (cpt_match and icd_match) else "FAIL"
     if status == "PASS":
