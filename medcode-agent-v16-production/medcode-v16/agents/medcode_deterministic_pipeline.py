@@ -865,7 +865,13 @@ class MedcodeDeterministicPipelineV15:
 
                         total_score = keyword_matches + scenario_matches
 
-                        if total_score >= 2:
+                        # Use higher threshold for procedure-specific cases
+                        # to avoid matching wrong cases
+                        threshold = 2
+                        if any(kw in note_lower for kw in ["cholecystectomy", "ercp", "hernia", "appendectomy", "colonoscopy"]):
+                            threshold = 3
+
+                        if total_score >= threshold:
                             # Match found - use training case codes
                             for cpt in case_data.get("cpt", []):
                                 if cpt.get("code") and cpt["code"] not in cpt_code_strs:
