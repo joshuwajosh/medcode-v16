@@ -47,6 +47,7 @@ health_checker = HealthChecker()
 from api.routes import coding, debug, health as health_routes, history, search, timing
 from api.routes.auth import router as auth_router
 from api.routes.compliance import router as compliance_router
+from api.routes.billing import router as billing_router
 app.include_router(coding.router)
 app.include_router(coding.v1_router)
 app.include_router(debug.router)
@@ -60,6 +61,7 @@ app.include_router(timing.router)
 app.include_router(timing.v1_router)
 app.include_router(auth_router)
 app.include_router(compliance_router)
+app.include_router(billing_router)
 
 # ── Serve frontend static files ─────────────────────────────────────────
 STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
