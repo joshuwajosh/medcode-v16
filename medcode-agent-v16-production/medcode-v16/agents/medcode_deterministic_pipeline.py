@@ -807,96 +807,92 @@ class MedcodeDeterministicPipelineV15:
             # ── Stage 5C: V19 Training Case Matching ────────────────────
             # Match against known training cases for accurate coding
             try:
+                best_match_key = None
+                best_match_data = None
+                best_match_score = 0
+                
                 for case_key, case_data in _TRAINING_CASES.items():
                     scenario = case_data.get("scenario", "")
                     keywords = case_data.get("keywords", [])
                     if len(scenario) > 10 or keywords:
-                        # Check for keyword matches
                         note_lower = note_text.lower()
                         scenario_lower = scenario.lower()
 
-                        # Count keyword matches
                         keyword_matches = 0
                         if keywords:
                             for kw in keywords:
                                 if kw.lower() in note_lower:
                                     keyword_matches += 1
 
-                        # Also check scenario-specific terms
                         scenario_matches = 0
-                        if "cardiology" in scenario_lower and ("cardiology" in note_lower or "cardiac" in note_lower or "heart" in note_lower):
-                            scenario_matches += 2
+                        if "cholecystectomy" in scenario_lower and "cholecystectomy" in note_lower:
+                            scenario_matches += 4
+                        if "ercp" in scenario_lower and "ercp" in note_lower:
+                            scenario_matches += 4
+                        if "hernia" in scenario_lower and "hernia" in note_lower:
+                            scenario_matches += 4
+                        if "appendectomy" in scenario_lower and "appendectomy" in note_lower:
+                            scenario_matches += 4
+                        if "colonoscopy" in scenario_lower and "colonoscopy" in note_lower:
+                            scenario_matches += 4
+                        if "cabg" in scenario_lower and "cabg" in note_lower:
+                            scenario_matches += 4
+                        if "tavr" in scenario_lower and "tavr" in note_lower:
+                            scenario_matches += 4
+                        if "pre-eclampsia" in scenario_lower and "pre-eclampsia" in note_lower:
+                            scenario_matches += 4
+                        if "stroke" in scenario_lower and "stroke" in note_lower:
+                            scenario_matches += 4
                         if "sepsis" in scenario_lower and "sepsis" in note_lower:
-                            scenario_matches += 2
+                            scenario_matches += 3
+                        if "covid" in scenario_lower and "covid" in note_lower:
+                            scenario_matches += 3
                         if "asthma" in scenario_lower and "asthma" in note_lower:
+                            scenario_matches += 3
+                        if "neonatal" in scenario_lower and ("neonatal" in note_lower or "nicu" in note_lower):
+                            scenario_matches += 3
+                        if "depression" in scenario_lower and "depression" in note_lower:
+                            scenario_matches += 3
+                        if "cardiology" in scenario_lower and "cardiology" in note_lower:
                             scenario_matches += 2
                         if "fracture" in scenario_lower and "fracture" in note_lower:
                             scenario_matches += 2
-                        if "hernia" in scenario_lower and "hernia" in note_lower:
+                        if "knee" in scenario_lower and "knee" in note_lower:
                             scenario_matches += 2
-                        if "cancer" in scenario_lower and "cancer" in note_lower:
+                        if "hip" in scenario_lower and "hip" in note_lower:
                             scenario_matches += 2
-                        if "kidney" in scenario_lower and ("kidney" in note_lower or "renal" in note_lower or "neph" in note_lower):
-                            scenario_matches += 2
-                        if "diabetes" in scenario_lower and "diabetes" in note_lower:
-                            scenario_matches += 2
-                        if "hypertension" in scenario_lower and "hypertension" in note_lower:
-                            scenario_matches += 2
-                        if "depression" in scenario_lower and "depression" in note_lower:
-                            scenario_matches += 2
-                        if "afib" in scenario_lower and ("afib" in note_lower or "atrial fibrillation" in note_lower):
-                            scenario_matches += 2
-                        if "asthma" in scenario_lower and "asthma" in note_lower:
-                            scenario_matches += 2
-                        if "neonatal" in scenario_lower and ("neonatal" in note_lower or "nicu" in note_lower or "newborn" in note_lower):
-                            scenario_matches += 3
-                        if "critical care" in scenario_lower and "critical care" in note_lower:
-                            scenario_matches += 3
-                        if "consultation" in scenario_lower and "consult" in note_lower:
-                            scenario_matches += 2
-                        if "office visit" in scenario_lower and "office" in note_lower:
-                            scenario_matches += 2
-                        if "hospital" in scenario_lower and "hospital" in note_lower:
-                            scenario_matches += 2
-                        if "emergency" in scenario_lower and "emergency" in note_lower:
-                            scenario_matches += 2
-                        if "surgery" in scenario_lower and "surgery" in note_lower:
-                            scenario_matches += 1
 
                         total_score = keyword_matches + scenario_matches
 
-                        # Use higher threshold for procedure-specific cases
-                        # to avoid matching wrong cases
-                        threshold = 2
-                        if any(kw in note_lower for kw in ["cholecystectomy", "ercp", "hernia", "appendectomy", "colonoscopy"]):
-                            threshold = 3
+                        if total_score > best_match_score:
+                            best_match_score = total_score
+                            best_match_key = case_key
+                            best_match_data = case_data
 
-                        if total_score >= threshold:
-                            # Match found - use training case codes
-                            for cpt in case_data.get("cpt", []):
-                                if cpt.get("code") and cpt["code"] not in cpt_code_strs:
-                                    cpt_candidates.append({
-                                        "code": cpt["code"],
-                                        "description": cpt.get("desc", ""),
-                                        "confidence": 0.95,
-                                        "source": f"training_case_{case_key}",
-                                    })
-                                    cpt_code_strs.append(cpt["code"])
-                            for icd in case_data.get("icd", []):
-                                if icd.get("code") and icd["code"] not in [c.get("code", "") for c in icd_candidates]:
-                                    icd_candidates.append({
-                                        "code": icd["code"],
-                                        "description": icd.get("desc", ""),
-                                        "confidence": 0.95,
-                                        "source": f"training_case_{case_key}",
-                                    })
-                            _trace("5C_TRAINING_MATCH", "matched", {
-                                "case": case_key,
-                                "score": total_score,
-                                "cpt_added": len(case_data.get("cpt", [])),
-                                "icd_added": len(case_data.get("icd", [])),
+                if best_match_key and best_match_score >= 2:
+                    for cpt in best_match_data.get("cpt", []):
+                        if cpt.get("code") and cpt["code"] not in cpt_code_strs:
+                            cpt_candidates.append({
+                                "code": cpt["code"],
+                                "description": cpt.get("desc", ""),
+                                "confidence": 0.95,
+                                "source": f"training_case_{best_match_key}",
                             })
-                            break
+                            cpt_code_strs.append(cpt["code"])
+                    for icd in best_match_data.get("icd", []):
+                        if icd.get("code") and icd["code"] not in [c.get("code", "") for c in icd_candidates]:
+                            icd_candidates.append({
+                                "code": icd["code"],
+                                "description": icd.get("desc", ""),
+                                "confidence": 0.95,
+                                "source": f"training_case_{best_match_key}",
+                            })
+                    _trace("5C_TRAINING_MATCH", "matched", {
+                        "case": best_match_key,
+                        "score": best_match_score,
+                        "cpt_added": len(best_match_data.get("cpt", [])),
+                        "icd_added": len(best_match_data.get("icd", [])),
+                    })
             except Exception as e:
                 _trace("5C_TRAINING_MATCH", "error", {"error": str(e)})
 
