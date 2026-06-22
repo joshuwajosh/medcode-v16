@@ -1,0 +1,506 @@
+{
+  "summary": {
+    "total_cases": 20,
+    "passed": 2,
+    "failed": 18,
+    "overall_accuracy": 10.0,
+    "cpt_accuracy": 20.0,
+    "icd_accuracy": 40.0,
+    "avg_confidence": 0.8,
+    "total_time_s": 1.3,
+    "avg_time_per_case_s": 0.1
+  },
+  "results": [
+    {
+      "id": 1,
+      "name": "CABG x3 with Endarterectomy",
+      "category": "cardiovascular",
+      "passed": true,
+      "cpt_generated": [
+        "33533"
+      ],
+      "cpt_expected": [
+        "33533",
+        "33572"
+      ],
+      "cpt_match": true,
+      "icd_generated": [
+        "I25.10"
+      ],
+      "icd_expected": [
+        "I25.10"
+      ],
+      "icd_match": true,
+      "confidence": 0.8655,
+      "processing_ms": 51.376299999901676,
+      "elapsed_s": 0.05
+    },
+    {
+      "id": 2,
+      "name": "Severe Sepsis with E. coli",
+      "category": "icd10",
+      "passed": false,
+      "cpt_generated": [
+        "99291"
+      ],
+      "cpt_expected": [],
+      "cpt_match": false,
+      "icd_generated": [
+        "R65.21",
+        "J96.01",
+        "A41.9",
+        "J18.9",
+        "A41.52"
+      ],
+      "icd_expected": [
+        "A41.52",
+        "R65.21"
+      ],
+      "icd_match": true,
+      "confidence": 0.8385,
+      "processing_ms": 71.56839999879594,
+      "elapsed_s": 0.07
+    },
+    {
+      "id": 3,
+      "name": "Laparoscopic Cholecystectomy",
+      "category": "surgery",
+      "passed": false,
+      "cpt_generated": [],
+      "cpt_expected": [
+        "47562"
+      ],
+      "cpt_match": false,
+      "icd_generated": [
+        "K80.20"
+      ],
+      "icd_expected": [
+        "K80.20"
+      ],
+      "icd_match": true,
+      "confidence": 0.771,
+      "processing_ms": 77.70340000024589,
+      "elapsed_s": 0.08
+    },
+    {
+      "id": 4,
+      "name": "Total Knee Replacement",
+      "category": "orthopedics",
+      "passed": false,
+      "cpt_generated": [
+        "27447"
+      ],
+      "cpt_expected": [
+        "27447"
+      ],
+      "cpt_match": true,
+      "icd_generated": [
+        "M17.10"
+      ],
+      "icd_expected": [
+        "M17.11"
+      ],
+      "icd_match": false,
+      "confidence": 0.8438,
+      "processing_ms": 46.61309999937657,
+      "elapsed_s": 0.05
+    },
+    {
+      "id": 5,
+      "name": "Diabetic Foot Ulcer with Cellulitis",
+      "category": "icd10",
+      "passed": false,
+      "cpt_generated": [],
+      "cpt_expected": [],
+      "cpt_match": false,
+      "icd_generated": [
+        "N18.3",
+        "E11.40",
+        "L03.119",
+        "R73.03"
+      ],
+      "icd_expected": [
+        "E11.621",
+        "L03.011",
+        "E11.65"
+      ],
+      "icd_match": false,
+      "confidence": 0.762,
+      "processing_ms": 70.88429999930668,
+      "elapsed_s": 0.07
+    },
+    {
+      "id": 6,
+      "name": "Emergency Department Asthma",
+      "category": "emergency",
+      "passed": false,
+      "cpt_generated": [],
+      "cpt_expected": [
+        "99284"
+      ],
+      "cpt_match": false,
+      "icd_generated": [
+        "J45.901",
+        "J45.909"
+      ],
+      "icd_expected": [
+        "J45.41"
+      ],
+      "icd_match": false,
+      "confidence": 0.7635,
+      "processing_ms": 78.1624000010197,
+      "elapsed_s": 0.08
+    },
+    {
+      "id": 7,
+      "name": "Neonatal Critical Care NICU Day 6",
+      "category": "neonatal",
+      "passed": true,
+      "cpt_generated": [
+        "99469",
+        "99291"
+      ],
+      "cpt_expected": [
+        "99469"
+      ],
+      "cpt_match": true,
+      "icd_generated": [
+        "P07.15",
+        "P22.0",
+        "P28.4",
+        "Q25.0",
+        "P59.9"
+      ],
+      "icd_expected": [
+        "P07.15",
+        "P22.0",
+        "P28.4",
+        "Q25.0",
+        "P59.9",
+        "P92.9"
+      ],
+      "icd_match": true,
+      "confidence": 0.8153,
+      "processing_ms": 52.64700000043376,
+      "elapsed_s": 0.05
+    },
+    {
+      "id": 8,
+      "name": "Severe Depression with Suicidal Ideation",
+      "category": "em",
+      "passed": false,
+      "cpt_generated": [
+        "71048"
+      ],
+      "cpt_expected": [
+        "99215"
+      ],
+      "cpt_match": false,
+      "icd_generated": [
+        "I21.3",
+        "S22.49XA"
+      ],
+      "icd_expected": [
+        "F32.2",
+        "R45.851"
+      ],
+      "icd_match": false,
+      "confidence": 0.8445,
+      "processing_ms": 43.479399999341695,
+      "elapsed_s": 0.04
+    },
+    {
+      "id": 9,
+      "name": "Atrial Fibrillation Follow-up",
+      "category": "em",
+      "passed": false,
+      "cpt_generated": [
+        "99214"
+      ],
+      "cpt_expected": [
+        "99213"
+      ],
+      "cpt_match": false,
+      "icd_generated": [
+        "I48.91"
+      ],
+      "icd_expected": [
+        "I48.91"
+      ],
+      "icd_match": true,
+      "confidence": 0.8155,
+      "processing_ms": 68.35359999968205,
+      "elapsed_s": 0.07
+    },
+    {
+      "id": 10,
+      "name": "COVID-19 with E. coli Sepsis",
+      "category": "icd10",
+      "passed": false,
+      "cpt_generated": [
+        "99291"
+      ],
+      "cpt_expected": [],
+      "cpt_match": false,
+      "icd_generated": [
+        "R65.21",
+        "R65.20",
+        "E11.9",
+        "A41.9",
+        "A41.52"
+      ],
+      "icd_expected": [
+        "J12.82",
+        "A41.52",
+        "R65.21",
+        "E11.9",
+        "N17.0"
+      ],
+      "icd_match": false,
+      "confidence": 0.8306,
+      "processing_ms": 82.71750000130851,
+      "elapsed_s": 0.08
+    },
+    {
+      "id": 11,
+      "name": "Hip Fracture with Osteoporosis",
+      "category": "orthopedics",
+      "passed": false,
+      "cpt_generated": [
+        "27230",
+        "99350"
+      ],
+      "cpt_expected": [
+        "27230"
+      ],
+      "cpt_match": true,
+      "icd_generated": [
+        "S72.009A",
+        "M97.11",
+        "Z87.39"
+      ],
+      "icd_expected": [
+        "S72.001A",
+        "M80.061"
+      ],
+      "icd_match": false,
+      "confidence": 0.8297,
+      "processing_ms": 38.74849999920116,
+      "elapsed_s": 0.04
+    },
+    {
+      "id": 12,
+      "name": "ERCP with Stent Exchange",
+      "category": "gi",
+      "passed": false,
+      "cpt_generated": [],
+      "cpt_expected": [
+        "43275"
+      ],
+      "cpt_match": false,
+      "icd_generated": [],
+      "icd_expected": [
+        "K86.1"
+      ],
+      "icd_match": false,
+      "confidence": 0.55,
+      "processing_ms": 80.73499999954947,
+      "elapsed_s": 0.08
+    },
+    {
+      "id": 13,
+      "name": "Colonoscopy with Polypectomy",
+      "category": "gi",
+      "passed": false,
+      "cpt_generated": [
+        "47100"
+      ],
+      "cpt_expected": [
+        "45385"
+      ],
+      "cpt_match": false,
+      "icd_generated": [],
+      "icd_expected": [
+        "Z12.11"
+      ],
+      "icd_match": false,
+      "confidence": 0.682,
+      "processing_ms": 47.137699999439064,
+      "elapsed_s": 0.05
+    },
+    {
+      "id": 14,
+      "name": "CABG x3 with Radial Artery",
+      "category": "cardiovascular",
+      "passed": false,
+      "cpt_generated": [
+        "33535"
+      ],
+      "cpt_expected": [
+        "33533",
+        "33534",
+        "33518"
+      ],
+      "cpt_match": false,
+      "icd_generated": [
+        "I25.10",
+        "I51.5"
+      ],
+      "icd_expected": [
+        "I25.10"
+      ],
+      "icd_match": true,
+      "confidence": 0.8762,
+      "processing_ms": 51.52959999941231,
+      "elapsed_s": 0.05
+    },
+    {
+      "id": 15,
+      "name": "Pneumonia with Sepsis",
+      "category": "icd10",
+      "passed": false,
+      "cpt_generated": [
+        "99291"
+      ],
+      "cpt_expected": [],
+      "cpt_match": false,
+      "icd_generated": [
+        "B95.61",
+        "J96.01",
+        "R65.20",
+        "A41.9",
+        "J18.9"
+      ],
+      "icd_expected": [
+        "A41.0",
+        "R65.21",
+        "J96.01",
+        "N17.0"
+      ],
+      "icd_match": false,
+      "confidence": 0.8411,
+      "processing_ms": 74.24499999979162,
+      "elapsed_s": 0.07
+    },
+    {
+      "id": 16,
+      "name": "TAVR for Aortic Stenosis",
+      "category": "cardiovascular",
+      "passed": false,
+      "cpt_generated": [],
+      "cpt_expected": [
+        "33361"
+      ],
+      "cpt_match": false,
+      "icd_generated": [
+        "I35.0"
+      ],
+      "icd_expected": [
+        "I35.0"
+      ],
+      "icd_match": true,
+      "confidence": 0.776,
+      "processing_ms": 75.6809999984398,
+      "elapsed_s": 0.08
+    },
+    {
+      "id": 17,
+      "name": "Sepsis with MRSA from Surgical Wound",
+      "category": "icd10",
+      "passed": false,
+      "cpt_generated": [
+        "99291"
+      ],
+      "cpt_expected": [],
+      "cpt_match": false,
+      "icd_generated": [
+        "I21.3",
+        "B95.61",
+        "J96.01",
+        "Z85.118",
+        "C34.10"
+      ],
+      "icd_expected": [
+        "A41.0",
+        "J96.01",
+        "N17.0"
+      ],
+      "icd_match": false,
+      "confidence": 0.8352,
+      "processing_ms": 70.34190000013041,
+      "elapsed_s": 0.07
+    },
+    {
+      "id": 18,
+      "name": "Pre-eclampsia with HELLP",
+      "category": "icd10",
+      "passed": false,
+      "cpt_generated": [
+        "01950"
+      ],
+      "cpt_expected": [],
+      "cpt_match": false,
+      "icd_generated": [
+        "N18.3",
+        "E10.9",
+        "G40.919",
+        "K44.9"
+      ],
+      "icd_expected": [
+        "O14.14",
+        "O15.0",
+        "O14.24",
+        "E10.9",
+        "N18.31"
+      ],
+      "icd_match": false,
+      "confidence": 0.8478,
+      "processing_ms": 45.85620000034396,
+      "elapsed_s": 0.05
+    },
+    {
+      "id": 19,
+      "name": "Inguinal Hernia Repair",
+      "category": "surgery",
+      "passed": false,
+      "cpt_generated": [
+        "01951"
+      ],
+      "cpt_expected": [
+        "49560"
+      ],
+      "cpt_match": false,
+      "icd_generated": [
+        "K40.90",
+        "K43.1"
+      ],
+      "icd_expected": [
+        "K40.90"
+      ],
+      "icd_match": true,
+      "confidence": 0.832,
+      "processing_ms": 55.53630000031262,
+      "elapsed_s": 0.06
+    },
+    {
+      "id": 20,
+      "name": "Stroke with Hemiparesis",
+      "category": "icd10",
+      "passed": false,
+      "cpt_generated": [],
+      "cpt_expected": [],
+      "cpt_match": false,
+      "icd_generated": [
+        "I63.9"
+      ],
+      "icd_expected": [
+        "I63.51",
+        "I69.354"
+      ],
+      "icd_match": false,
+      "confidence": 0.8045,
+      "processing_ms": 71.13869999921008,
+      "elapsed_s": 0.07
+    }
+  ]
+}
