@@ -1115,19 +1115,27 @@ class MedcodeDeterministicPipelineV15:
                             "recommendation": add_on["recommendation"],
                         })
                 # Check for specificity conflicts — remove less-specific codes
+                # BUT preserve codes that came from training case matching (expert-curated)
                 cross_code = guideline_analysis.get("_cross_code", {})
                 specificity = cross_code.get("specificity", {})
                 if specificity.get("applicable"):
                     conflicting = specificity.get("conflicting_codes", [])
                     if conflicting:
-                        # Remove less-specific codes from candidates
-                        cpt_candidates = [
-                            c for c in cpt_candidates
-                            if c.get("code", "") not in conflicting
-                        ]
-                        cpt_code_strs = [
-                            c for c in cpt_code_strs if c not in conflicting
-                        ]
+                        # Collect training case codes to preserve
+                        training_codes = {
+                            c.get("code") for c in cpt_candidates
+                            if c.get("source", "").startswith("training_case_")
+                        }
+                        # Only remove conflicting codes that are NOT from training cases
+                        safe_conflicts = [c for c in conflicting if c not in training_codes]
+                        if safe_conflicts:
+                            cpt_candidates = [
+                                c for c in cpt_candidates
+                                if c.get("code", "") not in safe_conflicts
+                            ]
+                            cpt_code_strs = [
+                                c for c in cpt_code_strs if c not in safe_conflicts
+                            ]
                 _trace("7B_CPT_GUIDELINES", "analyzed", {
                     "codes_analyzed": len([k for k in guideline_analysis if not k.startswith("_")]),
                     "add_on_violations": len(add_on_violations),

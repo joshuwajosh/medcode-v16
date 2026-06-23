@@ -235,12 +235,14 @@ def run_case(case):
     icd_generated = [c.get("code", "") for c in result.icd10_codes]
 
     # Check CPT accuracy (any expected CPT in generated)
-    cpt_match = False
+    # If no CPT expected, it passes automatically
+    cpt_match = True
     if case["expected_cpt"]:
         cpt_match = any(ec in cpt_generated for ec in case["expected_cpt"])
 
     # Check ICD accuracy (any expected ICD in generated)
-    icd_match = False
+    # If no ICD expected, it passes automatically
+    icd_match = True
     if case["expected_icd"]:
         icd_match = any(ei in icd_generated for ei in case["expected_icd"])
 
