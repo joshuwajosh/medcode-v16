@@ -88,6 +88,10 @@ from knowledge.em_engine_v19 import assess_em, select_em_by_time, calculate_mdm_
 from knowledge.icd10_engine_v19 import search_codes as icd10_search, lookup_code as icd10_lookup, ICD10_CHAPTERS
 from knowledge.training_cases_v19 import get_case_answer, search_cases as search_cases_by_keyword, get_all_cases as _get_all_training_cases
 
+# OCR Book Engines
+from knowledge.cpt_book_engine import get_engine as get_cpt_book_engine, lookup_cpt as cpt_book_lookup, search_cpt as cpt_book_search
+from knowledge.icd_book_engine import get_engine as get_icd_book_engine, lookup_icd as icd_book_lookup, search_icd as icd_book_search
+
 # Load training cases at module level
 _TRAINING_CASES = _get_all_training_cases()
 
@@ -915,6 +919,32 @@ class MedcodeDeterministicPipelineV15:
             except Exception:
                 pass
 
+            # ── Stage 5D: ICD Book Engine Search ──────────────────────
+            # Search the ICD-10-CM book OCR engine for supplementary codes
+            try:
+                icd_book_results = []
+                for term in codeable_diagnoses[:5]:
+                    book_results = icd_book_search(term, limit=3)
+                    for br in book_results:
+                        br_code = br.get("code", "")
+                        if br_code and br_code not in icd_code_strs and br_code not in [c.get("code", "") for c in icd_book_results]:
+                            icd_book_results.append({
+                                "code": br_code,
+                                "description": br.get("desc", br.get("description", "")),
+                                "confidence": 0.65,
+                                "source": "icd_book_engine",
+                                "category": br.get("category", ""),
+                                "chapter": br.get("chapter", ""),
+                            })
+                if icd_book_results:
+                    icd_candidates.extend(icd_book_results[:5])
+                    _trace("5D_ICD_BOOK", "enhanced", {
+                        "enhanced_count": len(icd_book_results),
+                        "terms_searched": codeable_diagnoses[:5],
+                    })
+            except Exception as e:
+                _trace("5D_ICD_BOOK", "error", {"error": str(e)})
+
             # ── Stage 5B: V16 ICD Clinical Reasoning ──────────────────────
             try:
                 icd_reasoning = self._icd_reasoning.analyze(note_text, icd_code_strs)
@@ -1143,6 +1173,35 @@ class MedcodeDeterministicPipelineV15:
                 })
             except Exception as e:
                 result.cpt_guideline_analysis = {"error": str(e)}
+
+            # ── Stage 7D: CPT Book Engine Search ──────────────────────
+            # Search the CPT book OCR engine for supplementary procedure codes
+            try:
+                cpt_book_results = []
+                for term in (getattr(facts, "keywords", []) or [])[:5]:
+                    book_results = cpt_book_search(term, limit=3)
+                    for br in book_results:
+                        br_code = br.get("code", "")
+                        if br_code and br_code not in cpt_code_strs and br_code not in [c.get("code", "") for c in cpt_book_results]:
+                            detected_cat = br.get("category", "")
+                            is_em = detected_cat == "E/M" or br_code.startswith("992") or br_code.startswith("993")
+                            if not is_em:
+                                cpt_book_results.append({
+                                    "code": br_code,
+                                    "description": br.get("desc", br.get("description", "")),
+                                    "confidence": 0.60,
+                                    "source": "cpt_book_engine",
+                                    "category": detected_cat,
+                                })
+                if cpt_book_results:
+                    cpt_candidates.extend(cpt_book_results[:5])
+                    cpt_code_strs.extend([c["code"] for c in cpt_book_results[:5]])
+                    _trace("7D_CPT_BOOK", "enhanced", {
+                        "enhanced_count": len(cpt_book_results),
+                        "terms_searched": (getattr(facts, "keywords", []) or [])[:5],
+                    })
+            except Exception as e:
+                _trace("7D_CPT_BOOK", "error", {"error": str(e)})
 
             # ── Stage 8: Global Period Validation (V16 full) ───────────────
             global_results = {}

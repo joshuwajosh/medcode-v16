@@ -48,6 +48,7 @@ from api.routes import coding, debug, health as health_routes, history, search, 
 from api.routes.auth import router as auth_router
 from api.routes.compliance import router as compliance_router
 from api.routes.billing import router as billing_router
+from api.routes.clinical_notes import router as clinical_notes_router
 app.include_router(coding.router)
 app.include_router(coding.v1_router)
 app.include_router(debug.router)
@@ -62,6 +63,7 @@ app.include_router(timing.v1_router)
 app.include_router(auth_router)
 app.include_router(compliance_router)
 app.include_router(billing_router)
+app.include_router(clinical_notes_router)
 
 # ── Serve frontend static files ─────────────────────────────────────────
 STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")

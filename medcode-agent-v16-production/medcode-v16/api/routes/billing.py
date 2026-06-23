@@ -124,3 +124,149 @@ async def place_of_service_codes():
     """Get place of service code descriptions."""
     from billing.claim_engine import POS_DESCRIPTIONS
     return {"pos_codes": POS_DESCRIPTIONS}
+
+
+# ── CMS-1500 / UB-04 / EDI 837 / Submission Workflow Routes ────────
+
+
+class CMS1500Request(BaseModel):
+    cpt_codes: List[Dict]
+    icd_codes: List[Dict]
+    patient_info: Optional[Dict] = None
+    provider_info: Optional[Dict] = None
+
+
+@router.post("/cms1500")
+async def generate_cms1500(body: CMS1500Request):
+    """Generate CMS-1500 (professional claim) form data."""
+    from billing.claim_engine import get_claim_generator
+    from billing.cms1500_generator import CMS1500Generator
+
+    generator = get_claim_generator()
+    claim = generator.generate_claim(
+        cpt_codes=body.cpt_codes,
+        icd_codes=body.icd_codes,
+        patient_info=body.patient_info,
+        provider_info=body.provider_info,
+    )
+    cms_gen = CMS1500Generator()
+    form_data = cms_gen.generate(claim)
+    return form_data
+
+
+class UB04Request(BaseModel):
+    cpt_codes: List[Dict]
+    icd_codes: List[Dict]
+    patient_info: Optional[Dict] = None
+    provider_info: Optional[Dict] = None
+
+
+@router.post("/ub04")
+async def generate_ub04(body: UB04Request):
+    """Generate UB-04 (institutional claim) form data."""
+    from billing.claim_engine import get_claim_generator
+    from billing.ub04_generator import UB04Generator
+
+    generator = get_claim_generator()
+    claim = generator.generate_claim(
+        cpt_codes=body.cpt_codes,
+        icd_codes=body.icd_codes,
+        patient_info=body.patient_info,
+        provider_info=body.provider_info,
+    )
+    claim.claim_type = "institutional"
+    ub_gen = UB04Generator()
+    form_data = ub_gen.generate(claim)
+    return form_data
+
+
+class EDI837Request(BaseModel):
+    cpt_codes: List[Dict]
+    icd_codes: List[Dict]
+    patient_info: Optional[Dict] = None
+    provider_info: Optional[Dict] = None
+    edi_type: str = "837P"
+
+
+@router.post("/edi-837")
+async def generate_edi_837(body: EDI837Request):
+    """Generate EDI 837 (professional or institutional) file."""
+    from billing.claim_engine import get_claim_generator
+    from billing.edi_837 import EDI837Generator
+
+    generator = get_claim_generator()
+    claim = generator.generate_claim(
+        cpt_codes=body.cpt_codes,
+        icd_codes=body.icd_codes,
+        patient_info=body.patient_info,
+        provider_info=body.provider_info,
+    )
+
+    edi_gen = EDI837Generator()
+    if body.edi_type.upper() == "837I":
+        result = edi_gen.generate_837i(claim)
+    else:
+        result = edi_gen.generate_837p(claim)
+
+    return result
+
+
+class SubmitClaimRequest(BaseModel):
+    cpt_codes: List[Dict]
+    icd_codes: List[Dict]
+    patient_info: Optional[Dict] = None
+    provider_info: Optional[Dict] = None
+
+
+@router.post("/submit-claim")
+async def submit_claim(body: SubmitClaimRequest):
+    """Execute full claim submission workflow: generate -> validate -> EDI -> track."""
+    from billing.submission_workflow import ClaimSubmissionWorkflow
+
+    workflow = ClaimSubmissionWorkflow()
+    claim_data = {
+        "cpt_codes": body.cpt_codes,
+        "icd_codes": body.icd_codes,
+        "patient_info": body.patient_info or {},
+        "provider_info": body.provider_info or {},
+    }
+    result = workflow.full_submit(claim_data)
+    return result
+
+
+@router.get("/claim-status/{claim_id}")
+async def get_claim_status(claim_id: str):
+    """Check claim status and history."""
+    from billing.claim_tracker import ClaimTracker
+
+    tracker = ClaimTracker()
+    status = tracker.get_status(claim_id)
+    history = tracker.get_history(claim_id)
+
+    if "error" in status:
+        raise HTTPException(status_code=404, detail=status["error"])
+
+    return {
+        "status": status,
+        "history": history,
+    }
+
+
+@router.get("/payer-rules/{payer}")
+async def get_payer_rules(payer: str):
+    """Get payer-specific rules and requirements."""
+    from billing.payer_rules import PayerRules
+
+    rules = PayerRules()
+    config = rules.get_payer_config(payer)
+
+    if not config:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No configuration found for payer '{payer}'",
+        )
+
+    return {
+        "payer_name": payer,
+        "config": config,
+    }
