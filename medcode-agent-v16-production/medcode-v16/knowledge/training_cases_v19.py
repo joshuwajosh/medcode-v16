@@ -1,5 +1,5 @@
-"""
-MedCode AI V19 — Complete Training Knowledge Base
+﻿"""
+MedCode AI V19 â€” Complete Training Knowledge Base
 ===========================================================
 Accurate CPT and ICD-10 answers for ALL cases from the mock exams.
 Based on CPT 2026 and ICD-10-CM 2026 guidelines.
@@ -7,14 +7,14 @@ Based on CPT 2026 and ICD-10-CM 2026 guidelines.
 from __future__ import annotations
 from typing import Dict, List, Optional
 
-# ═══════════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # ALL 200 CASES WITH ACCURATE CPT AND ICD-10 ANSWERS
-# ═══════════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 ALL_CASES = {
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # E/M & CARE MANAGEMENT CASES (1-6, 63-65, 91)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_1": {
         "category": "E/M",
         "scenario": "Principal Care Management, 72yo, 75 minutes, advanced Parkinson",
@@ -63,7 +63,7 @@ ALL_CASES = {
         "icd": [{"code": "M54.5", "desc": "Low back pain"}],
         "rule": "Workers comp evaluation = 99455.",
     },
-    # ═══ SURGERY CASES WITH KEYWORDS ═══════════════════════════════════════
+    # â•â•â• SURGERY CASES WITH KEYWORDS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_11": {
         "category": "Surgery",
         "scenario": "Adult, scar tattooing 5 sq cm hypopigmented scar right cheek",
@@ -331,7 +331,7 @@ ALL_CASES = {
         "icd": [{"code": "G89.29", "desc": "Other chronic pain"}, {"code": "M54.5", "desc": "Low back pain"}],
         "rule": "SCS trial phase = 63650.",
     },
-    # ═══ CARDIOVASCULAR WITH KEYWORDS ═══════════════════════════════════════
+    # â•â•â• CARDIOVASCULAR WITH KEYWORDS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_22": {
         "category": "Cardiovascular",
         "scenario": "12yo boy, congenital pulmonary valve stenosis, transcatheter valve implantation",
@@ -390,7 +390,7 @@ ALL_CASES = {
         "icd": [{"code": "I25.10", "desc": "Atherosclerotic heart disease"}],
         "rule": "CABG 2 arterial + 3 venous: 33533 (LIMA) + 33534 (radial) + 33518 (vein grafts).",
     },
-    # ═══ DIGESTIVE WITH KEYWORDS ═══════════════════════════════════════════
+    # â•â•â• DIGESTIVE WITH KEYWORDS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_28di": {
         "category": "Digestive",
         "scenario": "40yo male, rigid esophagoscopy, balloon dilation of stricture",
@@ -447,7 +447,7 @@ ALL_CASES = {
         "icd": [{"code": "C19", "desc": "Malignant neoplasm of rectosigmoid junction"}],
         "rule": "Open low anterior resection = 44110.",
     },
-    # ═══ URINARY/GENITAL WITH KEYWORDS ═══════════════════════════════════════
+    # â•â•â• URINARY/GENITAL WITH KEYWORDS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_35ug": {
         "category": "Urinary/Genital",
         "scenario": "58yo male, inflatable penile prosthesis, single-unit self-contained",
@@ -539,9 +539,9 @@ ALL_CASES = {
         "rule": "1 stable chronic + limited data + low risk = 99213.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # ANESTHESIA CASES (7-10, 66)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_7": {
         "category": "Anesthesia",
         "scenario": "58yo ASA P3, open incisional hernia repair, 75 min anesthesia",
@@ -578,9 +578,9 @@ ALL_CASES = {
         "rule": "CABG anesthesia = 00561.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # INTEGUMENTARY CASES (11-17)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_11": {
         "category": "Integumentary",
         "scenario": "Adult, scar tattooing 5 sq cm hypopigmented scar right cheek",
@@ -647,9 +647,9 @@ ALL_CASES = {
         "rule": "Simple subcutaneous abscess I&D = 10060.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # MUSCULOSKELETAL CASES (18-21, 34)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_18": {
         "category": "Musculoskeletal",
         "scenario": "78yo female, kyphoplasty 3 levels L2-L4, bilateral approach each level",
@@ -658,7 +658,7 @@ ALL_CASES = {
             {"code": "22511", "desc": "Each additional level", "reason": "L3 and L4 = 2 additional levels"},
         ],
         "icd": [{"code": "M80.08", "desc": "Osteoporosis with pathological fracture vertebrae"}],
-        "rule": "Kyphoplasty: 22510 (first) + 22511 (each additional). 3 levels = 22510 + 2×22511.",
+        "rule": "Kyphoplasty: 22510 (first) + 22511 (each additional). 3 levels = 22510 + 2Ã—22511.",
     },
     "case_19": {
         "category": "Musculoskeletal",
@@ -689,9 +689,9 @@ ALL_CASES = {
         "rule": "Open reduction of SC dislocation = 23525.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # CARDIOVASCULAR CASES (22-27)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_22": {
         "category": "Cardiovascular",
         "scenario": "12yo male, congenital PV stenosis, percutaneous transcatheter PV implantation",
@@ -745,9 +745,9 @@ ALL_CASES = {
         "rule": "CABG 2 arterial + 3 venous: 33533 (LIMA) + 33534 (radial) + 33518 (vein grafts).",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # DIGESTIVE SYSTEM CASES (28-33, 69)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_28": {
         "category": "Digestive",
         "scenario": "40yo male, rigid esophagoscopy, balloon dilation of stricture",
@@ -798,9 +798,9 @@ ALL_CASES = {
         "rule": "Open low anterior resection = 44110.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # URINARY/GENITAL CASES (35-40, 70)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_35": {
         "category": "Urinary/Genital",
         "scenario": "58yo male, inflatable penile prosthesis, single-unit self-contained",
@@ -854,9 +854,9 @@ ALL_CASES = {
         "rule": "Hydrocele repair bottle technique = 55430.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # NERVOUS SYSTEM CASES (41-46, 71)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_41": {
         "category": "Nervous",
         "scenario": "6yo pediatric, head injury, left SDH, 3 burr holes, evacuate hematoma",
@@ -913,9 +913,9 @@ ALL_CASES = {
         "rule": "SCS trial phase = 63650.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # RADIOLOGY CASES (72-78, 93)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_72": {
         "category": "Radiology",
         "scenario": "28yo male, chest X-ray 4 views, split billing (hospital tech + radiologist prof)",
@@ -982,9 +982,9 @@ ALL_CASES = {
         "rule": "Screening converted to diagnostic: 77067 + 77063 (modifier -59 for separate service).",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # PATHOLOGY/LAB CASES (79-84, 94)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_79": {
         "category": "Pathology",
         "scenario": "Adult, 3 individual chemistry tests: CO2, Chloride, Sodium (NOT K)",
@@ -1037,14 +1037,14 @@ ALL_CASES = {
     "case_94": {
         "category": "Pathology",
         "scenario": "IHC staining on single tissue block, 4 antibodies, 4 slides",
-        "cpt": [{"code": "88342", "desc": "IHC staining per antibody", "reason": "4 antibodies = 4 × 88342"}],
+        "cpt": [{"code": "88342", "desc": "IHC staining per antibody", "reason": "4 antibodies = 4 Ã— 88342"}],
         "icd": [],
-        "rule": "IHC staining = 88342 per antibody. 4 antibodies = 4 × 88342.",
+        "rule": "IHC staining = 88342 per antibody. 4 antibodies = 4 Ã— 88342.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # MEDICINE/INFUSIONS CASES (85-90)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_85": {
         "category": "Medicine",
         "scenario": "58yo male, multi-vessel PCI: RCA PTCA + stent, LAD atherectomy + angioplasty + stent, LCX stent only",
@@ -1099,9 +1099,9 @@ ALL_CASES = {
         "rule": "Home infusion = 90784.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # MEDICAL ANATOMY/PATHOLOGY KNOWLEDGE (47-54)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_47": {"category": "Knowledge", "scenario": "Phalanges definition", "answer": "Phalanges are bones of fingers and toes.", "cpt": [], "icd": []},
     "case_48": {"category": "Knowledge", "scenario": "Warthin's tumor definition", "answer": "Benign salivary gland neoplasm, parotid.", "cpt": [], "icd": []},
     "case_49": {"category": "Knowledge", "scenario": "Meningitis definition", "answer": "Inflammation of meninges covering brain and spinal cord.", "cpt": [], "icd": []},
@@ -1111,9 +1111,9 @@ ALL_CASES = {
     "case_53": {"category": "Knowledge", "scenario": "Mediastinum definition", "answer": "Central thoracic compartment containing heart, great vessels, esophagus, trachea.", "cpt": [], "icd": []},
     "case_54": {"category": "Knowledge", "scenario": "Venous valves definition", "answer": "Valves ensuring unidirectional blood flow toward heart.", "cpt": [], "icd": []},
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # ICD-10 SEQUENCING CASES (55-62)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_55": {
         "category": "ICD10",
         "scenario": "55yo female, breast cancer hx, vertebral metastasis T8, path fracture, anemia chemo",
@@ -1124,7 +1124,7 @@ ALL_CASES = {
             {"code": "D64.9", "desc": "Anemia, unspecified"},
             {"code": "G89.29", "desc": "Other chronic pain"},
         ],
-        "rule": "Sequencing: C79.31 (metastasis) first → M81.9 (path fracture) → D64.9 (anemia) → G89.29 (pain).",
+        "rule": "Sequencing: C79.31 (metastasis) first â†’ M81.9 (path fracture) â†’ D64.9 (anemia) â†’ G89.29 (pain).",
     },
     "case_56": {
         "category": "ICD10",
@@ -1137,7 +1137,7 @@ ALL_CASES = {
             {"code": "E10.9", "desc": "Type 1 diabetes without complications"},
             {"code": "N18.31", "desc": "CKD stage 3a"},
         ],
-        "rule": "Sequencing: O14.14 (pre-eclampsia) → O15.0 (eclampsia) → O14.24 (HELLP) → E10.9 (T1DM) → N18.31 (CKD).",
+        "rule": "Sequencing: O14.14 (pre-eclampsia) â†’ O15.0 (eclampsia) â†’ O14.24 (HELLP) â†’ E10.9 (T1DM) â†’ N18.31 (CKD).",
     },
     "case_57": {
         "category": "ICD10",
@@ -1149,7 +1149,7 @@ ALL_CASES = {
             {"code": "J96.01", "desc": "Acute respiratory failure with hypoxia"},
             {"code": "N17.0", "desc": "Acute kidney failure"},
         ],
-        "rule": "Sequencing: A41.0 (MRSA sepsis) → T80.211A (surgical site infection) → J96.01 (RF) → N17.0 (AKI).",
+        "rule": "Sequencing: A41.0 (MRSA sepsis) â†’ T80.211A (surgical site infection) â†’ J96.01 (RF) â†’ N17.0 (AKI).",
     },
     "case_58": {
         "category": "ICD10",
@@ -1160,7 +1160,7 @@ ALL_CASES = {
             {"code": "G93.1", "desc": "Anoxic brain damage"},
             {"code": "J69.0", "desc": "Aspiration pneumonia"},
         ],
-        "rule": "Sequencing: T75.1XXA (near-drowning) → G93.1 (anoxic brain) → J69.0 (aspiration pneumonia).",
+        "rule": "Sequencing: T75.1XXA (near-drowning) â†’ G93.1 (anoxic brain) â†’ J69.0 (aspiration pneumonia).",
     },
     "case_59": {
         "category": "ICD10",
@@ -1175,7 +1175,7 @@ ALL_CASES = {
             {"code": "I10", "desc": "Essential hypertension"},
             {"code": "E78.5", "desc": "Hyperlipidemia, unspecified"},
         ],
-        "rule": "Sequencing: E11.621 (diabetic foot ulcer) first → L03.011 (cellulitis) → E11.65 (hyperglycemia) → E11.40 (neuropathy) → N18.32 (CKD) → I10 (HTN) → E78.5 (lipids).",
+        "rule": "Sequencing: E11.621 (diabetic foot ulcer) first â†’ L03.011 (cellulitis) â†’ E11.65 (hyperglycemia) â†’ E11.40 (neuropathy) â†’ N18.32 (CKD) â†’ I10 (HTN) â†’ E78.5 (lipids).",
     },
     "case_60": {
         "category": "ICD10",
@@ -1185,7 +1185,7 @@ ALL_CASES = {
             {"code": "I16.0", "desc": "Hypertensive emergency"},
             {"code": "I63.9", "desc": "Cerebral infarction, unspecified"},
         ],
-        "rule": "Sequencing: I16.0 (hypertensive emergency) → I63.9 (cerebral infarction).",
+        "rule": "Sequencing: I16.0 (hypertensive emergency) â†’ I63.9 (cerebral infarction).",
     },
     "case_61": {
         "category": "ICD10",
@@ -1195,7 +1195,7 @@ ALL_CASES = {
             {"code": "H40.11", "desc": "Primary open-angle glaucoma, mild"},
             {"code": "H40.12", "desc": "Primary open-angle glaucoma, severe"},
         ],
-        "rule": "Sequencing: H40.11 (mild on admission) → H40.12 (severe at discharge). Code both to show progression.",
+        "rule": "Sequencing: H40.11 (mild on admission) â†’ H40.12 (severe at discharge). Code both to show progression.",
     },
     "case_62": {
         "category": "ICD10",
@@ -1205,12 +1205,12 @@ ALL_CASES = {
             {"code": "A41.0", "desc": "Sepsis due to S. aureus"},
             {"code": "T84.54XA", "desc": "Infection of internal joint prosthesis, initial encounter"},
         ],
-        "rule": "Sequencing: A41.0 (S. aureus sepsis) → T84.54XA (prosthesis infection).",
+        "rule": "Sequencing: A41.0 (S. aureus sepsis) â†’ T84.54XA (prosthesis infection).",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # HCPCS/REGULATORY CASES (92, 95-100)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "case_92": {
         "category": "HCPCS",
         "scenario": "Adult, laparotomy Day 0, wound dehiscence Day 5, same surgeon re-closure",
@@ -1268,9 +1268,9 @@ ALL_CASES = {
         "icd": [],
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SECOND SET: Medical Terminology (Set 2 Cases 1-8)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "set2_case_1": {
         "category": "Knowledge",
         "scenario": "Emphysema - irreversible destruction of alveolar walls",
@@ -1320,9 +1320,9 @@ ALL_CASES = {
         "cpt": [], "icd": [],
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SECOND SET: ICD-10 Coding (Set 2 Cases 9-16)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "set2_case_9": {
         "category": "ICD10",
         "scenario": "40yo male, HIV, PCP pneumonia, oral candidiasis, Kaposi sarcoma, T2DM",
@@ -1347,7 +1347,7 @@ ALL_CASES = {
             {"code": "J96.01", "desc": "Acute respiratory failure with hypoxia"},
             {"code": "Z99.81", "desc": "Dependence on supplemental oxygen"},
         ],
-        "rule": "COPD exacerbation (J44.1) → Pneumonia (J15.1) → RF (J96.01) → O2 dependence (Z99.81).",
+        "rule": "COPD exacerbation (J44.1) â†’ Pneumonia (J15.1) â†’ RF (J96.01) â†’ O2 dependence (Z99.81).",
     },
     "set2_case_11": {
         "category": "ICD10",
@@ -1360,7 +1360,7 @@ ALL_CASES = {
             {"code": "N18.4", "desc": "CKD stage 4"},
             {"code": "D63.8", "desc": "Anemia in chronic disease"},
         ],
-        "rule": "Sickle cell crisis (D57.00) → Acute chest (D57.01) → MRSA sepsis (A41.0) → CKD (N18.4).",
+        "rule": "Sickle cell crisis (D57.00) â†’ Acute chest (D57.01) â†’ MRSA sepsis (A41.0) â†’ CKD (N18.4).",
     },
     "set2_case_12": {
         "category": "ICD10",
@@ -1382,18 +1382,18 @@ ALL_CASES = {
             {"code": "C50.919", "desc": "Malignant neoplasm of unspecified site of unspecified female breast"},
             {"code": "Z51.5", "desc": "Encounter for palliative care"},
         ],
-        "rule": "Metastasis (C79.31) → Primary breast cancer (C50.919) → Palliative care (Z51.5).",
+        "rule": "Metastasis (C79.31) â†’ Primary breast cancer (C50.919) â†’ Palliative care (Z51.5).",
     },
     "set2_case_14": {
         "category": "ICD10",
-        "scenario": "5yo child, accidental lead ingestion, BLL 65 µg/dL, abdominal pain, irritability",
+        "scenario": "5yo child, accidental lead ingestion, BLL 65 Âµg/dL, abdominal pain, irritability",
         "cpt": [],
         "icd": [
             {"code": "T56.0X1A", "desc": "Toxic effect of lead, accidental, initial encounter"},
             {"code": "R10.9", "desc": "Abdominal pain"},
             {"code": "R45.851", "desc": "Suicidal ideation"},
         ],
-        "rule": "Lead poisoning (T56.0X1A) → Symptoms (R10.9, R45.851).",
+        "rule": "Lead poisoning (T56.0X1A) â†’ Symptoms (R10.9, R45.851).",
     },
     "set2_case_15": {
         "category": "ICD10",
@@ -1413,12 +1413,12 @@ ALL_CASES = {
             {"code": "O60.00", "desc": "Preterm labor"},
             {"code": "O32.1", "desc": "Fetal malpresentation"},
         ],
-        "rule": "Twin pregnancy (O30.009) → Preterm labor (O60.00) → Breech (O32.1).",
+        "rule": "Twin pregnancy (O30.009) â†’ Preterm labor (O60.00) â†’ Breech (O32.1).",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SECOND SET: E/M Cases (Set 2 Cases 17-32)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "set2_case_17": {
         "category": "E/M",
         "scenario": "62yo male, surgical consultation, inguinal hernia, comprehensive exam, moderate MDM, 42 min",
@@ -1496,9 +1496,9 @@ ALL_CASES = {
         "rule": "Critical care 95 min = 99291 (first 30-74 min) + 99292 (each additional 30 min).",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SECOND SET: Anesthesia (Set 2 Cases 20, 33-36)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "set2_case_20": {
         "category": "Anesthesia",
         "scenario": "72yo ASA P3 female, lumbar laminectomy multi-level, 4h15min anesthesia, arterial line",
@@ -1535,9 +1535,9 @@ ALL_CASES = {
         "rule": "Vascular bypass anesthesia = 01902.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SECOND SET: Integumentary (Set 2 Cases 21, 37-42)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "set2_case_21": {
         "category": "Integumentary",
         "scenario": "28yo male, electrical burns, 14% TBSA, debridement >10%, escharotomy 3 incisions",
@@ -1603,9 +1603,9 @@ ALL_CASES = {
         "rule": "Implant exchange (19357) + nipple reconstruction (19355) are separate procedures.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SECOND SET: Musculoskeletal (Set 2 Cases 43-48)
-    # ═══════════════════════════-arm═════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-armâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "set2_case_43": {
         "category": "Musculoskeletal",
         "scenario": "Adult, cast removal by different provider (not original applier)",
@@ -1652,9 +1652,9 @@ ALL_CASES = {
         "rule": "Percutaneous muscle biopsy = 20206.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SECOND SET: Cardiovascular (Set 2 Cases 49-54)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "set2_case_49": {
         "category": "Cardiovascular",
         "scenario": "56yo male, open mitral valve repair with annuloplasty ring, neochordae",
@@ -1701,9 +1701,9 @@ ALL_CASES = {
         "rule": "Open pulmonary embolectomy = 33910.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SECOND SET: Digestive (Set 2 Cases 24, 55-60)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "set2_case_24": {
         "category": "Digestive",
         "scenario": "70yo male, laparoscopic descending colectomy with splenic flexure mobilization",
@@ -1757,9 +1757,9 @@ ALL_CASES = {
         "rule": "Open cholecystectomy (47600) + choledochoenterostomy (47720) are separate procedures.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SECOND SET: Urinary/Genital (Set 2 Cases 61-66)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "set2_case_61": {
         "category": "Urinary/Genital",
         "scenario": "55yo, open drainage perirenal abscess, right flank, drains placed",
@@ -1809,9 +1809,9 @@ ALL_CASES = {
         "rule": "Rezum water vapor ablation = 53850.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SECOND SET: Nervous System (Set 2 Cases 67-72)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "set2_case_67": {
         "category": "Nervous",
         "scenario": "41yo, permanent VP shunt explantation, chronic infection, EVD placed",
@@ -1867,9 +1867,9 @@ ALL_CASES = {
         "rule": "Encephalocele excision (63900) + cranioplasty (61526).",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SECOND SET: Radiology (Set 2 Cases 25, 73-78)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "set2_case_25": {
         "category": "Radiology",
         "scenario": "38yo male, MRI right shoulder with IV contrast, multiplanar",
@@ -1923,9 +1923,9 @@ ALL_CASES = {
         "rule": "DXA (77080) + VFA (77083) can be billed together.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SECOND SET: Pathology (Set 2 Cases 79-84)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "set2_case_79": {
         "category": "Pathology",
         "scenario": "Adult, doxepin therapeutic drug assay, serum level monitoring",
@@ -1969,9 +1969,9 @@ ALL_CASES = {
         "rule": "Radical prostatectomy pathology = 88305.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SECOND SET: Medicine (Set 2 Cases 85-90)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "set2_case_85": {
         "category": "Medicine",
         "scenario": "58yo male, multi-vessel PCI: RCA stent, LAD atherectomy+stent, LCX stent",
@@ -2022,9 +2022,9 @@ ALL_CASES = {
         "rule": "Comprehensive TTE = 93306.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SECOND SET: Modifiers/HCPCS (Set 2 Cases 92, 94-100)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "set2_case_92": {
         "category": "Modifiers",
         "scenario": "Complex spinal reconstruction, co-surgeons (Surgeon X + Y) + assistant surgeon (Z)",
@@ -2084,9 +2084,9 @@ ALL_CASES = {
         "cpt": [], "icd": [],
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # THIRD SET: Additional Cases (Set 3)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "set3_case_1": {
         "category": "E/M",
         "scenario": "70yo male established, multi-condition follow-up, moderate MDM, 39 min",
@@ -2248,7 +2248,7 @@ ALL_CASES = {
             {"code": "K70.31", "desc": "Alcoholic cirrhosis of liver with ascites"},
             {"code": "N17.0", "desc": "Acute kidney failure with tubular necrosis"},
         ],
-        "rule": "K85.2 (pancreatitis) → K70.31 (liver disease) → N17.0 (AKI).",
+        "rule": "K85.2 (pancreatitis) â†’ K70.31 (liver disease) â†’ N17.0 (AKI).",
     },
     "set3_case_21": {
         "category": "ICD10",
@@ -2259,7 +2259,7 @@ ALL_CASES = {
             {"code": "D69.6", "desc": "Thrombocytopenia"},
             {"code": "K72.9", "desc": "Hepatic failure, unspecified"},
         ],
-        "rule": "A91 (dengue) → D69.6 (thrombocytopenia) → K72.9 (liver dysfunction).",
+        "rule": "A91 (dengue) â†’ D69.6 (thrombocytopenia) â†’ K72.9 (liver dysfunction).",
     },
     "set3_case_22": {
         "category": "ICD10",
@@ -2269,7 +2269,7 @@ ALL_CASES = {
             {"code": "F25.0", "desc": "Schizoaffective disorder, depressive type"},
             {"code": "F33.2", "desc": "Major depressive disorder recurrent severe without psychotic features"},
         ],
-        "rule": "F25.0 (schizoaffective) primary → F33.2 (MDD) secondary.",
+        "rule": "F25.0 (schizoaffective) primary â†’ F33.2 (MDD) secondary.",
     },
     "set3_case_23": {
         "category": "ICD10",
@@ -2280,7 +2280,7 @@ ALL_CASES = {
             {"code": "Q90.9", "desc": "Down syndrome, unspecified"},
             {"code": "Q21.1", "desc": "Atrial septal defect"},
         ],
-        "rule": "C91.00 (ALL) primary → Q90.9 (Down) → Q21.1 (ASD history).",
+        "rule": "C91.00 (ALL) primary â†’ Q90.9 (Down) â†’ Q21.1 (ASD history).",
     },
     "set3_case_24": {
         "category": "ICD10",
@@ -2472,7 +2472,7 @@ ALL_CASES = {
             {"code": "R50.83", "desc": "Fever"},
             {"code": "E11.9", "desc": "Type 2 diabetes"},
         ],
-        "rule": "C61 (prostate cancer) → C79.31 (bone mets) → D70.2 (neutropenia) → R50.83 (fever) → E11.9 (DM).",
+        "rule": "C61 (prostate cancer) â†’ C79.31 (bone mets) â†’ D70.2 (neutropenia) â†’ R50.83 (fever) â†’ E11.9 (DM).",
     },
     "set3_case_49": {
         "category": "ICD10",
@@ -2485,7 +2485,7 @@ ALL_CASES = {
             {"code": "E11.9", "desc": "Type 2 diabetes"},
             {"code": "N18.31", "desc": "CKD stage 3a"},
         ],
-        "rule": "I26.99 (PE) primary → N18.6 (ESRD) → I10 (HTN) → E11.9 (DM) → N18.31 (CKD).",
+        "rule": "I26.99 (PE) primary â†’ N18.6 (ESRD) â†’ I10 (HTN) â†’ E11.9 (DM) â†’ N18.31 (CKD).",
     },
     "set3_case_50": {
         "category": "ICD10",
@@ -2498,7 +2498,7 @@ ALL_CASES = {
             {"code": "P36.10", "desc": "Streptococcus sepsis of newborn"},
             {"code": "E11.9", "desc": "Type 2 diabetes (maternal)"},
         ],
-        "rule": "P07.24 (preterm) → P22.0 (RDS) → P52.1 (IVH) → P36.10 (GBS sepsis).",
+        "rule": "P07.24 (preterm) â†’ P22.0 (RDS) â†’ P52.1 (IVH) â†’ P36.10 (GBS sepsis).",
     },
     "set3_case_51": {
         "category": "ICD10",
@@ -2521,7 +2521,7 @@ ALL_CASES = {
             {"code": "K50.51", "desc": "Crohn disease of both small and large intestine with obstruction"},
             {"code": "D63.8", "desc": "Anemia in chronic disease"},
         ],
-        "rule": "K50.51 (Crohn with obstruction) → D63.8 (anemia in chronic disease).",
+        "rule": "K50.51 (Crohn with obstruction) â†’ D63.8 (anemia in chronic disease).",
     },
     "set3_case_53": {
         "category": "ICD10",
@@ -2541,7 +2541,7 @@ ALL_CASES = {
             {"code": "C56.9", "desc": "Malignant neoplasm of unspecified ovary"},
             {"code": "D63.8", "desc": "Anemia in chronic disease"},
         ],
-        "rule": "C56.9 (ovarian cancer) → D63.8 (anemia in chronic disease, chemo-induced).",
+        "rule": "C56.9 (ovarian cancer) â†’ D63.8 (anemia in chronic disease, chemo-induced).",
     },
     "set3_case_55": {
         "category": "ICD10",
@@ -2727,9 +2727,9 @@ ALL_CASES = {
         "cpt": [], "icd": [],
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # EXACT 20 REAL PATIENT CASES (for pipeline training)
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "real_patient_1": {
         "category": "cardiovascular",
         "scenario": "68yo male, three-vessel CAD, CABG x3, LIMA to LAD, SVG to RCA, SVG to OM, endarterectomy RCA",
@@ -2938,9 +2938,9 @@ ALL_CASES = {
         "rule": "Acute stroke = I63.51. Residual hemiparesis = I69.354.",
     },
 
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # NEW 20 CASES - Covering novel scenarios
-    # ═══════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     "new_1": {
         "category": "cardiovascular",
         "scenario": "58yo male, sudden tearing chest pain radiating to back, CT angiography Stanford Type B aortic dissection, BP 180/110",
@@ -3101,8 +3101,1791 @@ ALL_CASES = {
         "icd": [{"code": "M50.12", "desc": "Cervical disc disorder with radiculopathy"}],
         "rule": "Cervical disc replacement = 22585.",
     },
-}
 
+
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # EMERGENCY MEDICINE CASES (20 cases)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    "em_1": {
+        "category": "emergency_medicine",
+        "scenario": "45yo male, triage level 2, chest pain, ST depression leads II III aVF, troponin pending, IV heparin, cardiology consult",
+        "keywords": ["chest pain", "triage", "st depression", "troponin", "heparin", "non-stemi", "ed"],
+        "cpt": [{"code": "99285", "desc": "ED visit level 5 high complexity", "reason": "High-complexity ED visit with cardiac workup"}],
+        "icd": [{"code": "I21.19", "desc": "ST elevation myocardial infarction of inferior wall"}, {"code": "I10", "desc": "Essential hypertension"}],
+        "rule": "High-complexity ED visit for ACS = 99285. E/M level based on MDM.",
+    },
+    "em_2": {
+        "category": "emergency_medicine",
+        "scenario": "62yo female, triage level 1, cardiac arrest in ED, witnessed vfib, 3 rounds ACLS, ROSC after amiodarone, intubated, hypothermia protocol",
+        "keywords": ["cardiac arrest", "vfib", "acls", "rosc", "amiodarone", "intubation", "hypothermia", "resuscitation"],
+        "cpt": [{"code": "99291", "desc": "Critical care first hour", "reason": "Critical care for cardiac arrest resuscitation"},
+               {"code": "92941", "desc": "Cardioversion defibrillation", "reason": "Defibrillation for vfib"}],
+        "icd": [{"code": "I49.01", "desc": "Ventricular fibrillation"}, {"code": "I46.0", "desc": "Cardiac arrest with successful resuscitation"}],
+        "rule": "Cardiac arrest resuscitation = 99291 (critical care) + 92941 (defibrillation).",
+    },
+    "em_3": {
+        "category": "emergency_medicine",
+        "scenario": "28yo male, triage level 3, ankle fracture distal fibula, closed reduction, splint, post-reduction x-ray, discharge with ortho follow-up",
+        "keywords": ["ankle fracture", "fibula", "closed reduction", "splint", "x-ray", "triage"],
+        "cpt": [{"code": "99283", "desc": "ED visit level 3 moderate complexity", "reason": "Moderate complexity ED visit"},
+               {"code": "27756", "desc": "Closed treatment of distal fibula fracture", "reason": "Closed reduction of ankle fracture"},
+               {"code": "29440", "desc": "Short leg cast application", "reason": "Splint application"}],
+        "icd": [{"code": "S82.612A", "desc": "Displaced fracture of lateral malleolus of right fibula"}],
+        "rule": "ED visit + closed reduction + splint = 99283 + 27756 + 29440.",
+    },
+    "em_4": {
+        "category": "emergency_medicine",
+        "scenario": "3yo male, triage level 2, febrile seizure, 103.2F, 2-minute generalized tonic-clonic, postictal, normal exam, lumbar puncture performed",
+        "keywords": ["febrile seizure", "pediatric", "fever", "tonic-clonic", "lumbar puncture", "postictal"],
+        "cpt": [{"code": "99284", "desc": "ED visit level 4 high", "reason": "High complexity ED visit with LP"},
+               {"code": "62270", "desc": "Lumbar puncture diagnostic", "reason": "Diagnostic LP for febrile seizure workup"}],
+        "icd": [{"code": "R56.00", "desc": "Febrile convulsions, unspecified"}, {"code": "R50.9", "desc": "Fever, unspecified"}],
+        "rule": "ED visit with LP for febrile seizure = 99284 + 62270.",
+    },
+    "em_5": {
+        "category": "emergency_medicine",
+        "scenario": "55yo female, triage level 2, anaphylaxis after bee sting, epinephrine 0.3mg IM, diphenhydramine, methylprednisolone, 4-hour observation",
+        "keywords": ["anaphylaxis", "bee sting", "epinephrine", "diphenhydramine", "methylprednisolone", "observation"],
+        "cpt": [{"code": "99284", "desc": "ED visit level 4", "reason": "High complexity ED visit for anaphylaxis"},
+               {"code": "96372", "desc": "Therapeutic injection IM", "reason": "IM epinephrine injection"}],
+        "icd": [{"code": "T78.2XXA", "desc": "Anaphylactic shock due to insect sting, initial encounter"}, {"code": "T63.441A", "desc": "Toxic effect of bee venom, initial encounter"}],
+        "rule": "Anaphylaxis ED visit = 99284 + 96372 for injection.",
+    },
+    "em_6": {
+        "category": "emergency_medicine",
+        "scenario": "70yo male, triage level 1, acute stroke, left-sided weakness 45 minutes, tPA administered door-to-needle 42 minutes, CT non-contrast negative",
+        "keywords": ["stroke", "tpa", "acute ischemic", "door-to-needle", "thrombolytic", "left-sided weakness", "ct"],
+        "cpt": [{"code": "99291", "desc": "Critical care first hour", "reason": "Critical care for acute stroke management"},
+               {"code": "99292", "desc": "Critical care each additional 30 min", "reason": "Additional critical care time for tPA monitoring"},
+               {"code": "37193", "desc": "Intravascular thrombolytic infusion", "reason": "tPA infusion for ischemic stroke"}],
+        "icd": [{"code": "I63.9", "desc": "Cerebral infarction, unspecified"}],
+        "rule": "Acute stroke with tPA = 99291 + 99292 + 37193.",
+    },
+    "em_7": {
+        "category": "emergency_medicine",
+        "scenario": "35yo male, triage level 3, laceration right forearm 4cm deep to fascia, tendons intact, nerve intact, irrigation, sterile prep, layered closure 8 stitches, tetanus updated",
+        "keywords": ["laceration", "forearm", "deep", "closure", "stitches", "tetanus", "wound"],
+        "cpt": [{"code": "99283", "desc": "ED visit level 3", "reason": "Moderate complexity ED visit"},
+               {"code": "12032", "desc": "Repair layered closure 2.5-7.5cm intermediate", "reason": "Layered closure of deep laceration"}],
+        "icd": [{"code": "S51.319A", "desc": "Laceration without foreign body of right forearm, initial encounter"}],
+        "rule": "ED visit + intermediate repair = 99283 + 12032.",
+    },
+    "em_8": {
+        "category": "emergency_medicine",
+        "scenario": "80yo female, triage level 2, sepsis qSOFA 2, lactate 4.2, blood cultures x2, IV fluids 30L, broad-spectrum antibiotics, admitted to ICU",
+        "keywords": ["sepsis", "qsofa", "lactate", "blood cultures", "iv fluids", "antibiotics", "icu", "fluid resuscitation"],
+        "cpt": [{"code": "99284", "desc": "ED visit level 4", "reason": "High complexity ED visit for sepsis"},
+               {"code": "36415", "desc": "Venipuncture for cultures", "reason": "Blood cultures x2"}],
+        "icd": [{"code": "A41.9", "desc": "Sepsis, unspecified organism"}, {"code": "R65.20", "desc": "Severe sepsis without septic shock"}],
+        "rule": "Sepsis ED visit with cultures = 99284 + 36415.",
+    },
+    "em_9": {
+        "category": "emergency_medicine",
+        "scenario": "42yo male, triage level 2, acute asthma exacerbation, SpO2 89%, nebulized albuterol x3, IV magnesium, prednisone, 6-hour ED observation, improved SpO2 96%",
+        "keywords": ["asthma", "exacerbation", "albuterol", "magnesium", "observation", "spo2", "nebulizer"],
+        "cpt": [{"code": "99284", "desc": "ED visit level 4", "reason": "High complexity ED visit for severe asthma"},
+               {"code": "94640", "desc": "Pressurized inhalation treatment", "reason": "Nebulizer treatments"},
+               {"code": "96365", "desc": "IV infusion therapy 1 hour", "reason": "IV magnesium infusion"}],
+        "icd": [{"code": "J45.41", "desc": "Moderate persistent asthma with acute exacerbation"}],
+        "rule": "Severe asthma ED visit = 99284 + 94640 + 96365.",
+    },
+    "em_10": {
+        "category": "emergency_medicine",
+        "scenario": "58yo male, triage level 1, acute MI, cardiac catheterization emergent, LAD 99% occlusion, drug-eluting stent placed, transferred to CCU",
+        "keywords": ["acute mi", "cardiac catheterization", "stent", "lad", "stemi", "drug-eluting stent", "ccu"],
+        "cpt": [{"code": "99291", "desc": "Critical care first hour", "reason": "Critical care for acute STEMI"},
+               {"code": "93458", "desc": "Left heart catheterization", "reason": "Emergent cardiac catheterization"},
+               {"code": "92928", "desc": "Drug-eluting stent LAD", "reason": "DES placement in LAD"}],
+        "icd": [{"code": "I21.01", "desc": "STEMI of left main coronary artery"}, {"code": "I25.10", "desc": "Atherosclerotic heart disease of native coronary artery"}],
+        "rule": "Emergent STEMI cath + stent = 99291 + 93458 + 92928.",
+    },
+    "em_11": {
+        "category": "emergency_medicine",
+        "scenario": "22yo female, triage level 3, kidney stones, colicky flank pain, CT KUB showing 4mm distal ureteral stone, IV ketorolac, IV fluids, discharge with tamsulosin",
+        "keywords": ["kidney stone", "urolithiasis", "flank pain", "colic", "tamsulosin", "ketorolac", "ct scan", "ureteral stone"],
+        "cpt": [{"code": "99283", "desc": "ED visit level 3", "reason": "Moderate complexity ED visit for renal colic"},
+               {"code": "74177", "desc": "CT abdomen pelvis with contrast", "reason": "CT KUB for stone evaluation"}],
+        "icd": [{"code": "N20.1", "desc": "Calculus of ureter"}],
+        "rule": "ED visit for renal colic with CT = 99283 + 74177.",
+    },
+    "em_12": {
+        "category": "emergency_medicine",
+        "scenario": "68yo male, triage level 1, massive GI bleed, hematemesis, hypotensive BP 78/50, tachycardic HR 120, two large-bore IVs, pRBC transfusion 4 units, emergent EGD",
+        "keywords": ["gi bleed", "hematemesis", "hemorrhage", "hypotension", "transfusion", "egd", "upper gastrointestinal"],
+        "cpt": [{"code": "99291", "desc": "Critical care first hour", "reason": "Critical care for massive GI hemorrhage"},
+               {"code": "99292", "desc": "Critical care additional 30 min", "reason": "Extended critical care"},
+               {"code": "99172", "desc": "Sigmoidoscopy with control of hemorrhage", "reason": "Therapeutic EGD for GI bleed"},
+               {"code": "36430", "desc": "Transfusion pRBC", "reason": "Blood transfusion"}],
+        "icd": [{"code": "K92.2", "desc": "Gastrointestinal hemorrhage, unspecified"}, {"code": "D62", "desc": "Acute posthemorrhagic anemia"}],
+        "rule": "Massive GI bleed critical care = 99291 + 99292 + 99172 + 36430.",
+    },
+    "em_13": {
+        "category": "emergency_medicine",
+        "scenario": "16yo male, triage level 2, acute appendicitis, RLQ pain 12 hours, fever 101.8F, WBC 16000, CT abdomen showing non-perforated appendicitis, surgical consult, admitted for appendectomy",
+        "keywords": ["appendicitis", "rlq", "fever", "wbc", "ct scan", "surgical consult", "admission"],
+        "cpt": [{"code": "99284", "desc": "ED visit level 4", "reason": "High complexity ED visit with surgical consult"},
+               {"code": "74177", "desc": "CT abdomen pelvis with contrast", "reason": "CT for appendicitis workup"}],
+        "icd": [{"code": "K35.80", "desc": "Acute appendicitis, unspecified"}],
+        "rule": "ED visit for appendicitis with CT and surgical consult = 99284 + 74177.",
+    },
+    "em_14": {
+        "category": "emergency_medicine",
+        "scenario": "75yo female, triage level 1, traumatic brain injury after fall, GCS 9, CT shows acute subdural hematoma, emergent craniotomy, intubation, ICU admission",
+        "keywords": ["traumatic brain injury", "tbi", "subdural hematoma", "gcs", "craniotomy", "intubation", "fall"],
+        "cpt": [{"code": "99291", "desc": "Critical care first hour", "reason": "Critical care for TBI"},
+               {"code": "61108", "desc": "Craniotomy for evacuation of subdural hematoma", "reason": "Emergent craniotomy"},
+               {"code": "31500", "desc": "Endotracheal intubation", "reason": "Emergency intubation"}],
+        "icd": [{"code": "S06.5X0A", "desc": "Traumatic subdural hemorrhage without loss of consciousness, initial encounter"}, {"code": "S00.83XA", "desc": "Contusion of scalp, initial encounter"}],
+        "rule": "TBI critical care with craniotomy = 99291 + 61108 + 31500.",
+    },
+    "em_15": {
+        "category": "emergency_medicine",
+        "scenario": "40yo female, triage level 3, DKA, BG 680, pH 7.18, bicarb 8, anion gap 28, IV insulin drip, aggressive IV hydration, electrolyte monitoring, 12-hour ED stay improved",
+        "keywords": ["dka", "diabetic ketoacidosis", "insulin drip", "ph", "bicarb", "anion gap", "hyperglycemia"],
+        "cpt": [{"code": "99283", "desc": "ED visit level 3", "reason": "Moderate complexity ED visit for DKA"},
+               {"code": "96375", "desc": "Therapeutic injection IV", "reason": "IV insulin drip initiation"},
+               {"code": "96360", "desc": "IV infusion hydration", "reason": "Aggressive IV hydration"}],
+        "icd": [{"code": "E13.10", "desc": "Diabetic ketoacidosis without coma"}],
+        "rule": "DKA management in ED = 99283 + 96375 + 96360.",
+    },
+    "em_16": {
+        "category": "emergency_medicine",
+        "scenario": "50yo male, triage level 2, acute decompensated heart failure, pulmonary edema, SpO2 82%, BiPAP, IV furosemide 80mg, nitroglycerin drip, admitted CCU",
+        "keywords": ["heart failure", "pulmonary edema", "bipap", "furosemide", "nitroglycerin", "decompensated", "dyspnea"],
+        "cpt": [{"code": "99284", "desc": "ED visit level 4", "reason": "High complexity ED visit for ADHF"},
+               {"code": "94660", "desc": "BiPAP initiation", "reason": "BiPAP for respiratory distress"},
+               {"code": "96365", "desc": "IV infusion therapy 1 hour", "reason": "IV nitroglycerin drip"}],
+        "icd": [{"code": "I50.9", "desc": "Heart failure, unspecified"}, {"code": "J81.1", "desc": "Chronic pulmonary edema"}],
+        "rule": "ADHF with BiPAP and drip = 99284 + 94660 + 96365.",
+    },
+    "em_17": {
+        "category": "emergency_medicine",
+        "scenario": "30yo male, triage level 3, uncomplicated UTI, dysuria, frequency, urgency, UA positive nitrites leukocytes, urine culture sent, oral antibiotics prescribed",
+        "keywords": ["uti", "urinary tract infection", "dysuria", "urinalysis", "nitrites", "leukocytes", "antibiotics"],
+        "cpt": [{"code": "99282", "desc": "ED visit level 2 low", "reason": "Low complexity ED visit"},
+               {"code": "81003", "desc": "Urinalysis with microscopy", "reason": "UA for UTI workup"}],
+        "icd": [{"code": "N39.0", "desc": "Urinary tract infection, site not specified"}],
+        "rule": "Simple UTI ED visit = 99282 + 81003.",
+    },
+    "em_18": {
+        "category": "emergency_medicine",
+        "scenario": "85yo female, triage level 2, syncope, witnessed loss of consciousness 30 seconds, normal EKG, troponin negative, head CT negative, discharged with cardiology follow-up",
+        "keywords": ["syncope", "loss of consciousness", "ekg", "troponin", "head ct", "cardiology"],
+        "cpt": [{"code": "99284", "desc": "ED visit level 4", "reason": "High complexity ED visit for syncope workup"},
+               {"code": "70460", "desc": "CT head without contrast", "reason": "Head CT for syncope"},
+               {"code": "93000", "desc": "Electrocardiogram 12-lead", "reason": "EKG for syncope workup"}],
+        "icd": [{"code": "R55", "desc": "Syncope and collapse"}],
+        "rule": "Syncope workup = 99284 + 70460 + 93000.",
+    },
+    "em_19": {
+        "category": "emergency_medicine",
+        "scenario": "25yo male, triage level 1, penile fracture, 4 hours post-coital, painful erection, swelling, blood at meatus, emergent surgical repair, retrograde urethrogram normal",
+        "keywords": ["penile fracture", "trauma", "erectile", "meatus", "surgical repair", "urethrogram"],
+        "cpt": [{"code": "99291", "desc": "Critical care first hour", "reason": "Critical care for penile fracture"},
+               {"code": "54800", "desc": "Repair of penile fracture", "reason": "Surgical repair of penile fracture"},
+               {"code": "51600", "desc": "Retrograde urethrogram", "reason": "RUG for urethral injury evaluation"}],
+        "icd": [{"code": "S39.012A", "desc": "Injury of penis, initial encounter"}],
+        "rule": "Penile fracture repair = 99291 + 54800 + 51600.",
+    },
+    "em_20": {
+        "category": "emergency_medicine",
+        "scenario": "60yo female, triage level 1, pulmonary embolism, acute dyspnea, tachycardia HR 130, SpO2 84% on room air, CT-PA bilateral PEs, massive PE, heparin bolus and drip, admitted ICU, hemodynamically stable",
+        "keywords": ["pulmonary embolism", "pe", "dyspnea", "tachycardia", "ct-pa", "heparin", "anticoagulation"],
+        "cpt": [{"code": "99291", "desc": "Critical care first hour", "reason": "Critical care for massive PE"},
+               {"code": "71275", "desc": "CT pulmonary angiography", "reason": "CT-PA for PE diagnosis"}],
+        "icd": [{"code": "I26.99", "desc": "Other pulmonary embolism without acute cor pulmonale"}],
+        "rule": "Massive PE with critical care = 99291 + 71275.",
+    },
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # PEDIATRICS CASES (20 cases)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    "peds_1": {
+        "category": "pediatrics",
+        "scenario": "2-month well-child visit, weight 12 lbs, length 22 inches, head circumference 40cm, developmental smile, immunizations DTaP IPV Hib PCV13 rotavirus, anticipatory guidance",
+        "keywords": ["well-child", "2-month", "immunization", "dtap", "rotavirus", "developmental", "anticipatory guidance"],
+        "cpt": [{"code": "99392", "desc": "Preventive visit 1-4 years established", "reason": "Well-child visit with immunizations"},
+               {"code": "90460", "desc": "DTaP administration", "reason": "DTaP immunization"},
+               {"code": "90461", "desc": "Additional vaccine administration", "reason": "Additional vaccine administration"}],
+        "icd": [{"code": "Z00.121", "desc": "Routine child health exam with abnormal findings"}, {"code": "Z23", "desc": "Encounter for immunization"}],
+        "rule": "Well-child visit = 99392 + vaccine administration codes.",
+    },
+    "peds_2": {
+        "category": "pediatrics",
+        "scenario": "5-month infant, acute otitis media bilateral, fever 101.5F, irritability, bulging tympanic membranes bilaterally, amoxicillin prescribed",
+        "keywords": ["otitis media", "ear infection", "fever", "infant", "amoxicillin", "bulging tympanic"],
+        "cpt": [{"code": "99213", "desc": "Office visit established moderate", "reason": "Office visit for bilateral AOM"},
+               {"code": "69424", "desc": "Tympanometry bilateral", "reason": "Tympanometry for AOM evaluation"}],
+        "icd": [{"code": "H65.111", "desc": "Acute and subacute allergic otitis media, right ear"}, {"code": "H65.112", "desc": "Acute and subacute allergic otitis media, left ear"}],
+        "rule": "Bilateral AOM office visit = 99213 + 69424.",
+    },
+    "peds_3": {
+        "category": "pediatrics",
+        "scenario": "4-year-old, well-child visit, height/weight 50th percentile, vision screening pass, hearing screening pass, immunizations DTaP booster MMR varicella, developmental screening ASQ",
+        "keywords": ["well-child", "4-year", "vision screening", "hearing screening", "mmr", "varicella", "developmental screening", "asq"],
+        "cpt": [{"code": "99394", "desc": "Preventive visit 5-11 years established", "reason": "Well-child visit with screenings"},
+               {"code": "96110", "desc": "Developmental screening ASQ", "reason": "Developmental screening"}],
+        "icd": [{"code": "Z00.129", "desc": "Routine child health exam without abnormal findings"}, {"code": "Z23", "desc": "Encounter for immunization"}],
+        "rule": "Well-child visit 5-11 years = 99394 + developmental screening.",
+    },
+    "peds_4": {
+        "category": "pediatrics",
+        "scenario": "6-month infant, fever 104F, well-appearing, urinalysis negative, no source identified, reassuring exam, parents counseled on fever management",
+        "keywords": ["fever", "infant", "febrile", "urinalysis", "no source", "well-appearing"],
+        "cpt": [{"code": "99213", "desc": "Office visit established moderate", "reason": "Office visit for fever in infant"},
+               {"code": "81003", "desc": "Urinalysis with microscopy", "reason": "UA for fever workup"}],
+        "icd": [{"code": "R50.9", "desc": "Fever, unspecified"}],
+        "rule": "Fever in infant with UA = 99213 + 81003.",
+    },
+    "peds_5": {
+        "category": "pediatrics",
+        "scenario": "8-year-old, asthma, persistent moderate, FEV1 72%, daily inhaled corticosteroid budesonide, rescue albuterol PRN, asthma action plan updated",
+        "keywords": ["asthma", "pediatric", "budesonide", "fev1", "inhaled corticosteroid", "asthma action plan", "persistent"],
+        "cpt": [{"code": "99214", "desc": "Office visit established moderate MDM", "reason": "Office visit for asthma management"},
+               {"code": "94010", "desc": "Spirometry", "reason": "Spirometry for asthma assessment"}],
+        "icd": [{"code": "J45.30", "desc": "Mild persistent asthma, uncomplicated"}],
+        "rule": "Asthma visit with spirometry = 99214 + 94010.",
+    },
+    "peds_6": {
+        "category": "pediatrics",
+        "scenario": "12-year-old male, well-child visit, Tanner stage 3 puberty, BMI 85th percentile, scoliosis screening negative, HPV vaccine series initiated, depression screening PHQ-A negative",
+        "keywords": ["well-child", "puberty", "hpv vaccine", "scoliosis screening", "depression screening", "phq-a", "tanner"],
+        "cpt": [{"code": "99395", "desc": "Preventive visit 12-17 years established", "reason": "Well-child visit adolescent"},
+               {"code": "96116", "desc": "Neurobehavioral status exam", "reason": "Depression screening"}],
+        "icd": [{"code": "Z00.121", "desc": "Routine child health exam with abnormal findings"}, {"code": "Z23", "desc": "Encounter for immunization"}],
+        "rule": "Adolescent well-child visit = 99395 + screenings.",
+    },
+    "peds_7": {
+        "category": "pediatrics",
+        "scenario": "3-year-old, croup, barking cough, stridor at rest, drooling, hoarse voice, dexamethasone 0.6mg/kg PO, racemic epinephrine nebulizer, improved symptoms",
+        "keywords": ["croup", "barking cough", "stridor", "dexamethasone", "racemic epinephrine", "pediatric", "laryngotracheobronchitis"],
+        "cpt": [{"code": "99213", "desc": "Office visit established moderate", "reason": "Office visit for croup"},
+               {"code": "94640", "desc": "Pressurized inhalation treatment", "reason": "Racemic epinephrine nebulizer"}],
+        "icd": [{"code": "J05.0", "desc": "Acute obstructive laryngitis (croup)"}],
+        "rule": "Croup office visit with nebulizer = 99213 + 94640.",
+    },
+    "peds_8": {
+        "category": "pediatrics",
+        "scenario": "18-month, failure to thrive, weight below 5th percentile, length 10th percentile, head circumference 50th percentile, calorie supplementation, nutritional counseling, labs ordered CBC CMP",
+        "keywords": ["failure to thrive", "ftt", "weight loss", "pediatric", "calorie", "nutritional", "cbc"],
+        "cpt": [{"code": "99214", "desc": "Office visit established high MDM", "reason": "High MDM for FTT workup"},
+               {"code": "85025", "desc": "CBC with differential", "reason": "CBC for FTT"},
+               {"code": "80053", "desc": "Comprehensive metabolic panel", "reason": "CMP for FTT"}],
+        "icd": [{"code": "R62.51", "desc": "Failure to thrive in childhood"}],
+        "rule": "FTT visit with labs = 99214 + 85025 + 80053.",
+    },
+    "peds_9": {
+        "category": "pediatrics",
+        "scenario": "6-year-old, ADHD, combined type, on methylphenidate 10mg BID, school behavioral reports, parent Vanderbilt scales completed, dose titration discussed",
+        "keywords": ["adhd", "methylphenidate", "behavioral", "vanderbilt", "titration", "combined type"],
+        "cpt": [{"code": "99214", "desc": "Office visit established moderate MDM", "reason": "Office visit for ADHD medication management"}],
+        "icd": [{"code": "F90.2", "desc": "Attention-deficit hyperactivity disorder, combined type"}],
+        "rule": "ADHD medication management visit = 99214.",
+    },
+    "peds_10": {
+        "category": "pediatrics",
+        "scenario": "10-year-old male, sports physical, no medical history, normal cardiac exam, murmur grade 2/6 systolic innocent, EKG normal, cleared for sports participation",
+        "keywords": ["sports physical", "murmur", "innocent", "ekg", "cleared", "pediatric"],
+        "cpt": [{"code": "99395", "desc": "Preventive visit 12-17 years", "reason": "Sports physical"},
+               {"code": "93000", "desc": "Electrocardiogram 12-lead", "reason": "EKG for murmur evaluation"}],
+        "icd": [{"code": "Z01.810", "desc": "Encounter for general adult medical examination without abnormal findings"}, {"code": "R01.1", "desc": "Cardiac murmur, unspecified"}],
+        "rule": "Sports physical with EKG = 99395 + 93000.",
+    },
+    "peds_11": {
+        "category": "pediatrics",
+        "scenario": "2-year-old, febrile status epilepticus, generalized tonic-clonic seizure 20 minutes, rectal diazepam administered, seizure stopped, LP performed, admitted for observation",
+        "keywords": ["status epilepticus", "seizure", "diazepam", "febrile", "lumbar puncture", "pediatric"],
+        "cpt": [{"code": "99291", "desc": "Critical care first hour", "reason": "Critical care for status epilepticus"},
+               {"code": "62270", "desc": "Lumbar puncture", "reason": "LP for status workup"}],
+        "icd": [{"code": "R56.01", "desc": "Febrile convulsions, simple"}, {"code": "G41.9", "desc": "Status epilepticus, unspecified"}],
+        "rule": "Status epilepticus = 99291 + 62270.",
+    },
+    "peds_12": {
+        "category": "pediatrics",
+        "scenario": "9-month infant, developmental delay, not sitting independently, not crawling, absent pincer grasp, abnormal tone, referral to early intervention, developmental assessment",
+        "keywords": ["developmental delay", "motor delay", "tone", "early intervention", "infant", "sitting", "crawling"],
+        "cpt": [{"code": "99214", "desc": "Office visit established high MDM", "reason": "Office visit for developmental delay"},
+               {"code": "96112", "desc": "Developmental testing parent report", "reason": "Developmental assessment"}],
+        "icd": [{"code": "F88", "desc": "Other pervasive developmental disorder"}, {"code": "R62.0", "desc": "Delayed milestones"}],
+        "rule": "Developmental delay visit with assessment = 99214 + 96112.",
+    },
+    "peds_13": {
+        "category": "pediatrics",
+        "scenario": "14-year-old female, menstrual irregularity, primary amenorrhea, Tanner stage 2, no secondary sexual characteristics by age 14, FSH LH elevated, karyotype ordered",
+        "keywords": ["amenorrhea", "puberty", "primary", "tanner", "fsh", "karyotype", "adolescent"],
+        "cpt": [{"code": "99215", "desc": "Office visit established high MDM", "reason": "High MDM for primary amenorrhea workup"},
+               {"code": "84443", "desc": "TSH", "reason": "Thyroid evaluation"},
+               {"code": "83001", "desc": "FSH", "reason": "FSH level for amenorrhea"}],
+        "icd": [{"code": "N91.0", "desc": "Primary amenorrhea"}],
+        "rule": "Primary amenorrhea workup = 99215 + hormone labs.",
+    },
+    "peds_14": {
+        "category": "pediatrics",
+        "scenario": "5-year-old, allergic reaction to peanuts, facial angioedema, urticaria, mild respiratory distress, epinephrine auto-injector administered, diphenhydramine, observation 2 hours",
+        "keywords": ["allergic reaction", "peanut", "angioedema", "urticaria", "epinephrine", "anaphylaxis", "food allergy"],
+        "cpt": [{"code": "99213", "desc": "Office visit established moderate", "reason": "Office visit for allergic reaction"},
+               {"code": "96372", "desc": "Therapeutic injection IM", "reason": "IM epinephrine"}],
+        "icd": [{"code": "T78.2XXA", "desc": "Anaphylactic shock, initial encounter"}, {"code": "L50.0", "desc": "Urticaria"}],
+        "rule": "Allergic reaction with IM epi = 99213 + 96372.",
+    },
+    "peds_15": {
+        "category": "pediatrics",
+        "scenario": "8-month, breastfeeding mother concerns, slow weight gain, latch evaluation, tongue-tie identified, frenotomy performed, lactation consultant referral",
+        "keywords": ["breastfeeding", "latch", "tongue-tie", "ankyloglossia", "frenotomy", "slow weight gain", "lactation"],
+        "cpt": [{"code": "99213", "desc": "Office visit established moderate", "reason": "Office visit for breastfeeding concerns"},
+               {"code": "40810", "desc": "Frenotomy", "reason": "Frenotomy for tongue-tie"}],
+        "icd": [{"code": "M79.83", "desc": "Ankyloglossia congenital"}, {"code": "R62.51", "desc": "Failure to thrive in childhood"}],
+        "rule": "Frenotomy in infant = 99213 + 40810.",
+    },
+    "peds_16": {
+        "category": "pediatrics",
+        "scenario": "11-year-old, obesity, BMI 98th percentile, fasting glucose 110, fasting lipid panel elevated LDL, lifestyle counseling, nutrition referral, activity plan",
+        "keywords": ["obesity", "bmi", "pediatric", "lipid panel", "fasting glucose", "nutrition", "lifestyle"],
+        "cpt": [{"code": "99214", "desc": "Office visit established moderate MDM", "reason": "Office visit for pediatric obesity"},
+               {"code": "82947", "desc": "Glucose fasting", "reason": "Fasting glucose"},
+               {"code": "80061", "desc": "Lipid panel", "reason": "Fasting lipid panel"}],
+        "icd": [{"code": "E66.01", "desc": "Morbid obesity due to excess calories"}, {"code": "E78.01", "desc": "Pure hypercholesterolemia"}],
+        "rule": "Pediatric obesity visit with labs = 99214 + 82947 + 80061.",
+    },
+    "peds_17": {
+        "category": "pediatrics",
+        "scenario": "4-day-old newborn, bilirubin 15.2 mg/dL, bluish skin, jaundice above umbilicus, phototherapy initiated, feeding plan intensified, follow-up 24 hours",
+        "keywords": ["jaundice", "newborn", "bilirubin", "phototherapy", "hyperbilirubinemia", "neonate"],
+        "cpt": [{"code": "99477", "desc": "Initial care of newborn in hospital", "reason": "Initial hospital care for hyperbilirubinemia"},
+               {"code": "96920", "desc": "Phototherapy", "reason": "Phototherapy for jaundice"}],
+        "icd": [{"code": "P59.0", "desc": "Neonatal jaundice associated with preterm delivery"}, {"code": "P59.9", "desc": "Neonatal jaundice, unspecified"}],
+        "rule": "Newborn phototherapy = 99477 + 96920.",
+    },
+    "peds_18": {
+        "category": "pediatrics",
+        "scenario": "7-year-old, recurrent pneumonia right lower lobe, third episode in 12 months, CT chest showing bronchiectasis, immune workup ordered, pulmonology referral",
+        "keywords": ["recurrent pneumonia", "bronchiectasis", "ct chest", "immune workup", "pulmonology"],
+        "cpt": [{"code": "99215", "desc": "Office visit established high MDM", "reason": "High MDM for recurrent pneumonia workup"},
+               {"code": "71260", "desc": "CT chest without contrast", "reason": "CT chest for bronchiectasis"}],
+        "icd": [{"code": "J85.10", "desc": "Pneumonia with abscess"}, {"code": "J47.1", "desc": "Bronchiectasis with acute lower respiratory infection"}],
+        "rule": "Recurrent pneumonia workup = 99215 + 71260.",
+    },
+    "peds_19": {
+        "category": "pediatrics",
+        "scenario": "15-year-old female, depression, moderate, PHQ-A 15, suicidal ideation without plan, safety plan created, started sertraline 50mg, close follow-up arranged",
+        "keywords": ["depression", "adolescent", "phq-a", "suicidal ideation", "sertraline", "safety plan", "mental health"],
+        "cpt": [{"code": "99215", "desc": "Office visit established high MDM", "reason": "High MDM for adolescent depression"},
+               {"code": "96116", "desc": "Neurobehavioral status exam", "reason": "PHQ-A depression screening"}],
+        "icd": [{"code": "F32.1", "desc": "Major depressive disorder, single episode, moderate"}, {"code": "R45.851", "desc": "Suicidal ideation"}],
+        "rule": "Adolescent depression with SI = 99215 + 96116.",
+    },
+    "peds_20": {
+        "category": "pediatrics",
+        "scenario": "1-month-old, colic, excessive crying 4 hours daily, feeding normal, weight gain adequate, physical exam normal, behavioral counseling, swaddling techniques discussed",
+        "keywords": ["colic", "excessive crying", "infant", "behavioral", "swaddling", "newborn"],
+        "cpt": [{"code": "99213", "desc": "Office visit established moderate", "reason": "Office visit for colic counseling"}],
+        "icd": [{"code": "R68.11", "desc": "Excessive crying of infant"}],
+        "rule": "Colic office visit = 99213.",
+    },
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # DERMATOLOGY CASES (15 cases)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    "derm_1": {
+        "category": "dermatology",
+        "scenario": "55yo male, suspicious pigmented lesion right back, 8mm, asymmetric, irregular borders, Dermoscopy concerning, shave biopsy performed, pathology melanoma in situ",
+        "keywords": ["melanoma", "biopsy", "shave biopsy", "pigmented lesion", "dermoscopy", "asymmetric", "borders"],
+        "cpt": [{"code": "11102", "desc": "Tangential biopsy of skin lesion", "reason": "Shave biopsy of suspicious lesion"},
+               {"code": "88305", "desc": "Level IV surgical pathology", "reason": "Pathology for melanoma"}],
+        "icd": [{"code": "D22.62", "desc": "Melanocytic nevi of unspecified part of trunk"}, {"code": "D04.22", "desc": "Melanoma in situ of unspecified part of trunk"}],
+        "rule": "Shave biopsy = 11102 + 88305 for pathology.",
+    },
+    "derm_2": {
+        "category": "dermatology",
+        "scenario": "62yo female, basal cell carcinoma left nasolabial fold, 1.2cm, Mohs micrographic surgery, 2 stages, clear margins, linear repair",
+        "keywords": ["basal cell carcinoma", "mohs surgery", "nasolabial fold", "micrographic", "stages", "closure"],
+        "cpt": [{"code": "17311", "desc": "Mohs first stage", "reason": "Mohs surgery first stage"},
+               {"code": "17312", "desc": "Mohs each additional stage", "reason": "Mohs additional stage"},
+               {"code": "12032", "desc": "Layered closure 2.5-7.5cm", "reason": "Linear repair"}],
+        "icd": [{"code": "C44.311", "desc": "Basal cell carcinoma of nose"}],
+        "rule": "Mohs first stage = 17311, each additional = 17312. Repair separate.",
+    },
+    "derm_3": {
+        "category": "dermatology",
+        "scenario": "48yo male, squamous cell carcinoma right ear, 0.8cm, excision with 4mm margins, Mohs not indicated, repair second intention healing",
+        "keywords": ["squamous cell carcinoma", "excision", "ear", "margins", "scc"],
+        "cpt": [{"code": "17263", "desc": "Destruction malignant lesion 1.1-2.0cm trunk", "reason": "Excision of SCC"},
+               {"code": "88305", "desc": "Level IV surgical pathology", "reason": "Pathology for SCC"}],
+        "icd": [{"code": "C44.211", "desc": "Squamous cell carcinoma of external ear"}],
+        "rule": "SCC excision = 17263 + 88305.",
+    },
+    "derm_4": {
+        "category": "dermatology",
+        "scenario": "70yo male, actinic keratoses right forearm, 4 lesions, liquid nitrogen cryotherapy each lesion, field cancerization",
+        "keywords": ["actinic keratosis", "cryotherapy", "liquid nitrogen", "sun damage", "field cancerization", "ak"],
+        "cpt": [{"code": "17000", "desc": "Destruction first actinic keratosis", "reason": "First AK cryotherapy"},
+               {"code": "17003", "desc": "Destruction each additional actinic keratosis", "reason": "Additional AKs"},
+               {"code": "17004", "desc": "Destruction actinic keratosis 15+ lesions", "reason": "If 15+ lesions"}],
+        "icd": [{"code": "L57.0", "desc": "Actinic keratosis"}],
+        "rule": "AK cryotherapy = 17000 for first, 17003 for each additional (total 4 = 17000 + 17003 x3).",
+    },
+    "derm_5": {
+        "category": "dermatology",
+        "scenario": "35yo female, seborrheic keratosis left cheek, 1.5cm, raised, waxy, stucco-like, dermoscopy confirmed benign, no biopsy needed, patient desires removal, curettage",
+        "keywords": ["seborrheic keratosis", "curettage", "benign", "waxy", "dermoscopy", "stucco"],
+        "cpt": [{"code": "17000", "desc": "Destruction premalignant lesion", "reason": "Destruction of seborrheic keratosis"}],
+        "icd": [{"code": "L82.1", "desc": "Other seborrheic keratosis"}],
+        "rule": "Seborrheic keratosis destruction = 17000.",
+    },
+    "derm_6": {
+        "category": "dermatology",
+        "scenario": "50yo male, psoriasis, plaque type, body surface area 12%, PASI 14, failure topical therapy, started methotrexate, baseline labs CBC CMP hepatic panel",
+        "keywords": ["psoriasis", "plaque", "methotrexate", "basi", "pasi", "body surface area", "biologic"],
+        "cpt": [{"code": "99214", "desc": "Office visit established moderate MDM", "reason": "Office visit for psoriasis management"},
+               {"code": "85025", "desc": "CBC with differential", "reason": "Baseline CBC for methotrexate"},
+               {"code": "80053", "desc": "Comprehensive metabolic panel", "reason": "Baseline CMP"}],
+        "icd": [{"code": "L40.0", "desc": "Psoriasis vulgaris"}],
+        "rule": "Psoriasis visit with labs = 99214 + 85025 + 80053.",
+    },
+    "derm_7": {
+        "category": "dermatology",
+        "scenario": "28yo female, acne vulgaris, moderate, comedonal and inflammatory papules, face and back, isotretinoin considered, pregnancy test negative, iPLEDGE enrolled, labs ordered",
+        "keywords": ["acne", "isotretinoin", "ipledge", "pregnancy test", "comedonal", "inflammatory", "papules"],
+        "cpt": [{"code": "99214", "desc": "Office visit established moderate MDM", "reason": "Office visit for isotretinoin management"},
+               {"code": "82677", "desc": "Pregnancy test urine", "reason": "Pregnancy test for iPLEDGE"},
+               {"code": "80053", "desc": "CMP", "reason": "Baseline labs for isotretinoin"}],
+        "icd": [{"code": "L70.0", "desc": "Acne vulgaris"}],
+        "rule": "Isotretinoin management visit = 99214 + pregnancy test + labs.",
+    },
+    "derm_8": {
+        "category": "dermatology",
+        "scenario": "45yo male, dermatofibroma left lower leg, 1cm, firm nodule, punch biopsy confirmed, patient desires removal, excision with elliptical incision",
+        "keywords": ["dermatofibroma", "excision", "punch biopsy", "firm", "nodule", "leg"],
+        "cpt": [{"code": "11402", "desc": "Excision benign lesion 0.5-1.0cm trunk extremities", "reason": "Excision of dermatofibroma"},
+               {"code": "88300", "desc": "Level II surgical pathology", "reason": "Pathology confirmation"}],
+        "icd": [{"code": "D23.62", "desc": "Benign neoplasm of skin of lower limb"}],
+        "rule": "Benign lesion excision = 11402 + 88300.",
+    },
+    "derm_9": {
+        "category": "dermatology",
+        "scenario": "60yo female, melanoma in situ left shoulder, 1.5cm, wide local excision 1cm margins, split-thickness skin graft donor site right thigh, 3x4cm graft",
+        "keywords": ["melanoma", "excision", "skin graft", "melanoma in situ", "wide local excision", "graft"],
+        "cpt": [{"code": "11606", "desc": "Excision malignant lesion trunk 2.1-3.0cm", "reason": "Wide local excision melanoma in situ"},
+               {"code": "15100", "desc": "Split-thickness skin graft trunk", "reason": "STSG for defect closure"},
+               {"code": "88305", "desc": "Level IV surgical pathology", "reason": "Pathology for melanoma"}],
+        "icd": [{"code": "D04.22", "desc": "Melanoma in situ of trunk"}, {"code": "L81.0", "desc": "Post-inflammatory hyperpigmentation"}],
+        "rule": "Melanoma in situ excision = 11606 + 15100 + 88305.",
+    },
+    "derm_10": {
+        "category": "dermatology",
+        "scenario": "32yo male, keloid bilateral earlobes post-piercing, pruritic, growing, intralesional triamcinolone injection 10mg/mL, silicone gel sheets prescribed",
+        "keywords": ["keloid", "earlobe", "triamcinolone", "intralesional", "piercing", "silicone"],
+        "cpt": [{"code": "11900", "desc": "Injection intralesional up to 7 lesions", "reason": "Intralesional steroid injection keloid"},
+               {"code": "11901", "desc": "Injection intralesional each additional", "reason": "Additional lesion injection"}],
+        "icd": [{"code": "L91.0", "desc": "Hypertrophic scar"}, {"code": "L72.3", "desc": "Sebaceous cyst"}],
+        "rule": "Keloid injection = 11900 for first lesion, 11901 for each additional.",
+    },
+    "derm_11": {
+        "category": "dermatology",
+        "scenario": "50yo female, hidradenitis suppurativa axillae bilateral, Hurley stage II, recurrent abscesses, incision and drainage right axilla, doxycycline started",
+        "keywords": ["hidradenitis", "suppurativa", "abscess", "incision drainage", "axilla", "hurley"],
+        "cpt": [{"code": "10060", "desc": "Incision drainage abscess simple", "reason": "I&D of axillary abscess"},
+               {"code": "99213", "desc": "Office visit established moderate", "reason": "Office visit for HS management"}],
+        "icd": [{"code": "L73.2", "desc": "Hidradenitis suppurativa"}],
+        "rule": "I&D + office visit = 10060 + 99213.",
+    },
+    "derm_12": {
+        "category": "dermatology",
+        "scenario": "65yo male, poroma right sole, excisional biopsy, 1.2cm, pathological diagnosis eccrine poroma, complete excision achieved, 4mm margins",
+        "keywords": ["poroma", "excision", "biopsy", "sole", "eccrine", "margins"],
+        "cpt": [{"code": "11402", "desc": "Excision benign lesion 0.5-1.0cm", "reason": "Excision of poroma"},
+               {"code": "88305", "desc": "Level IV surgical pathology", "reason": "Pathology for poroma"}],
+        "icd": [{"code": "D23.69", "desc": "Benign neoplasm of skin of lower limb"}],
+        "rule": "Poroma excision = 11402 + 88305.",
+    },
+    "derm_13": {
+        "category": "dermatology",
+        "scenario": "40yo female, onychomycosis bilateral great toenails, KOH positive, terbinafine 250mg daily 12 weeks, liver function monitoring, baseline LFTs obtained",
+        "keywords": ["onychomycosis", "nail fungus", "terbinafine", "koh", "antifungal", "lft", "toenail"],
+        "cpt": [{"code": "99213", "desc": "Office visit established moderate", "reason": "Office visit for onychomycosis"},
+               {"code": "83874", "desc": "KOH preparation skin", "reason": "KOH for fungal confirmation"},
+               {"code": "84443", "desc": "TSH", "reason": "Rule out thyroid disease"}],
+        "icd": [{"code": "B35.1", "desc": "Tinea unguium"}],
+        "rule": "Onychomycosis visit with KOH = 99213 + 83874.",
+    },
+    "derm_14": {
+        "category": "dermatology",
+        "scenario": "25yo male, dermatitis herpetiformis bilateral extensor elbows, pruritic vesicles, gluten-free diet recommended, dapsone started, skin biopsy with direct immunofluorescence",
+        "keywords": ["dermatitis herpetiformis", "vesicles", "pruritic", "dapsone", "immunofluorescence", "gluten-free", "celiac"],
+        "cpt": [{"code": "11102", "desc": "Tangential biopsy", "reason": "Skin biopsy for DIF"},
+               {"code": "88346", "desc": "Immunofluorescence direct", "reason": "Direct immunofluorescence"},
+               {"code": "99214", "desc": "Office visit established moderate MDM", "reason": "Office visit for DH management"}],
+        "icd": [{"code": "L13.0", "desc": "Dermatitis herpetiformis"}],
+        "rule": "DH biopsy with DIF = 11102 + 88346 + 99214.",
+    },
+    "derm_15": {
+        "category": "dermatology",
+        "scenario": "70yo female, actinic cheilitis lower lip, white scaly plaque, vermillionectomy performed, specimen sent pathology, sun protection counseling",
+        "keywords": ["actinic cheilitis", "vermillionectomy", "lower lip", "sun damage", "white plaque", "scaly"],
+        "cpt": [{"code": "40590", "desc": "Vermillionectomy", "reason": "Vermillionectomy for actinic cheilitis"},
+               {"code": "88305", "desc": "Level IV surgical pathology", "reason": "Pathology for actinic cheilitis"}],
+        "icd": [{"code": "K13.0", "desc": "Diseases of lips"}, {"code": "L57.0", "desc": "Actinic keratosis"}],
+        "rule": "Vermillionectomy = 40590 + 88305.",
+    },
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # OPHTHALMOLOGY CASES (15 cases)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    "eye_1": {
+        "category": "ophthalmology",
+        "scenario": "72yo female, cataract right eye, nuclear sclerosis grade 3, BCVA 20/80, phacoemulsification with intraocular lens implantation, posterior chamber IOL, uneventful",
+        "keywords": ["cataract", "phacoemulsification", "iol", "intraocular lens", "nuclear sclerosis", "posterior chamber"],
+        "cpt": [{"code": "66984", "desc": "Extracapsular cataract removal with IOL", "reason": "Phaco with IOL implantation"},
+               {"code": "92174", "desc": "Retinal photography", "reason": "Preop retinal assessment"}],
+        "icd": [{"code": "H25.11", "desc": "Age-related nuclear cataract, right eye"}],
+        "rule": "Phaco with IOL = 66984.",
+    },
+    "eye_2": {
+        "category": "ophthalmology",
+        "scenario": "65yo male, open-angle glaucoma right eye, IOP 28mmHg, visual field superior arcuate scotoma, SLT laser performed, timolol continues",
+        "keywords": ["glaucoma", "open-angle", "slt", "laser", "iop", "visual field", "timolol"],
+        "cpt": [{"code": "65855", "desc": "Trabeculoplasty laser", "reason": "SLT for open-angle glaucoma"},
+               {"code": "92083", "desc": "Visual field examination", "reason": "Visual field for glaucoma monitoring"}],
+        "icd": [{"code": "H40.1110", "desc": "Open-angle glaucoma, right eye, mild"}],
+        "rule": "SLT laser = 65855 + 92083 for visual field.",
+    },
+    "eye_3": {
+        "category": "ophthalmology",
+        "scenario": "55yo female, retinal detachment left eye, superior temporal tear, macula-on, scleral buckle placement, cryopexy, gas bubble injected",
+        "keywords": ["retinal detachment", "retinal tear", "scleral buckle", "cryopexy", "gas bubble", "macula-on"],
+        "cpt": [{"code": "67105", "desc": "Repair retinal detachment with scleral buckle", "reason": "Scleral buckle for RD"},
+               {"code": "67145", "desc": "Photocoagulation retinal tear", "reason": "Cryopexy for retinal tear"},
+               {"code": "67039", "desc": "Injection intravitreal gas", "reason": "Gas injection"}],
+        "icd": [{"code": "H33.001", "desc": "Retinal detachment with retinal break, left eye"}],
+        "rule": "RD repair with scleral buckle = 67105 + 67145 + 67039.",
+    },
+    "eye_4": {
+        "category": "ophthalmology",
+        "scenario": "68yo male, diabetic retinopathy proliferative, neovascularization disc, panretinal photocoagulation 1500 spots bilaterally, anti-VEGF injection right eye",
+        "keywords": ["diabetic retinopathy", "proliferative", "panretinal photocoagulation", "prp", "anti-vegf", "neovascularization"],
+        "cpt": [{"code": "67228", "desc": "Panretinal photocoagulation", "reason": "PRP for proliferative DR"},
+               {"code": "67028", "desc": "Intravitreal injection anti-VEGF", "reason": "Anti-VEGF injection"}],
+        "icd": [{"code": "E11.319", "desc": "Type 2 diabetes with unspecified diabetic retinopathy without macular edema"}],
+        "rule": "PRP + anti-VEGF injection = 67228 + 67028.",
+    },
+    "eye_5": {
+        "category": "ophthalmology",
+        "scenario": "78yo female, wet AMD right eye, subretinal hemorrhage, decreased vision 20/200, intravitreal ranibizumab injection, monitoring plan monthly",
+        "keywords": ["macular degeneration", "amd", "wet", "ranibizumab", "intravitreal", "subretinal hemorrhage"],
+        "cpt": [{"code": "67028", "desc": "Intravitreal injection anti-VEGF", "reason": "Ranibizumab injection for wet AMD"},
+               {"code": "92250", "desc": "Fundus photography", "reason": "OCT for AMD monitoring"}],
+        "icd": [{"code": "H35.3210", "desc": "Exudative age-related macular degeneration, right eye"}],
+        "rule": "Anti-VEGF injection for wet AMD = 67028 + 92250.",
+    },
+    "eye_6": {
+        "category": "ophthalmology",
+        "scenario": "30yo male, penetrating keratoplasty right eye, keratoconus severe, corneal transplant, 16 interrupted sutures, post-op prednisolone drops",
+        "keywords": ["keratoplasty", "corneal transplant", "keratoconus", "penetrating", "sutures", "prednisolone"],
+        "cpt": [{"code": "65730", "desc": "Penetrating keratoplasty", "reason": "Corneal transplant for keratoconus"}],
+        "icd": [{"code": "H18.609", "desc": "Keratoconus, unspecified"}],
+        "rule": "Penetrating keratoplasty = 65730.",
+    },
+    "eye_7": {
+        "category": "ophthalmology",
+        "scenario": "50yo female, acute angle-closure glaucoma left eye, IOP 52mmHg, mid-dilated fixed pupil, pain, nausea, emergent laser peripheral iridotomy, miotics started",
+        "keywords": ["angle-closure", "glaucoma", "emergency", "iridotomy", "iop", "mid-dilated", "pain"],
+        "cpt": [{"code": "66761", "desc": "Iridotomy laser", "reason": "Laser peripheral iridotomy"}],
+        "icd": [{"code": "H40.012", "desc": "Acute angle-closure glaucoma, left eye"}],
+        "rule": "Laser peripheral iridotomy = 66761.",
+    },
+    "eye_8": {
+        "category": "ophthalmology",
+        "scenario": "45yo male, blepharoplasty upper eyelids bilateral, dermatochalasis, visual field obstruction superiorly, functional indication documented, 8mm upper lid, 6mm lower lid",
+        "keywords": ["blepharoplasty", "dermatochalasis", "visual field", "upper eyelid", "ptosis", "functional"],
+        "cpt": [{"code": "15823", "desc": "Blepharoplasty upper eyelid", "reason": "Functional upper lid blepharoplasty"},
+               {"code": "15824", "desc": "Blepharoplasty lower eyelid", "reason": "Lower lid blepharoplasty"}],
+        "icd": [{"code": "H02.339", "desc": "Dermatochalasis of eyelid, bilateral"}],
+        "rule": "Upper + lower blepharoplasty = 15823 + 15824.",
+    },
+    "eye_9": {
+        "category": "ophthalmology",
+        "scenario": "60yo male, vitreous hemorrhage right eye, diabetes, non-clearing after 3 months, pars plana vitrectomy, endolaser, silicone oil tamponade",
+        "keywords": ["vitreous hemorrhage", "vitrectomy", "pars plana", "endolaser", "silicone oil", "diabetes"],
+        "cpt": [{"code": "67036", "desc": "Vitrectomy with endolaser", "reason": "Pars plana vitrectomy"},
+               {"code": "67039", "desc": "Injection intravitreal substance", "reason": "Silicone oil tamponade"},
+               {"code": "67228", "desc": "Panretinal photocoagulation", "reason": "Endolaser photocoagulation"}],
+        "icd": [{"code": "H35.311", "desc": "Nonexudative age-related macular degeneration, right eye"}],
+        "rule": "Vitrectomy with endolaser = 67036 + 67039 + 67228.",
+    },
+    "eye_10": {
+        "category": "ophthalmology",
+        "scenario": "22yo female, strabismus esotropia right eye, 30 prism diopters, superior rectus transposition, medial rectus recession 5mm, adjustable suture",
+        "keywords": ["strabismus", "esotropia", "recession", "transposition", "rectus", "prism diopters"],
+        "cpt": [{"code": "67311", "desc": "Strabismus surgery recession", "reason": "Medial rectus recession"},
+               {"code": "67312", "desc": "Strabismus surgery transposition", "reason": "Superior rectus transposition"}],
+        "icd": [{"code": "H50.10", "desc": "Monocular esotropia, right eye"}],
+        "rule": "Strabismus surgery = 67311 + 67312.",
+    },
+    "eye_11": {
+        "category": "ophthalmology",
+        "scenario": "40yo male, chalazion upper left eyelid, 8mm, conservative therapy failed 6 weeks, incision and curettage under local anesthesia, pathology sent",
+        "keywords": ["chalazion", "incision", "curettage", "eyelid", "local anesthesia", "conservative"],
+        "cpt": [{"code": "67999", "desc": "Blepharoplasty other", "reason": "Incision and curettage of chalazion"},
+               {"code": "88300", "desc": "Level II surgical pathology", "reason": "Pathology for chalazion"}],
+        "icd": [{"code": "H00.11", "desc": "Chalazion of left upper eyelid"}],
+        "rule": "Chalazion I&C = 67999 + 88300.",
+    },
+    "eye_12": {
+        "category": "ophthalmology",
+        "scenario": "55yo female, dry eye syndrome bilateral, Schirmer test 3mm right 4mm left, punctal plugs placed both eyes bilateral, cyclosporine 0.05% started",
+        "keywords": ["dry eye", "punctal plugs", "schirmer", "cyclosporine", "keratoconjunctivitis sicca"],
+        "cpt": [{"code": "68761", "desc": "Punctal occlusion", "reason": "Punctal plug placement"},
+               {"code": "92014", "desc": "Comprehensive eye exam", "reason": "Eye exam for dry eye management"}],
+        "icd": [{"code": "H04.121", "desc": "Dry eye syndrome, right eye"}, {"code": "H04.122", "desc": "Dry eye syndrome, left eye"}],
+        "rule": "Punctal plug placement = 68761 + 92014.",
+    },
+    "eye_13": {
+        "category": "ophthalmology",
+        "scenario": "80yo male, dense cataract left eye, glaucoma, combined phaco-trabeculectomy with mitomycin C, single session, IOL implantation",
+        "keywords": ["phaco-trabeculectomy", "combined surgery", "cataract", "glaucoma", "mitomycin", "iol"],
+        "cpt": [{"code": "66984", "desc": "Extracapsular cataract removal with IOL", "reason": "Phacoemulsification"},
+               {"code": "66170", "desc": "Trabeculectomy", "reason": "Trabeculectomy with MMC"}],
+        "icd": [{"code": "H25.11", "desc": "Age-related nuclear cataract, left eye"}, {"code": "H40.1120", "desc": "Open-angle glaucoma, left eye"}],
+        "rule": "Combined phaco + trab = 66984 + 66170.",
+    },
+    "eye_14": {
+        "category": "ophthalmology",
+        "scenario": "62yo female, central retinal vein occlusion left eye, macular edema, decreased vision 20/200, intravitreal aflibercept injection, OCT macular thickness 480um",
+        "keywords": ["retinal vein occlusion", "macular edema", "aflibercept", "intravitreal", "oct", "crvo"],
+        "cpt": [{"code": "67028", "desc": "Intravitreal injection anti-VEGF", "reason": "Aflibercept for CRVO macular edema"},
+               {"code": "92134", "desc": "OCT macula", "reason": "OCT for macular edema assessment"}],
+        "icd": [{"code": "H34.811", "desc": "Central retinal vein occlusion, left eye"}],
+        "rule": "Anti-VEGF for CRVO = 67028 + 92134.",
+    },
+    "eye_15": {
+        "category": "ophthalmology",
+        "scenario": "35yo male, pterygium left eye nasal, encroaching on cornea 2mm, photophobia, primary pterygium excision with conjunctival autograft, mitomycin C",
+        "keywords": ["pterygium", "conjunctival autograft", "mitomycin", "nasal", "cornea", "excision"],
+        "cpt": [{"code": "68110", "desc": "Excision pterygium", "reason": "Pterygium excision with autograft"}],
+        "icd": [{"code": "H11.009", "desc": "Pterygium of unspecified eye"}],
+        "rule": "Pterygium excision with autograft = 68110.",
+    },
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ORTHOPEDICS ADDITIONAL (15 cases)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    "ortho_1": {
+        "category": "orthopedics",
+        "scenario": "70yo female, displaced femoral neck fracture right hip, Garden IV, ORIF with cannulated screws vs hemiarthroplasty, surgical decision, posterior approach",
+        "keywords": ["femoral neck fracture", "hip fracture", "garden", "orif", "cannulated screws", "hemiarthroplasty"],
+        "cpt": [{"code": "27236", "desc": "Closed treatment femoral neck fracture ORIF", "reason": "ORIF femoral neck fracture"},
+               {"code": "27130", "desc": "Hemiarthroplasty hip", "reason": "Hemiarthroplasty"}],
+        "icd": [{"code": "S72.001A", "desc": "Fracture of unspecified part of neck of right femur"}],
+        "rule": "Femoral neck fracture: ORIF = 27236, hemiarthroplasty = 27130.",
+    },
+    "ortho_2": {
+        "category": "orthopedics",
+        "scenario": "45yo male, ACL tear left knee, complete, MRI confirmed, chronic instability, ACL reconstruction with hamstring autograft, arthroscopic assisted",
+        "keywords": ["acl tear", "acl reconstruction", "hamstring autograft", "knee instability", "arthroscopic", "anterior cruciate"],
+        "cpt": [{"code": "29888", "desc": "ACL reconstruction arthroscopic", "reason": "ACL reconstruction with autograft"}],
+        "icd": [{"code": "S83.512A", "desc": "Sprain of anterior cruciate ligament of left knee"}],
+        "rule": "ACL reconstruction = 29888.",
+    },
+    "ortho_3": {
+        "category": "orthopedics",
+        "scenario": "65yo female, rotator cuff tear right shoulder, full thickness supraspinatus 2cm, arthroscopic repair, subacromial decompression, single row",
+        "keywords": ["rotator cuff", "supraspinatus", "arthroscopic repair", "subacromial decompression", "full thickness"],
+        "cpt": [{"code": "29827", "desc": "Arthroscopic rotator cuff repair", "reason": "Arthroscopic RCR"},
+               {"code": "29826", "desc": "Arthroscopic acromioplasty", "reason": "Subacromial decompression"}],
+        "icd": [{"code": "M75.111", "desc": "Complete rotator cuff tear or rupture of right shoulder"}],
+        "rule": "Arthroscopic RCR + decompression = 29827 + 29826.",
+    },
+    "ortho_4": {
+        "category": "orthopedics",
+        "scenario": "55yo male, lumbar spinal stenosis L4-L5, neurogenic claudication, failed conservative 6 months, laminectomy L4-5 bilateral, decompression",
+        "keywords": ["spinal stenosis", "laminectomy", "decompression", "neurogenic claudication", "l4-l5", "lumbar"],
+        "cpt": [{"code": "63047", "desc": "Laminectomy decompression 1-2 levels", "reason": "Laminectomy L4-5 decompression"}],
+        "icd": [{"code": "M48.06", "desc": "Spinal stenosis, lumbar region"}],
+        "rule": "Laminectomy decompression = 63047.",
+    },
+    "ortho_5": {
+        "category": "orthopedics",
+        "scenario": "75yo female, severe knee osteoarthritis bilateral, bone-on-bone, BMI 32, failed injections PT, total knee arthroplasty right knee, posterior stabilized, cemented",
+        "keywords": ["total knee arthroplasty", "tka", "osteoarthritis", "cemented", "posterior stabilized"],
+        "cpt": [{"code": "27447", "desc": "Total knee arthroplasty", "reason": "TKA for OA"}],
+        "icd": [{"code": "M17.11", "desc": "Primary osteoarthritis, right knee"}],
+        "rule": "Total knee arthroplasty = 27447.",
+    },
+    "ortho_6": {
+        "category": "orthopedics",
+        "scenario": "25yo male, distal radius fracture right, displaced intra-articular, ORIF with volar locking plate, 3 fragments, anatomical reduction confirmed fluoroscopy",
+        "keywords": ["distal radius fracture", "orif", "volar locking plate", "intra-articular", "fluoroscopy"],
+        "cpt": [{"code": "25607", "desc": "ORIF distal radius fracture", "reason": "Volar locking plate ORIF distal radius"}],
+        "icd": [{"code": "S52.502A", "desc": "Fracture of lower end of radius, right arm"}],
+        "rule": "ORIF distal radius = 25607.",
+    },
+    "ortho_7": {
+        "category": "orthopedics",
+        "scenario": "68yo female, total hip arthroplasty left, femoral neck fracture displaced, cementless stem, acetabular cup, posterior approach, DVT prophylaxis",
+        "keywords": ["total hip arthroplasty", "tha", "femoral neck fracture", "cementless", "acetabular cup"],
+        "cpt": [{"code": "27130", "desc": "Total hip arthroplasty", "reason": "THA for femoral neck fracture"}],
+        "icd": [{"code": "S72.001A", "desc": "Fracture of unspecified part of neck of right femur"}],
+        "rule": "Total hip arthroplasty = 27130.",
+    },
+    "ortho_8": {
+        "category": "orthopedics",
+        "scenario": "50yo male, Achilles tendon rupture left, complete, Thompson test positive, MRI confirmed, percutaneous repair 2 weeks post-injury, short leg cast",
+        "keywords": ["achilles tendon", "rupture", "percutaneous repair", "thompson test", "tendon"],
+        "cpt": [{"code": "27650", "desc": "Repair of Achilles tendon", "reason": "Percutaneous Achilles repair"}],
+        "icd": [{"code": "S86.012A", "desc": "Complete rupture of left Achilles tendon"}],
+        "rule": "Achilles tendon repair = 27650.",
+    },
+    "ortho_9": {
+        "category": "orthopedics",
+        "scenario": "40yo male, lumbar disc herniation L5-S1 left, radiculopathy, failed conservative, microdiscectomy L5-S1 left, nerve root decompression",
+        "keywords": ["disc herniation", "microdiscectomy", "l5-s1", "radiculopathy", "nerve root", "lumbar"],
+        "cpt": [{"code": "63030", "desc": "Lumbar discectomy single level", "reason": "Microdiscectomy L5-S1"}],
+        "icd": [{"code": "M51.16", "desc": "Intervertebral disc disorder with radiculopathy, lumbar region"}],
+        "rule": "Microdiscectomy = 63030.",
+    },
+    "ortho_10": {
+        "category": "orthopedics",
+        "scenario": "60yo male, distal humerus fracture right elbow, comminuted intra-articular, ORIF with dual plating, open approach, 360 degree fixation",
+        "keywords": ["distal humerus fracture", "orif", "dual plating", "comminuted", "intra-articular", "elbow"],
+        "cpt": [{"code": "24566", "desc": "ORIF distal humerus fracture", "reason": "Dual plating ORIF distal humerus"}],
+        "icd": [{"code": "S42.402A", "desc": "Fracture of lower end of humerus, right arm"}],
+        "rule": "ORIF distal humerus = 24566.",
+    },
+    "ortho_11": {
+        "category": "orthopedics",
+        "scenario": "30yo male, tibial plateau fracture right, Schatzker type II, split depression, ORIF with elevation and subchondral bone grafting, lateral approach",
+        "keywords": ["tibial plateau fracture", "schatzker", "orif", "bone grafting", "split depression"],
+        "cpt": [{"code": "27536", "desc": "ORIF tibial plateau fracture", "reason": "ORIF tibial plateau with grafting"}],
+        "icd": [{"code": "S82.101A", "desc": "Fracture of upper end of tibia, right leg"}],
+        "rule": "ORIF tibial plateau = 27536.",
+    },
+    "ortho_12": {
+        "category": "orthopedics",
+        "scenario": "70yo female, cervical myelopathy C3-C5, gait instability, bilateral hand numbness, cervical laminoplasty C3-C5, open door technique",
+        "keywords": ["cervical myelopathy", "laminoplasty", "open door", "c3-c5", "gait", "hand numbness"],
+        "cpt": [{"code": "63050", "desc": "Cervical laminoplasty", "reason": "Open door laminoplasty C3-C5"}],
+        "icd": [{"code": "M48.02", "desc": "Spinal stenosis, cervical region"}],
+        "rule": "Cervical laminoplasty = 63050.",
+    },
+    "ortho_13": {
+        "category": "orthopedics",
+        "scenario": "55yo male, trigger finger right middle finger, catching pain, locked in flexion, corticosteroid injection failed, A1 pulley release open technique",
+        "keywords": ["trigger finger", "stenosing tenosynovitis", "pulley release", "catching", "locked", "corticosteroid"],
+        "cpt": [{"code": "26055", "desc": "Release of trigger finger", "reason": "A1 pulley release"}],
+        "icd": [{"code": "M65.31", "desc": "Trigger finger, right middle finger"}],
+        "rule": "Trigger finger release = 26055.",
+    },
+    "ortho_14": {
+        "category": "orthopedics",
+        "scenario": "45yo female, carpal tunnel syndrome bilateral, EMG confirmed, nocturnal paresthesias, thenar atrophy, endoscopic carpal tunnel release right, staged left",
+        "keywords": ["carpal tunnel", "endoscopic release", "emg", "thenar atrophy", "paresthesias", "median nerve"],
+        "cpt": [{"code": "64721", "desc": "Carpal tunnel release", "reason": "Endoscopic CTR"}],
+        "icd": [{"code": "G56.00", "desc": "Carpal tunnel syndrome, unspecified hand"}],
+        "rule": "Carpal tunnel release = 64721.",
+    },
+    "ortho_15": {
+        "category": "orthopedics",
+        "scenario": "20yo male, closed clavicle fracture right, midshaft, displaced 2cm, ORIF with superior precontoured plate, 6-hole, nerve block anesthesia",
+        "keywords": ["clavicle fracture", "orif", "plate fixation", "midshaft", "displaced", "nerve block"],
+        "cpt": [{"code": "23430", "desc": "ORIF clavicle fracture", "reason": "Plate fixation midshaft clavicle"}],
+        "icd": [{"code": "S42.012A", "desc": "Fracture of shaft of clavicle, right side"}],
+        "rule": "ORIF clavicle fracture = 23430.",
+    },
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # PATHOLOGY/LAB CASES (15 cases)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    "path_1": {
+        "category": "pathology_lab",
+        "scenario": "55yo male, colonoscopy, 3 sessile polyps ascending colon, hot snare polypectomy, specimens sent to pathology, tubular adenomas found",
+        "keywords": ["colonoscopy", "polypectomy", "polyp", "adenoma", "pathology", "hot snare"],
+        "cpt": [{"code": "45385", "desc": "Colonoscopy with removal of polyp", "reason": "Colonoscopy with polypectomy"},
+               {"code": "88305", "desc": "Level IV surgical pathology", "reason": "Pathology for polyps"}],
+        "icd": [{"code": "K63.5", "desc": "Polyp of colon"}, {"code": "D12.0", "desc": "Benign neoplasm of cecum"}],
+        "rule": "Polypectomy + pathology = 45385 + 88305 (each specimen).",
+    },
+    "path_2": {
+        "category": "pathology_lab",
+        "scenario": "40yo female, breast core needle biopsy right, BI-RADS 4A, 1.2cm mass ultrasound-guided, invasive ductal carcinoma grade 2, ER+/PR+/HER2-",
+        "keywords": ["breast biopsy", "core needle", "invasive ductal carcinoma", "b-rads", "ultrasound-guided", "er positive"],
+        "cpt": [{"code": "19083", "desc": "Ultrasound-guided breast biopsy", "reason": "US-guided breast core biopsy"},
+               {"code": "88307", "desc": "Level V surgical pathology neoplasm", "reason": "Pathology for carcinoma"}],
+        "icd": [{"code": "C50.911", "desc": "Malignant neoplasm of unspecified site of right female breast"}],
+        "rule": "US-guided breast biopsy = 19083 + 88307.",
+    },
+    "path_3": {
+        "category": "pathology_lab",
+        "scenario": "65yo male, lung mass right upper lobe 2.5cm, CT-guided core needle biopsy, non-small cell lung cancer adenocarcinoma, PD-L1 60%, EGFR negative",
+        "keywords": ["lung biopsy", "core needle", "adenocarcinoma", "ct-guided", "pd-l1", "non-small cell"],
+        "cpt": [{"code": "19081", "desc": "CT-guided lung biopsy core needle", "reason": "CT-guided lung core biopsy"},
+               {"code": "88307", "desc": "Level V surgical pathology neoplasm", "reason": "Pathology for lung cancer"},
+               {"code": "88360", "desc": "Immunohistochemistry", "reason": "PD-L1 and molecular testing"}],
+        "icd": [{"code": "C34.11", "desc": "Malignant neoplasm of upper lobe right bronchus or lung"}],
+        "rule": "CT-guided lung biopsy = 19081 + 88307 + 88360.",
+    },
+    "path_4": {
+        "category": "pathology_lab",
+        "scenario": "35yo male, wound culture right foot, chronic ulcer, methicillin-resistant Staphylococcus aureus grown, vancomycin sensitivity panel",
+        "keywords": ["wound culture", "mrsa", "chronic ulcer", "vancomycin", "sensitivity", "staphylococcus"],
+        "cpt": [{"code": "87070", "desc": "Culture wound", "reason": "Wound culture for infection"},
+               {"code": "87186", "desc": "Antimicrobial susceptibility testing", "reason": "Sensitivity panel"}],
+        "icd": [{"code": "L97.519", "desc": "Non-pressure chronic ulcer of other part of right foot"}, {"code": "B95.62", "desc": "MRSA"}],
+        "rule": "Wound culture + sensitivity = 87070 + 87186.",
+    },
+    "path_5": {
+        "category": "pathology_lab",
+        "scenario": "50yo female, thyroid nodule right lobe 2cm, FNA ultrasound-guided, Bethesda IV follicular lesion, molecular testing Afirma GSC, surgery consultation",
+        "keywords": ["thyroid nodule", "fna", "fine needle aspiration", "bethesda", "afirma", "molecular testing", "follicular"],
+        "cpt": [{"code": "10005", "desc": "FNA thyroid ultrasound-guided", "reason": "US-guided FNA thyroid"},
+               {"code": "88172", "desc": "Cytopathology FNA", "reason": "Cytopathology interpretation"},
+               {"code": "81479", "desc": "Molecular pathology unlisted", "reason": "Molecular testing Afirma"}],
+        "icd": [{"code": "E04.1", "desc": "Nontoxic thyroid nodule"}],
+        "rule": "Thyroid FNA + cytopathology = 10005 + 88172 + 81479.",
+    },
+    "path_6": {
+        "category": "pathology_lab",
+        "scenario": "60yo male, prostate biopsy 12-core transrectal, PSA elevated 8.2, Gleason 3+4=7 prostate adenocarcinoma 2 of 12 cores involved, 30% of core involved",
+        "keywords": ["prostate biopsy", "gleason", "psa", "adenocarcinoma", "transrectal", "core biopsy"],
+        "cpt": [{"code": "55700", "desc": "Prostate biopsy core needle", "reason": "12-core transrectal biopsy"},
+               {"code": "88305", "desc": "Level IV surgical pathology", "reason": "Pathology for prostate cancer"}],
+        "icd": [{"code": "C61", "desc": "Malignant neoplasm of prostate"}],
+        "rule": "Prostate core biopsy = 55700 + 88305.",
+    },
+    "path_7": {
+        "category": "pathology_lab",
+        "scenario": "25yo female, skin punch biopsy left arm, 4mm, suspected lupus, dermal lymphocytic infiltrate, interface dermatitis, positive ANA 1:640, anti-dsDNA elevated",
+        "keywords": ["skin biopsy", "punch biopsy", "lupus", "lymphocytic", "ana", "anti-dsDNA", "dermatitis"],
+        "cpt": [{"code": "11104", "desc": "Punch biopsy skin", "reason": "4mm punch biopsy"},
+               {"code": "88305", "desc": "Level IV surgical pathology", "reason": "Pathology for lupus"},
+               {"code": "86200", "desc": "ANA", "reason": "ANA testing"}],
+        "icd": [{"code": "M32.10", "desc": "Systemic lupus erythematosus with organ involvement"}],
+        "rule": "Punch biopsy + pathology = 11104 + 88305 + 86200.",
+    },
+    "path_8": {
+        "category": "pathology_lab",
+        "scenario": "70yo male, bone marrow biopsy iliac crest, pancytopenia, myelodysplastic syndrome suspected, hypocellular marrow, blasts 8%, flow cytometry sent",
+        "keywords": ["bone marrow biopsy", "pancytopenia", "myelodysplastic", "blasts", "flow cytometry", "hypocellular"],
+        "cpt": [{"code": "38220", "desc": "Bone marrow biopsy", "reason": "Bone marrow biopsy and aspiration"},
+               {"code": "88305", "desc": "Level IV surgical pathology", "reason": "Bone marrow pathology"},
+               {"code": "88184", "desc": "Flow cytometry", "reason": "Flow cytometry for MDS"}],
+        "icd": [{"code": "D46.9", "desc": "Myelodysplastic syndrome, unspecified"}],
+        "rule": "Bone marrow biopsy + aspiration = 38220 + 88305 + 88184.",
+    },
+    "path_9": {
+        "category": "pathology_lab",
+        "scenario": "45yo female, endometrial biopsy, postmenopausal bleeding, complex hyperplasia without atypia, progesterone therapy recommended",
+        "keywords": ["endometrial biopsy", "postmenopausal bleeding", "hyperplasia", "pathology", "progesterone"],
+        "cpt": [{"code": "58100", "desc": "Endometrial biopsy", "reason": "Endometrial sampling"},
+               {"code": "88305", "desc": "Level IV surgical pathology", "reason": "Pathology for endometrium"}],
+        "icd": [{"code": "N92.1", "desc": "Excessive and frequent menstruation with regular cycle"}, {"code": "N85.01", "desc": "Endometrial hyperplasia without atypia"}],
+        "rule": "Endometrial biopsy = 58100 + 88305.",
+    },
+    "path_10": {
+        "category": "pathology_lab",
+        "scenario": "30yo male, lymph node biopsy right axillary, 2cm, excisional, nodal sclerosis Hodgkin lymphoma, mixed cellularity, stage IIA",
+        "keywords": ["lymph node biopsy", "excisional", "hodgkin lymphoma", "sclerosis", "axillary", "staging"],
+        "cpt": [{"code": "38525", "desc": "Excision axillary lymph node", "reason": "Excisional lymph node biopsy"},
+               {"code": "88307", "desc": "Level V surgical pathology neoplasm", "reason": "Pathology for lymphoma"},
+               {"code": "88360", "desc": "Immunohistochemistry", "reason": "IHC for lymphoma subtyping"}],
+        "icd": [{"code": "C81.11", "desc": "Nodular sclerosis Hodgkin lymphoma, lymph nodes of axilla"}],
+        "rule": "Excisional LN biopsy = 38525 + 88307 + 88360.",
+    },
+    "path_11": {
+        "category": "pathology_lab",
+        "scenario": "55yo female, Pap smear routine, atypical glandular cells, reflex HPV testing positive, colposcopy referral, cervical biopsy during colposcopy, CIN 2",
+        "keywords": ["pap smear", "atypical glandular cells", "hpv", "colposcopy", "cin", "cervical biopsy"],
+        "cpt": [{"code": "88141", "desc": "Cytopathology cervical Pap", "reason": "Pap smear interpretation"},
+               {"code": "87625", "desc": "HPV detection", "reason": "Reflex HPV testing"},
+               {"code": "57454", "desc": "Colposcopy with cervical biopsy", "reason": "Cervical biopsy during colposcopy"}],
+        "icd": [{"code": "R87.610", "desc": "Atypical glandular cells on cytology"}, {"code": "N87.1", "desc": "Dysplasia of cervix uteri"}],
+        "rule": "Pap + HPV + colposcopy + biopsy = 88141 + 87625 + 57454.",
+    },
+    "path_12": {
+        "category": "pathology_lab",
+        "scenario": "40yo male, liver biopsy percutaneous, elevated transaminases, chronic hepatitis B, METAVIR F2-F3, bridging fibrosis, stage 2-3 fibrosis",
+        "keywords": ["liver biopsy", "percutaneous", "hepatitis b", "fibrosis", "metavir", "transaminases"],
+        "cpt": [{"code": "47000", "desc": "Liver biopsy percutaneous", "reason": "Percutaneous liver biopsy"},
+               {"code": "88305", "desc": "Level IV surgical pathology", "reason": "Pathology for hepatitis staging"}],
+        "icd": [{"code": "B18.1", "desc": "Chronic viral hepatitis B without delta agent"}, {"code": "K73.9", "desc": "Chronic hepatitis, unspecified"}],
+        "rule": "Liver biopsy + pathology = 47000 + 88305.",
+    },
+    "path_13": {
+        "category": "pathology_lab",
+        "scenario": "65yo female, fine needle aspiration thyroid left lobe, follicular neoplasm Bethesda III, repeat FNA 3 months benign, surveillance recommended",
+        "keywords": ["thyroid", "fna", "follicular neoplasm", "bethesda", "repeat", "surveillance"],
+        "cpt": [{"code": "10005", "desc": "FNA thyroid ultrasound-guided", "reason": "Repeat FNA thyroid"},
+               {"code": "88172", "desc": "Cytopathology FNA", "reason": "Cytopathology interpretation"}],
+        "icd": [{"code": "E04.1", "desc": "Nontoxic thyroid nodule"}],
+        "rule": "Repeat FNA + cytopathology = 10005 + 88172.",
+    },
+    "path_14": {
+        "category": "pathology_lab",
+        "scenario": "28yo female, cervical LEEP procedure, CIN 2, cone biopsy margins negative, HPV 16 positive, follow-up Pap in 12 months",
+        "keywords": ["leep", "cin", "cervical", "cone biopsy", "hpv 16", "electrosurgical excision"],
+        "cpt": [{"code": "57460", "desc": "LEEP excision cervix", "reason": "LEEP for CIN 2"},
+               {"code": "88305", "desc": "Level IV surgical pathology", "reason": "Pathology for LEEP specimen"}],
+        "icd": [{"code": "N87.1", "desc": "Dysplasia of cervix uteri"}, {"code": "A63.0", "desc": "Anogenital warts due to HPV"}],
+        "rule": "LEEP + pathology = 57460 + 88305.",
+    },
+    "path_15": {
+        "category": "pathology_lab",
+        "scenario": "50yo male, gastric biopsy EGD, H. pylori positive rapid urease test, chronic active gastritis, triple therapy prescribed, repeat testing after treatment",
+        "keywords": ["gastric biopsy", "h pylori", "rapid urease", "gastritis", "egd", "triple therapy"],
+        "cpt": [{"code": "43239", "desc": "EGD with biopsy", "reason": "EGD with gastric biopsies"},
+               {"code": "87999", "desc": "H. pylori rapid urease test", "reason": "Rapid urease for H. pylori"},
+               {"code": "88305", "desc": "Level IV surgical pathology", "reason": "Pathology for gastritis"}],
+        "icd": [{"code": "K25.9", "desc": "Chronic gastritis, unspecified"}, {"code": "B98.0", "desc": "H. pylori as cause of diseases classified elsewhere"}],
+        "rule": "EGD with biopsy + H. pylori = 43239 + 87999 + 88305.",
+    },
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # RADIOLOGY CASES (15 cases)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    "rad_1": {
+        "category": "radiology",
+        "scenario": "65yo male, CT head without contrast emergent, fall with head strike, altered mental status, GCS 13, no acute intracranial hemorrhage, mild cerebral atrophy",
+        "keywords": ["ct head", "without contrast", "fall", "head injury", "intracranial hemorrhage", "gcs"],
+        "cpt": [{"code": "70450", "desc": "CT head without contrast", "reason": "Emergent CT head for trauma"}],
+        "icd": [{"code": "S00.83XA", "desc": "Contusion of scalp, initial encounter"}, {"code": "R40.20", "desc": "Coma, unspecified"}],
+        "rule": "CT head without contrast = 70450.",
+    },
+    "rad_2": {
+        "category": "radiology",
+        "scenario": "45yo female, MRI lumbar spine without and with contrast, radiculopathy, L4-L5 disc herniation with nerve root compression, foraminal stenosis",
+        "keywords": ["mri", "lumbar spine", "contrast", "disc herniation", "radiculopathy", "foraminal stenosis"],
+        "cpt": [{"code": "72148", "desc": "MRI lumbar spine without contrast", "reason": "MRI lumbar spine"},
+               {"code": "72149", "desc": "MRI lumbar spine with contrast", "reason": "MRI lumbar spine with contrast"}],
+        "icd": [{"code": "M51.16", "desc": "Intervertebral disc disorder with radiculopathy, lumbar region"}],
+        "rule": "MRI lumbar spine W/O and W contrast = 72148 + 72149.",
+    },
+    "rad_3": {
+        "category": "radiology",
+        "scenario": "55yo male, chest X-ray PA and lateral, chronic cough 3 weeks, right lower lobe infiltrate, airspace opacity, pneumonia suspected",
+        "keywords": ["chest x-ray", "pa lateral", "pneumonia", "infiltrate", "cough", "opacity"],
+        "cpt": [{"code": "71046", "desc": "Chest X-ray 2 views PA and lateral", "reason": "PA and lateral chest radiograph"}],
+        "icd": [{"code": "J18.9", "desc": "Pneumonia, unspecified organism"}],
+        "rule": "Chest X-ray PA and lateral = 71046.",
+    },
+    "rad_4": {
+        "category": "radiology",
+        "scenario": "60yo female, mammogram bilateral screening, dense breast tissue, BI-RADS 3 probably benign, 6-month follow-up recommended, no masses or calcifications",
+        "keywords": ["mammogram", "screening", "dense breasts", "bi-rads 3", "follow-up"],
+        "cpt": [{"code": "77067", "desc": "Screening mammography bilateral", "reason": "Screening mammogram"}],
+        "icd": [{"code": "Z12.31", "desc": "Encounter for screening mammogram"}],
+        "rule": "Screening mammogram bilateral = 77067.",
+    },
+    "rad_5": {
+        "category": "radiology",
+        "scenario": "50yo male, CT abdomen and pelvis with contrast, RLQ pain, appendix normal, unexpected finding 2cm adrenal incidentaloma right, HU 10 non-enhancing",
+        "keywords": ["ct abdomen", "pelvis", "contrast", "adrenal incidentaloma", "hounsfield", "appendix"],
+        "cpt": [{"code": "74177", "desc": "CT abdomen pelvis with contrast", "reason": "CT abdomen pelvis with contrast"}],
+        "icd": [{"code": "R93.89", "desc": "Abnormal findings on diagnostic imaging of other structures"}, {"code": "D35.00", "desc": "Benign neoplasm of adrenal gland"}],
+        "rule": "CT abdomen pelvis with contrast = 74177.",
+    },
+    "rad_6": {
+        "category": "radiology",
+        "scenario": "70yo male, bone density DEXA scan, postmenopausal osteoporosis screening, T-score lumbar spine -2.8, femoral neck -2.5, osteoporosis diagnosed",
+        "keywords": ["dexa", "bone density", "osteoporosis", "t-score", "lumbar", "femoral"],
+        "cpt": [{"code": "77080", "desc": "Bone density scan axial", "reason": "DEXA scan bilateral hips and spine"}],
+        "icd": [{"code": "M81.0", "desc": "Age-related osteoporosis without current pathological fracture"}],
+        "rule": "DEXA scan = 77080.",
+    },
+    "rad_7": {
+        "category": "radiology",
+        "scenario": "45yo female, ultrasound pelvis transvaginal, postmenopausal bleeding, endometrial stripe 8mm, no intracavitary lesion, ovarian cyst 3cm simple",
+        "keywords": ["pelvic ultrasound", "transvaginal", "postmenopausal bleeding", "endometrial stripe", "ovarian cyst"],
+        "cpt": [{"code": "76831", "desc": "Ultrasound transvaginal", "reason": "Transvaginal pelvic ultrasound"}],
+        "icd": [{"code": "N92.1", "desc": "Excessive menstruation"}, {"code": "N83.209", "desc": "Unspecified ovarian cyst"}],
+        "rule": "Transvaginal ultrasound = 76831.",
+    },
+    "rad_8": {
+        "category": "radiology",
+        "scenario": "35yo male, MRI brain without and with contrast, new onset seizures, rule out tumor, no mass lesion, left temporal signal abnormality, mesial temporal sclerosis",
+        "keywords": ["mri brain", "seizure", "contrast", "temporal sclerosis", "mass", "neoplasm"],
+        "cpt": [{"code": "70553", "desc": "MRI brain without and with contrast", "reason": "MRI brain W/O and W contrast for seizures"}],
+        "icd": [{"code": "G40.009", "desc": "Idiopathic generalized epilepsy"}, {"code": "G40.109", "desc": "Localization-related epilepsy"}],
+        "rule": "MRI brain W/O and W contrast = 70553.",
+    },
+    "rad_9": {
+        "category": "radiology",
+        "scenario": "55yo male, interventional radiology, CT-guided percutaneous biopsy left lung nodule 2.5cm, 18-gauge core needle, 4 passes, moderate sedation",
+        "keywords": ["ct-guided biopsy", "lung nodule", "core needle", "interventional radiology", "percutaneous"],
+        "cpt": [{"code": "19081", "desc": "CT-guided lung biopsy core needle", "reason": "CT-guided percutaneous lung biopsy"},
+               {"code": "77012", "desc": "CT guidance for biopsy", "reason": "CT guidance for needle placement"}],
+        "icd": [{"code": "R91.1", "desc": "Solitary pulmonary nodule"}],
+        "rule": "CT-guided lung biopsy = 19081 + 77012.",
+    },
+    "rad_10": {
+        "category": "radiology",
+        "scenario": "60yo female, CT angiography chest, acute pulmonary embolism, bilateral segmental PEs, RV dilation, saddle embolus absent, anticoagulation started",
+        "keywords": ["ct pulmonary angiography", "pulmonary embolism", "ctpa", "saddle", "rv dilation", "anticoagulation"],
+        "cpt": [{"code": "71275", "desc": "CT pulmonary angiography", "reason": "CT-PA for PE diagnosis"}],
+        "icd": [{"code": "I26.99", "desc": "Other pulmonary embolism without acute cor pulmonale"}],
+        "rule": "CT pulmonary angiography = 71275.",
+    },
+    "rad_11": {
+        "category": "radiology",
+        "scenario": "72yo male, nuclear medicine bone scan, metastatic prostate cancer staging, multiple focal areas of increased uptake spine ribs pelvis, osseous metastases confirmed",
+        "keywords": ["bone scan", "nuclear medicine", "metastatic", "prostate cancer", "osseous", "uptake"],
+        "cpt": [{"code": "78306", "desc": "Bone scan whole body", "reason": "Bone scan for metastatic workup"}],
+        "icd": [{"code": "C61", "desc": "Malignant neoplasm of prostate"}, {"code": "C79.31", "desc": "Secondary malignant neoplasm of brain"}],
+        "rule": "Whole body bone scan = 78306.",
+    },
+    "rad_12": {
+        "category": "radiology",
+        "scenario": "50yo female, diagnostic cardiac catheterization, chest pain, LAD 70% stenosis, RCA 40% stenosis, LVEF 55%, no intervention, medical management",
+        "keywords": ["cardiac catheterization", "diagnostic", "stenosis", "lad", "rca", "ef"],
+        "cpt": [{"code": "93458", "desc": "Left heart catheterization", "reason": "Diagnostic left heart cath"},
+               {"code": "93543", "desc": "Right heart catheterization", "reason": "Right heart catheterization"}],
+        "icd": [{"code": "I25.10", "desc": "Atherosclerotic heart disease of native coronary artery"}],
+        "rule": "Diagnostic cath = 93458 + 93543.",
+    },
+    "rad_13": {
+        "category": "radiology",
+        "scenario": "30yo male, ultrasound scrotum, acute scrotal pain left, torsion suspected, absent left testicular blood flow, emergent surgical exploration, detorsion",
+        "keywords": ["scrotal ultrasound", "torsion", "testicular", "blood flow", "scrotal pain", "emergency"],
+        "cpt": [{"code": "76870", "desc": "Ultrasound scrotum", "reason": "Scrotal ultrasound for torsion"},
+               {"code": "76871", "desc": "Doppler ultrasound scrotum", "reason": "Doppler for blood flow assessment"}],
+        "icd": [{"code": "N44.02", "desc": "Torsion of testis"}],
+        "rule": "Scrotal ultrasound with Doppler = 76870 + 76871.",
+    },
+    "rad_14": {
+        "category": "radiology",
+        "scenario": "55yo female, CT chest with contrast, lung cancer screening, 8mm solid nodule right upper lobe, Lung-RADS 4B, PET-CT recommended",
+        "keywords": ["ct chest", "lung screening", "lung-rads", "pulmonary nodule", "pet-ct"],
+        "cpt": [{"code": "71271", "desc": "CT chest with contrast low dose lung screening", "reason": "Low-dose CT for lung cancer screening"}],
+        "icd": [{"code": "R91.1", "desc": "Solitary pulmonary nodule"}, {"code": "Z87.891", "desc": "Personal history of nicotine dependence"}],
+        "rule": "Low-dose CT lung screening = 71271.",
+    },
+    "rad_15": {
+        "category": "radiology",
+        "scenario": "45yo male, PET-CT whole body, staging diffuse large B-cell lymphoma, FDG-avid masses mediastinum retroperitoneum bilateral inguinal, Ann Arbor stage III",
+        "keywords": ["pet-ct", "fdg-avid", "lymphoma", "staging", "mediastinum", "retroperitoneum"],
+        "cpt": [{"code": "78814", "desc": "PET-CT scan whole body", "reason": "PET-CT for lymphoma staging"}],
+        "icd": [{"code": "C85.17", "desc": "Diffuse large B-cell lymphoma"}, {"code": "C83.39", "desc": "Other types of diffuse non-Hodgkin lymphoma"}],
+        "rule": "PET-CT whole body = 78814.",
+    },
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ADDITIONAL E/M CASES (20 cases)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    "em_extra_1": {
+        "category": "E/M",
+        "scenario": "82yo female, critical care ICU, septic shock, vasopressor norepinephrine, mechanical ventilation, 85 minutes critical care time documented",
+        "keywords": ["critical care", "icu", "septic shock", "vasopressor", "mechanical ventilation", "norepinephrine"],
+        "cpt": [{"code": "99291", "desc": "Critical care first hour", "reason": "Critical care first 30-74 minutes"},
+               {"code": "99292", "desc": "Critical care each additional 30 min", "reason": "Additional critical care time (85 min total)"}],
+        "icd": [{"code": "A41.9", "desc": "Sepsis, unspecified organism"}, {"code": "R65.21", "desc": "Severe sepsis with septic shock"}],
+        "rule": "Critical care 85 min = 99291 (first hour) + 99292 (additional 15 min).",
+    },
+    "em_extra_2": {
+        "category": "E/M",
+        "scenario": "65yo male, observation status for chest pain rule-out, serial troponins negative, stress test scheduled, 18 hours in observation, discharge planning",
+        "keywords": ["observation", "chest pain", "troponin", "stress test", "discharge planning", "serial"],
+        "cpt": [{"code": "99218", "desc": "Initial observation care moderate MDM", "reason": "Initial observation for chest pain"},
+               {"code": "99217", "desc": "Subsequent observation care", "reason": "Subsequent observation care"}],
+        "icd": [{"code": "R07.9", "desc": "Chest pain, unspecified"}],
+        "rule": "Observation care = 99218 initial, 99217 subsequent per day.",
+    },
+    "em_extra_3": {
+        "category": "E/M",
+        "scenario": "75yo female, nursing facility visit, established patient, 3 chronic conditions diabetes CHF COPD, medication reconciliation, 25 minutes face-to-face",
+        "keywords": ["nursing facility", "established", "chronic conditions", "medication reconciliation", "face-to-face"],
+        "cpt": [{"code": "99310", "desc": "Nursing facility subsequent visit", "reason": "Nursing facility subsequent visit"}],
+        "icd": [{"code": "E11.65", "desc": "Type 2 diabetes with hyperglycemia"}, {"code": "I50.9", "desc": "Heart failure, unspecified"}, {"code": "J44.1", "desc": "COPD with acute exacerbation"}],
+        "rule": "Nursing facility subsequent visit = 99310.",
+    },
+    "em_extra_4": {
+        "category": "E/M",
+        "scenario": "55yo male, transitional care management, post-discharge 7 days, high complexity, multiple comorbidities, 30 minutes telephone and care coordination",
+        "keywords": ["transitional care", "post-discharge", "care coordination", "high complexity", "telephone"],
+        "cpt": [{"code": "99495", "desc": "Transitional care management high", "reason": "High complexity transitional care"}],
+        "icd": [{"code": "I50.9", "desc": "Heart failure, unspecified"}, {"code": "E11.65", "desc": "Type 2 diabetes with hyperglycemia"}],
+        "rule": "High complexity TCM = 99495.",
+    },
+    "em_extra_5": {
+        "category": "E/M",
+        "scenario": "60yo female, home visit established patient, wound care complex, pressure ulcer stage 3 sacrum, daily dressing changes, 45 minutes total visit time",
+        "keywords": ["home visit", "wound care", "pressure ulcer", "stage 3", "dressing", "complex"],
+        "cpt": [{"code": "99350", "desc": "Home visit established patient", "reason": "Home visit for complex wound care"}],
+        "icd": [{"code": "L89.152", "desc": "Pressure ulcer of sacral region, stage 3"}],
+        "rule": "Home visit for wound care = 99350.",
+    },
+    "em_extra_6": {
+        "category": "E/M",
+        "scenario": "45yo male, chronic care management, 3 chronic conditions, 40 minutes care coordination, portal messages, medication management, phone calls",
+        "keywords": ["chronic care management", "ccm", "care coordination", "chronic", "medication management"],
+        "cpt": [{"code": "99490", "desc": "Chronic care management 20+ min", "reason": "CCM 40 minutes"}],
+        "icd": [{"code": "E11.65", "desc": "Type 2 diabetes with hyperglycemia"}, {"code": "I10", "desc": "Essential hypertension"}, {"code": "E78.5", "desc": "Hyperlipidemia, unspecified"}],
+        "rule": "CCM 20+ min = 99490.",
+    },
+    "em_extra_7": {
+        "category": "E/M",
+        "scenario": "70yo male, complex chronic care management, 60 minutes, advanced diabetes CKD CHF, medication reconciliation, care plan updates, interprofessional communication",
+        "keywords": ["complex chronic care", "ccm", "60 minutes", "ckd", "advanced", "interprofessional"],
+        "cpt": [{"code": "99491", "desc": "PCM 60+ min", "reason": "Complex CCM 60+ minutes"}],
+        "icd": [{"code": "E11.65", "desc": "Type 2 diabetes with hyperglycemia"}, {"code": "N18.4", "desc": "CKD stage 4"}, {"code": "I50.9", "desc": "Heart failure, unspecified"}],
+        "rule": "Complex CCM 60+ min = 99491.",
+    },
+    "em_extra_8": {
+        "category": "E/M",
+        "scenario": "80yo female, advance care planning, 30 minutes discussion with patient and family, goals of care, healthcare proxy, living will, documentation",
+        "keywords": ["advance care planning", "goals of care", "healthcare proxy", "living will", "end of life"],
+        "cpt": [{"code": "99497", "desc": "Advance care planning first 30 min", "reason": "ACP initial 30 minutes"}],
+        "icd": [{"code": "Z66", "desc": "Do not resuscitate"}],
+        "rule": "ACP first 30 min = 99497. Additional 30 min = 99498.",
+    },
+    "em_extra_9": {
+        "category": "E/M",
+        "scenario": "50yo male, initial preventive physical examination, Medicare annual wellness visit, health risk assessment, prevention plan, 45 minutes",
+        "keywords": ["annual wellness visit", "awv", "medicare", "preventive", "health risk assessment", "prevention plan"],
+        "cpt": [{"code": "G0438", "desc": "Annual wellness visit initial", "reason": "Initial Medicare AWV"},
+               {"code": "99457", "desc": "Remote patient monitoring 20 min", "reason": "RPM if applicable"}],
+        "icd": [{"code": "Z00.00", "desc": "Encounter for general adult medical examination without abnormal findings"}],
+        "rule": "Initial Medicare AWV = G0438.",
+    },
+    "em_extra_10": {
+        "category": "E/M",
+        "scenario": "30yo female, hospital observation, syncope, comprehensive metabolic panel, echocardiogram, telemetry 12 hours, discharge home with follow-up",
+        "keywords": ["hospital observation", "syncope", "echocardiogram", "telemetry", "metabolic panel"],
+        "cpt": [{"code": "99218", "desc": "Initial observation care moderate MDM", "reason": "Initial observation for syncope"},
+               {"code": "93306", "desc": "Echocardiography complete", "reason": "Echo for syncope workup"}],
+        "icd": [{"code": "R55", "desc": "Syncope and collapse"}],
+        "rule": "Observation for syncope = 99218 + 93306.",
+    },
+    "em_extra_11": {
+        "category": "E/M",
+        "scenario": "65yo male, prolonged services without E/M, total time 60 minutes face-to-face for complex wound debridement, no separate E/M service",
+        "keywords": ["prolonged service", "wound debridement", "face-to-face", "complex", "time-based"],
+        "cpt": [{"code": "99358", "desc": "Prolonged evaluation without E/M", "reason": "Prolonged service 60 min"},
+               {"code": "99359", "desc": "Prolonged each additional 30 min", "reason": "Additional prolonged time"}],
+        "icd": [{"code": "L89.152", "desc": "Pressure ulcer of sacral region, stage 3"}],
+        "rule": "Prolonged service without E/M = 99358 + 99359.",
+    },
+    "em_extra_12": {
+        "category": "E/M",
+        "scenario": "55yo female, high complexity home visit, new patient, multiple chronic conditions, comprehensive assessment, care plan development, 75 minutes",
+        "keywords": ["home visit", "new patient", "high complexity", "comprehensive", "care plan", "chronic"],
+        "cpt": [{"code": "99345", "desc": "Home visit new patient high complexity", "reason": "High complexity new patient home visit"}],
+        "icd": [{"code": "I50.9", "desc": "Heart failure, unspecified"}, {"code": "E11.65", "desc": "Type 2 diabetes with hyperglycemia"}],
+        "rule": "High complexity home visit new patient = 99345.",
+    },
+    "em_extra_13": {
+        "category": "E/M",
+        "scenario": "72yo male, subsequent nursing facility visit, established patient, medication adjustment, fall prevention plan, PT/OT orders, 20 minutes",
+        "keywords": ["nursing facility", "subsequent", "medication adjustment", "fall prevention", "pt ot"],
+        "cpt": [{"code": "99310", "desc": "Nursing facility subsequent visit", "reason": "Subsequent nursing facility visit"}],
+        "icd": [{"code": "R29.6", "desc": "Repeated falls"}, {"code": "I10", "desc": "Essential hypertension"}],
+        "rule": "Nursing facility subsequent visit = 99310.",
+    },
+    "em_extra_14": {
+        "category": "E/M",
+        "scenario": "40yo female, behavioral health integration, collaborative care management, moderate complexity, 25 minutes psychiatric consultation, warm handoff",
+        "keywords": ["behavioral health", "collaborative care", "psychiatric consultation", "integration", "warm handoff"],
+        "cpt": [{"code": "99492", "desc": "Initial BHI collaborative care", "reason": "Initial behavioral health integration"},
+               {"code": "99493", "desc": "Subsequent BHI collaborative care", "reason": "Subsequent care coordination"}],
+        "icd": [{"code": "F32.1", "desc": "Major depressive disorder, single episode, moderate"}],
+        "rule": "BHI collaborative care = 99492 initial, 99493 subsequent.",
+    },
+    "em_extra_15": {
+        "category": "E/M",
+        "scenario": "60yo male, remote patient monitoring, daily BP readings transmitted, 20 minutes clinical staff review, medication titration, device data interpretation",
+        "keywords": ["remote patient monitoring", "rpm", "blood pressure", "device", "clinical staff", "medication titration"],
+        "cpt": [{"code": "99453", "desc": "RPM setup and patient education", "reason": "RPM device setup"},
+               {"code": "99454", "desc": "RPM device supply 30 days", "reason": "Monthly device supply"},
+               {"code": "99457", "desc": "RPM first 20 min clinical staff", "reason": "Clinical staff RPM time"}],
+        "icd": [{"code": "I10", "desc": "Essential hypertension"}],
+        "rule": "RPM = 99453 (setup) + 99454 (supply) + 99457 (time).",
+    },
+    "em_extra_16": {
+        "category": "E/M",
+        "scenario": "78yo female, transitional care management post-hospital, low complexity, 1 telephone call within 48 hours, medication reconciliation, follow-up scheduled",
+        "keywords": ["transitional care", "post-hospital", "low complexity", "telephone", "medication reconciliation"],
+        "cpt": [{"code": "99490", "desc": "CCM 20 min", "reason": "Low complexity TCM"},
+               {"code": "99491", "desc": "PCM 60+ min", "reason": "Moderate complexity TCM if applicable"}],
+        "icd": [{"code": "I50.9", "desc": "Heart failure, unspecified"}],
+        "rule": "TCM low complexity = 99490.",
+    },
+    "em_extra_17": {
+        "category": "E/M",
+        "scenario": "55yo male, cognitive assessment and care planning, MDS 10-minute screening, mild cognitive impairment, caregiver education, advance care planning initiated",
+        "keywords": ["cognitive assessment", "care planning", "mild cognitive impairment", "caregiver", "screening"],
+        "cpt": [{"code": "99483", "desc": "Cognitive assessment and care planning", "reason": "Cognitive assessment visit"}],
+        "icd": [{"code": "G31.84", "desc": "Mild cognitive impairment"}, {"code": "Z91.89", "desc": "Other specified personal risk factors"}],
+        "rule": "Cognitive assessment and care plan = 99483.",
+    },
+    "em_extra_18": {
+        "category": "E/M",
+        "scenario": "45yo female, principal care management diabetes type 1, insulin pump management, continuous glucose monitoring, 35 minutes care coordination monthly",
+        "keywords": ["principal care management", "pcm", "diabetes type 1", "insulin pump", "cgm", "care coordination"],
+        "cpt": [{"code": "99424", "desc": "Principal care management first 30 min", "reason": "PCM initial monthly"},
+               {"code": "99425", "desc": "PCM each additional 30 min", "reason": "Additional PCM time"}],
+        "icd": [{"code": "E10.65", "desc": "Type 1 diabetes with hyperglycemia"}],
+        "rule": "PCM diabetes = 99424 initial, 99425 additional.",
+    },
+    "em_extra_19": {
+        "category": "E/M",
+        "scenario": "85yo male, subsequent care management services, established plan of care, wound management update, 20 minutes telephone care coordination",
+        "keywords": ["care management", "subsequent", "wound management", "telephone", "care coordination"],
+        "cpt": [{"code": "99427", "desc": "Subsequent PCM each 30 min", "reason": "Subsequent PCM"}],
+        "icd": [{"code": "L89.152", "desc": "Pressure ulcer of sacral region, stage 3"}],
+        "rule": "Subsequent PCM = 99427.",
+    },
+    "em_extra_20": {
+        "category": "E/M",
+        "scenario": "60yo female, interprofessional consultation for complex wound care, nutrition, PT, OT, social work, collaborative care plan, 45 minutes",
+        "keywords": ["interprofessional", "consultation", "collaborative care", "wound care", "nutrition", "multidisciplinary"],
+        "cpt": [{"code": "99446", "desc": "Interprofessional consultation 30+ min", "reason": "Interprofessional consultation"}],
+        "icd": [{"code": "L89.152", "desc": "Pressure ulcer of sacral region, stage 3"}, {"code": "E11.65", "desc": "Type 2 diabetes with hyperglycemia"}],
+        "rule": "Interprofessional consultation 30+ min = 99446.",
+    },
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ADDITIONAL CARDIOVASCULAR CASES (15 cases)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    "cv_1": {
+        "category": "cardiovascular",
+        "scenario": "65yo male, pacemaker implantation, dual chamber, sick sinus syndrome, bradycardia, HR 38, Syncope, DDD pacemaker, right pectoral pocket, passive fixation lead",
+        "keywords": ["pacemaker", "dual chamber", "sick sinus syndrome", "bradycardia", "ddd", "syncope"],
+        "cpt": [{"code": "33206", "desc": "Insertion dual chamber permanent pacemaker", "reason": "DDD pacemaker implantation"},
+               {"code": "33216", "desc": "Insertion atrial lead", "reason": "Atrial lead placement"},
+               {"code": "33218", "desc": "Insertion ventricular lead", "reason": "Ventricular lead placement"}],
+        "icd": [{"code": "I49.5", "desc": "Sick sinus syndrome"}, {"code": "R55", "desc": "Syncope and collapse"}],
+        "rule": "Dual chamber pacemaker = 33206 (includes leads).",
+    },
+    "cv_2": {
+        "category": "cardiovascular",
+        "scenario": "55yo male, ICD implantation, primary prevention, LVEF 25%, ischemic cardiomyopathy, NYHA class III, transvenous single chamber ICD, right pectoral",
+        "keywords": ["icd", "defibrillator", "cardiomyopathy", "primary prevention", "lef", "nyha"],
+        "cpt": [{"code": "33240", "desc": "Insertion implantable defibrillator single chamber", "reason": "ICD implantation single chamber"},
+               {"code": "33230", "desc": "Insertion ventricular lead", "reason": "ICD lead placement"}],
+        "icd": [{"code": "I25.5", "desc": "Ischemic cardiomyopathy"}, {"code": "I50.9", "desc": "Heart failure, unspecified"}],
+        "rule": "ICD single chamber = 33240.",
+    },
+    "cv_3": {
+        "category": "cardiovascular",
+        "scenario": "70yo male, CRT-D implantation, LVEF 20%, NYHA class IV, QRS 160ms LBBB, biventricular pacing, CRT-D device, coronary sinus lead",
+        "keywords": ["crt-d", "cardiac resynchronization", "biventricular", "lbbb", "qrs", "coronary sinus"],
+        "cpt": [{"code": "33230", "desc": "Insertion CRT-D device", "reason": "CRT-D implantation"},
+               {"code": "33225", "desc": "Insertion coronary sinus lead", "reason": "CS lead placement"},
+               {"code": "33216", "desc": "Insertion atrial lead", "reason": "Atrial lead"},
+               {"code": "33218", "desc": "Insertion ventricular lead", "reason": "RV lead"}],
+        "icd": [{"code": "I44.30", "desc": "Left bundle branch block, unspecified"}, {"code": "I50.22", "desc": "Chronic systolic heart failure"}],
+        "rule": "CRT-D = 33230 (device) + leads.",
+    },
+    "cv_4": {
+        "category": "cardiovascular",
+        "scenario": "50yo female, electrophysiology study, recurrent SVT, WPW syndrome, accessory pathway ablation, left posteroseptal pathway, successful ablation",
+        "keywords": ["electrophysiology study", "eps", "svt", "wpw", "ablation", "accessory pathway"],
+        "cpt": [{"code": "93650", "desc": "EP study with ablation", "reason": "EPS with ablation WPW"},
+               {"code": "93656", "desc": "EP study complex", "reason": "Complex EPS evaluation"}],
+        "icd": [{"code": "I47.1", "desc": "Supraventricular tachycardia"}, {"code": "Q24.0", "desc": "Wolff-Parkinson-White syndrome"}],
+        "rule": "EPS with ablation = 93650.",
+    },
+    "cv_5": {
+        "category": "cardiovascular",
+        "scenario": "60yo male, catheter ablation atrial fibrillation, paroxysmal, drug-refractory, pulmonary vein isolation, cryoballoon, 4 veins isolated, AF-free post-procedure",
+        "keywords": ["catheter ablation", "atrial fibrillation", "pulmonary vein isolation", "cryoballoon", "paroxysmal"],
+        "cpt": [{"code": "93657", "desc": "Catheter ablation AF", "reason": "AF ablation PVI"},
+               {"code": "93656", "desc": "EP study with ablation", "reason": "EPS with AF ablation"}],
+        "icd": [{"code": "I48.0", "desc": "Paroxysmal atrial fibrillation"}],
+        "rule": "AF ablation = 93657 + 93656.",
+    },
+    "cv_6": {
+        "category": "cardiovascular",
+        "scenario": "75yo female, patent foramen ovale closure, cryptogenic stroke, TEE-guided, Amplatzer device, post-procedure antiplatelet therapy",
+        "keywords": ["pfo closure", "patent foramen ovale", "cryptogenic stroke", "amplatzer", "tee-guided"],
+        "cpt": [{"code": "93668", "desc": "TEE guidance PFO closure", "reason": "TEE-guided PFO closure"}],
+        "icd": [{"code": "Q21.1", "desc": "Patent foramen ovale"}, {"code": "I63.51", "desc": "Cerebral infarction"}],
+        "rule": "PFO closure with TEE = 93668.",
+    },
+    "cv_7": {
+        "category": "cardiovascular",
+        "scenario": "65yo male, peripheral arterial disease, critical limb ischemia, right SFA occlusion, femoropopliteal bypass graft PTFE, claudication relieved",
+        "keywords": ["peripheral arterial disease", "bypass graft", "ptfe", "femoropopliteal", "critical limb ischemia"],
+        "cpt": [{"code": "35556", "desc": "Femoropopliteal bypass graft PTFE", "reason": "FP bypass with PTFE"}],
+        "icd": [{"code": "I73.9", "desc": "Peripheral vascular disease, unspecified"}, {"code": "I70.261", "desc": "Atherosclerosis of native arteries of right leg with intermittent claudication"}],
+        "rule": "Femoropopliteal bypass PTFE = 35556.",
+    },
+    "cv_8": {
+        "category": "cardiovascular",
+        "scenario": "55yo male, coronary angiography with intervention, unstable angina, LAD 90% proximal stenosis, DES deployed, IVUS guided, post-dilation with NC balloon",
+        "keywords": ["coronary angiography", "pci", "stent", "des", "ivus", "balloon", "lad"],
+        "cpt": [{"code": "92928", "desc": "Drug-eluting stent LAD", "reason": "DES placement LAD"},
+               {"code": "92943", "desc": "IVUS coronary", "reason": "Intravascular ultrasound"},
+               {"code": "92920", "desc": "Balloon angioplasty", "reason": "Post-dilation NC balloon"}],
+        "icd": [{"code": "I25.10", "desc": "Atherosclerotic heart disease of native coronary artery"}, {"code": "I20.0", "desc": "Unstable angina"}],
+        "rule": "PCI with DES = 92928 + 92943 + 92920.",
+    },
+    "cv_9": {
+        "category": "cardiovascular",
+        "scenario": "70yo male, aortic valve replacement, severe aortic stenosis, TAVR approach, balloon-expandable valve, transfemoral access, LVEF 45%, high surgical risk",
+        "keywords": ["tavr", "aortic stenosis", "transcatheter", "balloon-expandable", "transfemoral"],
+        "cpt": [{"code": "33361", "desc": "TAVR balloon-expandable valve", "reason": "TAVR with balloon-expandable prosthesis"},
+               {"code": "33533", "desc": "Concomitant CABG with AVR", "reason": "If combined"}],
+        "icd": [{"code": "I35.0", "desc": "Aortic valve stenosis"}],
+        "rule": "TAVR = 33361.",
+    },
+    "cv_10": {
+        "category": "cardiovascular",
+        "scenario": "60yo female, left atrial appendage closure, Watchman device, atrial fibrillation, CHA2DS2-VASc 4, contraindication to anticoagulation, TEE-guided",
+        "keywords": ["left atrial appendage", "watchman", "laac", "atrial fibrillation", "tee", "anticoagulation"],
+        "cpt": [{"code": "93669", "desc": "TEE guidance for LA appendage closure", "reason": "TEE-guided Watchman placement"}],
+        "icd": [{"code": "I48.91", "desc": "Unspecified atrial fibrillation"}],
+        "rule": "LAA closure TEE = 93669.",
+    },
+    "cv_11": {
+        "category": "cardiovascular",
+        "scenario": "50yo male, cardiac MRI, ischemic cardiomyopathy evaluation, LVEF 30%, viability assessment, late gadolinium enhancement, microvascular obstruction",
+        "keywords": ["cardiac mri", "viability", "gadolinium", "cardiomyopathy", "ef", "mri"],
+        "cpt": [{"code": "75563", "desc": "Cardiac MRI with contrast", "reason": "Cardiac MRI for viability"}],
+        "icd": [{"code": "I25.5", "desc": "Ischemic cardiomyopathy"}],
+        "rule": "Cardiac MRI with contrast = 75563.",
+    },
+    "cv_12": {
+        "category": "cardiovascular",
+        "scenario": "65yo female, carotid endarterectomy, symptomatic 80% right internal carotid stenosis, TIA left arm weakness 2 weeks ago, patch angioplasty",
+        "keywords": ["carotid endarterectomy", "stenosis", "tia", "patch angioplasty", "internal carotid"],
+        "cpt": [{"code": "35301", "desc": "Carotid endarterectomy", "reason": "CEA with patch angioplasty"}],
+        "icd": [{"code": "I65.21", "desc": "Occlusion and stenosis of right carotid artery"}, {"code": "G45.1", "desc": "Carotid artery syndrome hemispheric"}],
+        "rule": "Carotid endarterectomy = 35301.",
+    },
+    "cv_13": {
+        "category": "cardiovascular",
+        "scenario": "55yo male, ICD generator change, battery depletion at 6 years, existing leads functional, pocket revision, device interrogation",
+        "keywords": ["icd", "generator change", "battery", "depletion", "pocket revision", "interrogation"],
+        "cpt": [{"code": "33233", "desc": "ICD generator replacement", "reason": "ICD generator change"}],
+        "icd": [{"code": "T85.71XA", "desc": "Infection and inflammatory reaction due to cardiac device, initial encounter"}],
+        "rule": "ICD generator replacement = 33233.",
+    },
+    "cv_14": {
+        "category": "cardiovascular",
+        "scenario": "72yo male, endovascular aortic repair, abdominal aortic aneurysm 5.8cm, asymptomatic, bifurcated endograft, bilateral iliac extension",
+        "keywords": ["endovascular", "aortic repair", "aneurysm", "endograft", "bifurcated", "iliac"],
+        "cpt": [{"code": "34800", "desc": "Endovascular AAA repair", "reason": "EVAR for AAA"},
+               {"code": "34805", "desc": "Endovascular iliac extension", "reason": "Iliac extension limbs"}],
+        "icd": [{"code": "I71.3", "desc": "Abdominal aortic aneurysm, ruptured"}],
+        "rule": "EVAR = 34800 + 34805.",
+    },
+    "cv_15": {
+        "category": "cardiovascular",
+        "scenario": "48yo female, mitral valve repair, severe mitral regurgitation, flail posterior leaflet, minimally invasive right minithoracotomy, robotic-assisted, annuloplasty ring",
+        "keywords": ["mitral valve repair", "flail leaflet", "robotic", "annuloplasty", "minithoracotomy", "mitral regurgitation"],
+        "cpt": [{"code": "33430", "desc": "Mitral valve repair", "reason": "Robotic mitral valve repair"},
+               {"code": "33404", "desc": "Annuloplasty ring", "reason": "Annuloplasty ring placement"}],
+        "icd": [{"code": "I34.0", "desc": "Nonrheumatic mitral regurgitation"}],
+        "rule": "Mitral valve repair = 33430 + 33404.",
+    },
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ADDITIONAL GENERAL SURGERY CASES (15 cases)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    "surg_1": {
+        "category": "general_surgery",
+        "scenario": "55yo male, colonoscopy with EMR, large sessile polyp rectum 2.5cm, submucosal injection saline, hot snare resection, pathological low-grade dysplasia",
+        "keywords": ["colonoscopy", "emr", "endoscopic mucosal resection", "polyp", "rectum", "sessile"],
+        "cpt": [{"code": "45388", "desc": "Colonoscopy with EMR", "reason": "Endoscopic mucosal resection"}],
+        "icd": [{"code": "K63.5", "desc": "Polyp of colon"}],
+        "rule": "Colonoscopy with EMR = 45388.",
+    },
+    "surg_2": {
+        "category": "general_surgery",
+        "scenario": "40yo male, incisional hernia umbilical, 4cm defect, recurrent after prior surgery, laparoscopic IPOM repair, mesh placement, 2 trocars",
+        "keywords": ["incisional hernia", "ipom", "mesh", "laparoscopic", "recurrent", "umbilical"],
+        "cpt": [{"code": "49560", "desc": "Repair incisional hernia", "reason": "Laparoscopic IPOM repair"},
+               {"code": "49568", "desc": "Implant mesh repair hernia", "reason": "Mesh implantation"}],
+        "icd": [{"code": "K43.10", "desc": "Incisional hernia without obstruction or gangrene"}],
+        "rule": "Incisional hernia repair = 49560 + 49568.",
+    },
+    "surg_3": {
+        "category": "general_surgery",
+        "scenario": "60yo male, laparoscopic cholecystectomy, symptomatic gallstones, RUQ pain, biliary colic, HIDA scan 15% EF, intraoperative cholangiogram negative stones",
+        "keywords": ["cholecystectomy", "gallstones", "biliary colic", "hida scan", "cholangiogram", "laparoscopic"],
+        "cpt": [{"code": "47562", "desc": "Laparoscopic cholecystectomy", "reason": "Lap chole for gallstones"},
+               {"code": "47563", "desc": "Lap cholecystectomy with cholangiogram", "reason": "Intraoperative cholangiogram"}],
+        "icd": [{"code": "K80.20", "desc": "Calculus of gallbladder without cholecystitis"}],
+        "rule": "Lap chole with cholangiogram = 47563.",
+    },
+    "surg_4": {
+        "category": "general_surgery",
+        "scenario": "50yo female, inguinal hernia right direct, bulge right groin, reducible, laparoscopic TEP repair, mesh plug, same-day discharge",
+        "keywords": ["inguinal hernia", "tep", "mesh", "laparoscopic", "direct", "reducible"],
+        "cpt": [{"code": "49505", "desc": "Repair inguinal hernia", "reason": "Laparoscopic TEP repair"},
+               {"code": "49507", "desc": "Repair inguinal hernia mesh", "reason": "Mesh repair"}],
+        "icd": [{"code": "K40.00", "desc": "Direct inguinal hernia, unspecified"}],
+        "rule": "Inguinal hernia repair = 49505.",
+    },
+    "surg_5": {
+        "category": "general_surgery",
+        "scenario": "65yo male, laparoscopic ventral hernia repair, epigastric hernia 3cm, primary repair, no mesh needed, evisceration no, strangulation no",
+        "keywords": ["ventral hernia", "epigastric", "laparoscopic", "primary repair", "no mesh"],
+        "cpt": [{"code": "49580", "desc": "Repair ventral hernia primary", "reason": "Primary ventral hernia repair"}],
+        "icd": [{"code": "K43.9", "desc": "Ventral hernia without obstruction or gangrene"}],
+        "rule": "Primary ventral hernia repair = 49580.",
+    },
+    "surg_6": {
+        "category": "general_surgery",
+        "scenario": "55yo female, laparoscopic Nissen fundoplication, GERD refractory PPI, Barrett esophagus confirmed on EGD, manometry normal, 360-degree wrap",
+        "keywords": ["nissen fundoplication", "gerd", "barrett", "fundoplication", "ppi", "laparoscopic"],
+        "cpt": [{"code": "43280", "desc": "Laparoscopic Nissen fundoplication", "reason": "Lap Nissen for GERD"}],
+        "icd": [{"code": "K21.0", "desc": "GERD with esophagitis"}, {"code": "K22.70", "desc": "Barrett esophagus without dysplasia"}],
+        "rule": "Laparoscopic Nissen = 43280.",
+    },
+    "surg_7": {
+        "category": "general_surgery",
+        "scenario": "70yo female, right colectomy laparoscopic, ascending colon cancer T2N0M0, 25cm specimen, 12 lymph nodes, ileocolic anastomosis",
+        "keywords": ["right colectomy", "colon cancer", "laparoscopic", "ileocolic", "anastomosis", "specimen"],
+        "cpt": [{"code": "44205", "desc": "Laparoscopic right colectomy", "reason": "Lap right colectomy for cancer"},
+               {"code": "44206", "desc": "Laparoscopic colectomy with intracorporeal anastomosis", "reason": "If intracorporeal"}],
+        "icd": [{"code": "C18.0", "desc": "Malignant neoplasm of cecum"}],
+        "rule": "Laparoscopic right colectomy = 44205.",
+    },
+    "surg_8": {
+        "category": "general_surgery",
+        "scenario": "50yo male, laparoscopic sigmoid colectomy, diverticular disease recurrent, 3 episodes diverticulitis, 15cm specimen, left lower quadrant approach",
+        "keywords": ["sigmoid colectomy", "diverticulitis", "diverticular disease", "recurrent", "laparoscopic"],
+        "cpt": [{"code": "44208", "desc": "Laparoscopic sigmoid colectomy", "reason": "Lap sigmoid colectomy for diverticulitis"}],
+        "icd": [{"code": "K57.32", "desc": "Diverticulitis of large intestine without perforation"}],
+        "rule": "Laparoscopic sigmoid colectomy = 44208.",
+    },
+    "surg_9": {
+        "category": "general_surgery",
+        "scenario": "35yo female, laparoscopic appendectomy, recurrent appendicitis, normal appendix on initial CT, chronic symptoms 3 months, pathology chronic appendicitis",
+        "keywords": ["appendectomy", "recurrent appendicitis", "chronic", "laparoscopic", "normal"],
+        "cpt": [{"code": "44970", "desc": "Laparoscopic appendectomy", "reason": "Lap appendectomy"}],
+        "icd": [{"code": "K38.3", "desc": "Chronic appendicitis"}],
+        "rule": "Laparoscopic appendectomy = 44970.",
+    },
+    "surg_10": {
+        "category": "general_surgery",
+        "scenario": "60yo female, EGD with EMR, large duodenal polyp 3cm ampulla of Vater, EMR performed, post-ERCP pancreatitis prophylaxis, pancreatic stent placed",
+        "keywords": ["egd", "emr", "duodenal polyp", "ampulla", "ercp", "pancreatic stent"],
+        "cpt": [{"code": "43249", "desc": "EGD with EMR", "reason": "EGD with endoscopic mucosal resection"},
+               {"code": "43264", "desc": "ERCP biliary stent placement", "reason": "Pancreatic stent placement"}],
+        "icd": [{"code": "K63.5", "desc": "Polyp of intestine"}],
+        "rule": "EGD EMR + pancreatic stent = 43249 + 43264.",
+    },
+    "surg_11": {
+        "category": "general_surgery",
+        "scenario": "75yo male, laparoscopic splenectomy, immune thrombocytopenic purpura, platelets 12000, steroid-refractory, perisplenic artery ligation, 3 ports",
+        "keywords": ["splenectomy", "itp", "thrombocytopenic purpura", "laparoscopic", "steroid-refractory"],
+        "cpt": [{"code": "38120", "desc": "Laparoscopic splenectomy", "reason": "Lap splenectomy for ITP"}],
+        "icd": [{"code": "D69.3", "desc": "Immune thrombocytopenic purpura"}],
+        "rule": "Laparoscopic splenectomy = 38120.",
+    },
+    "surg_12": {
+        "category": "general_surgery",
+        "scenario": "45yo female, laparoscopic sleeve gastrectomy, morbid obesity BMI 42, T2DM, 80% gastric resection along lesser curvature, bougie calibration",
+        "keywords": ["sleeve gastrectomy", "bariatric", "obesity", "bmi", "diabetes", "bougie"],
+        "cpt": [{"code": "43775", "desc": "Laparoscopic sleeve gastrectomy", "reason": "Sleeve gastrectomy"}],
+        "icd": [{"code": "E66.01", "desc": "Morbid obesity due to excess calories"}, {"code": "E11.65", "desc": "Type 2 diabetes with hyperglycemia"}],
+        "rule": "Sleeve gastrectomy = 43775.",
+    },
+    "surg_13": {
+        "category": "general_surgery",
+        "scenario": "55yo male, transanal endoscopic microsurgery TEM, rectal villous adenoma 4cm, full-thickness excision, negative margins, pathology low-grade dysplasia",
+        "keywords": ["tem", "transanal endoscopic", "rectal adenoma", "villous", "full-thickness"],
+        "cpt": [{"code": "45620", "desc": "Transanal endoscopic excision", "reason": "TEM for rectal adenoma"}],
+        "icd": [{"code": "D12.8", "desc": "Benign neoplasm of rectum"}],
+        "rule": "TEM excision = 45620.",
+    },
+    "surg_14": {
+        "category": "general_surgery",
+        "scenario": "40yo male, laparoscopic hiatal hernia repair, paraesophageal hernia type III, Hill repair with fundoplication, mesh crural repair, intraoperative manometry",
+        "keywords": ["hiatal hernia", "paraesophageal", "hill repair", "fundoplication", "mesh", "laparoscopic"],
+        "cpt": [{"code": "43324", "desc": "Repair paraesophageal hiatal hernia", "reason": "Paraesophageal hernia repair"},
+               {"code": "43280", "desc": "Nissen fundoplication", "reason": "Concomitant fundoplication"}],
+        "icd": [{"code": "K44.1", "desc": "Paraesophageal hernia"}],
+        "rule": "Paraesophageal hernia repair = 43324 + 43280.",
+    },
+    "surg_15": {
+        "category": "general_surgery",
+        "scenario": "65yo male, exploratory laparotomy, adhesive small bowel obstruction, failed conservative management, lysis of adhesions, bowel viability confirmed, no resection",
+        "keywords": ["exploratory laparotomy", "small bowel obstruction", "adhesive", "lysis adhesions", "conservative"],
+        "cpt": [{"code": "44005", "desc": "Lysis of adhesions small intestine", "reason": "Lysis of adhesions for SBO"}],
+        "icd": [{"code": "K56.609", "desc": "Unspecified intestinal obstruction without perforation"}],
+        "rule": "Lysis of adhesions = 44005.",
+    },
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ADDITIONAL ICD-10 SEQUENCING CASES (20 cases)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    "icd_1": {
+        "category": "icd10_sequencing",
+        "scenario": "65yo male, sepsis from pneumonia, E. coli bacteremia, acute kidney injury stage 2, respiratory failure requiring mechanical ventilation, type 2 diabetes",
+        "keywords": ["sepsis", "pneumonia", "bacteremia", "acute kidney injury", "respiratory failure", "diabetes", "sequencing"],
+        "cpt": [],
+        "icd": [
+            {"code": "A41.51", "desc": "Sepsis due to E. coli"},
+            {"code": "J15.1", "desc": "Pneumonia due to E. coli"},
+            {"code": "N17.2", "desc": "Acute kidney injury with medullary necrosis"},
+            {"code": "J96.00", "desc": "Acute respiratory failure, unspecified"},
+            {"code": "E11.65", "desc": "Type 2 diabetes with hyperglycemia"},
+        ],
+        "rule": "Sepsis is the principal diagnosis. A41.51 first, then J15.1, N17.2, J96.00, E11.65.",
+    },
+    "icd_2": {
+        "category": "icd10_sequencing",
+        "scenario": "70yo female, acute exacerbation COPD, pneumonia Streptococcus pneumoniae, congestive heart failure exacerbation, atrial fibrillation, chronic kidney disease stage 3",
+        "keywords": ["copd exacerbation", "pneumonia", "heart failure", "atrial fibrillation", "ckd", "sequencing"],
+        "cpt": [],
+        "icd": [
+            {"code": "J44.1", "desc": "COPD with acute exacerbation"},
+            {"code": "J15.4", "desc": "Pneumonia due to other Streptococcus"},
+            {"code": "I50.9", "desc": "Heart failure, unspecified"},
+            {"code": "I48.91", "desc": "Unspecified atrial fibrillation"},
+            {"code": "N18.3", "desc": "Chronic kidney disease stage 3"},
+        ],
+        "rule": "Pneumonia triggers COPD exacerbation. J15.4 first, then J44.1, I50.9, I48.91, N18.3.",
+    },
+    "icd_3": {
+        "category": "icd10_sequencing",
+        "scenario": "55yo male, type 2 diabetes with diabetic ketoacidosis, acute myocardial infarction STEMI, hypertensive heart disease, morbid obesity",
+        "keywords": ["dka", "diabetes", "myocardial infarction", "stemi", "hypertension", "obesity", "sequencing"],
+        "cpt": [],
+        "icd": [
+            {"code": "E11.10", "desc": "Type 2 diabetes with ketoacidosis without coma"},
+            {"code": "I21.01", "desc": "STEMI of left main coronary artery"},
+            {"code": "I11.0", "desc": "Hypertensive heart disease with heart failure"},
+            {"code": "E66.01", "desc": "Morbid obesity due to excess calories"},
+        ],
+        "rule": "Acute MI is principal. I21.01 first, then E11.10, I11.0, E66.01.",
+    },
+    "icd_4": {
+        "category": "icd10_sequencing",
+        "scenario": "80yo female, aspiration pneumonia after stroke, dysphagia, malnutrition, pressure ulcer sacral stage 3, dementia, urinary tract infection",
+        "keywords": ["aspiration pneumonia", "stroke", "dysphagia", "malnutrition", "pressure ulcer", "dementia", "uti"],
+        "cpt": [],
+        "icd": [
+            {"code": "J69.0", "desc": "Pneumonitis due to aspiration of food and vomit"},
+            {"code": "I69.354", "desc": "Monoplegia of right side due to cerebral infarction"},
+            {"code": "R13.12", "desc": "Dysphagia, oropharyngeal phase"},
+            {"code": "E44.1", "desc": "Moderate malnutrition"},
+            {"code": "L89.152", "desc": "Pressure ulcer sacral region stage 3"},
+            {"code": "F03.90", "desc": "Unspecified dementia without behavioral disturbance"},
+            {"code": "N39.0", "desc": "Urinary tract infection"},
+        ],
+        "rule": "Aspiration pneumonia is principal. J69.0 first, then stroke sequelae, other conditions.",
+    },
+    "icd_5": {
+        "category": "icd10_sequencing",
+        "scenario": "45yo male, motor vehicle accident, multiple injuries: femur fracture left, rib fractures 3-5 right, pneumothorax left, splenic laceration grade II, concussion",
+        "keywords": ["motor vehicle accident", "femur fracture", "rib fracture", "pneumothorax", "splenic laceration", "concussion", "trauma"],
+        "cpt": [],
+        "icd": [
+            {"code": "S72.301A", "desc": "Fracture of shaft of femur, left, initial"},
+            {"code": "S22.41XA", "desc": "Fracture of ribs, right, initial"},
+            {"code": "S27.0XXA", "desc": "Pneumothorax, initial"},
+            {"code": "S36.030A", "desc": "Laceration of spleen, grade II, initial"},
+            {"code": "S06.0X0A", "desc": "Concussion without loss of consciousness, initial"},
+        ],
+        "rule": "Most life-threatening injury first. Splenic laceration S36.030A, then pneumothorax, femur fracture, rib fractures, concussion.",
+    },
+    "icd_6": {
+        "category": "icd10_sequencing",
+        "scenario": "60yo female, colon cancer with liver metastases, malignant ascites, anemia secondary to chemotherapy, DVT left lower extremity, malnutrition",
+        "keywords": ["colon cancer", "liver metastases", "malignant ascites", "anemia", "dvts", "malnutrition", "sequencing"],
+        "cpt": [],
+        "icd": [
+            {"code": "C18.9", "desc": "Malignant neoplasm of colon, unspecified"},
+            {"code": "C78.7", "desc": "Secondary malignant neoplasm of liver"},
+            {"code": "R18.8", "desc": "Other ascites"},
+            {"code": "D61.81", "desc": "Anemia due to antineoplastic chemotherapy"},
+            {"code": "I82.402", "desc": "Acute embolism and thrombosis of left femoral vein"},
+            {"code": "E44.0", "desc": "Mild malnutrition"},
+        ],
+        "rule": "Colon cancer is principal. C18.9 first, then C78.7, R18.8, D61.81, I82.402, E44.0.",
+    },
+    "icd_7": {
+        "category": "icd10_sequencing",
+        "scenario": "75yo male, post-operative ileus after colectomy, dehydration, acute kidney injury, electrolyte imbalance hypokalemia, atrial fibrillation rapid ventricular response",
+        "keywords": ["post-operative ileus", "colectomy", "dehydration", "acute kidney injury", "hypokalemia", "atrial fibrillation"],
+        "cpt": [],
+        "icd": [
+            {"code": "K91.1", "desc": "Post-procedural ileus"},
+            {"code": "E86.0", "desc": "Dehydration"},
+            {"code": "N17.9", "desc": "Acute kidney failure, unspecified"},
+            {"code": "E87.1", "desc": "Hypocalcemia"},
+            {"code": "I48.0", "desc": "Paroxysmal atrial fibrillation"},
+        ],
+        "rule": "Post-op ileus is principal. K91.1 first, then E86.0, N17.9, E87.1, I48.0.",
+    },
+    "icd_8": {
+        "category": "icd10_sequencing",
+        "scenario": "35yo female, ectopic pregnancy ruptured, hemorrhagic shock, need for transfusion 4 units pRBC, right salpingectomy, postpartum depression",
+        "keywords": ["ectopic pregnancy", "ruptured", "hemorrhagic shock", "transfusion", "salpingectomy", "postpartum"],
+        "cpt": [],
+        "icd": [
+            {"code": "O00.101", "desc": "Tubal pregnancy with hemoperitoneum"},
+            {"code": "R57.1", "desc": "Hypovolemic shock"},
+            {"code": "D62", "desc": "Acute posthemorrhagic anemia"},
+            {"code": "F53.0", "desc": "Puerperal depression"},
+        ],
+        "rule": "Ectopic pregnancy with hemorrhage is principal. O00.101 first, then R57.1, D62, F53.0.",
+    },
+    "icd_9": {
+        "category": "icd10_sequencing",
+        "scenario": "68yo male, COPD with chronic respiratory failure, cor pulmonale, pulmonary hypertension, obstructive sleep apnea, obesity hypoventilation, polycythemia secondary",
+        "keywords": ["copd", "respiratory failure", "cor pulmonale", "pulmonary hypertension", "sleep apnea", "polycythemia"],
+        "cpt": [],
+        "icd": [
+            {"code": "J44.1", "desc": "COPD with acute exacerbation"},
+            {"code": "J96.10", "desc": "Chronic respiratory failure, unspecified"},
+            {"code": "I27.81", "desc": "Cor pulmonale"},
+            {"code": "I27.20", "desc": "Pulmonary hypertension, unspecified"},
+            {"code": "G47.33", "desc": "Obstructive sleep apnea"},
+            {"code": "E66.01", "desc": "Morbid obesity"},
+            {"code": "D75.1", "desc": "Secondary polycythemia"},
+        ],
+        "rule": "COPD with acute exacerbation is principal. J44.1 first, then J96.10, I27.81, I27.20, G47.33, E66.01, D75.1.",
+    },
+    "icd_10": {
+        "category": "icd10_sequencing",
+        "scenario": "42yo female, systemic lupus erythematosus flare, lupus nephritis class IV, acute kidney injury, pericardial effusion, anemia chronic disease, thrombocytopenia",
+        "keywords": ["lupus", "sle flare", "lupus nephritis", "pericardial effusion", "anemia", "thrombocytopenia"],
+        "cpt": [],
+        "icd": [
+            {"code": "M32.14", "desc": "SLE glomerular disease"},
+            {"code": "N05.5", "desc": "Lupus nephritis"},
+            {"code": "N17.9", "desc": "Acute kidney failure"},
+            {"code": "I30.9", "desc": "Pericardial effusion"},
+            {"code": "D63.8", "desc": "Anemia in chronic disease"},
+            {"code": "D69.5", "desc": "Secondary thrombocytopenia"},
+        ],
+        "rule": "Lupus nephritis is principal. N05.5 first, then M32.14, N17.9, I30.9, D63.8, D69.5.",
+    },
+    "icd_11": {
+        "category": "icd10_sequencing",
+        "scenario": "58yo male, acute cholecystitis with gallstone pancreatitis, choledocholithiasis, cholangitis, jaundice, elevated liver enzymes, sepsis secondary",
+        "keywords": ["cholecystitis", "gallstone pancreatitis", "choledocholithiasis", "cholangitis", "jaundice", "sepsis"],
+        "cpt": [],
+        "icd": [
+            {"code": "K80.00", "desc": "Calculus of gallbladder with acute cholecystitis"},
+            {"code": "K85.1", "desc": "Acute pancreatitis due to gallstone"},
+            {"code": "K80.50", "desc": "Calculus of bile duct without cholangitis"},
+            {"code": "K83.0", "desc": "Cholangitis"},
+            {"code": "R17.9", "desc": "Jaundice, unspecified"},
+            {"code": "A41.9", "desc": "Sepsis, unspecified organism"},
+        ],
+        "rule": "Acute pancreatitis is principal. K85.1 first, then K80.00, K80.50, K83.0, R17.9, A41.9.",
+    },
+    "icd_12": {
+        "category": "icd10_sequencing",
+        "scenario": "72yo female, hip replacement revision, mechanical loosening, periprosthetic fracture Vancouver type B, ORIF with plate, infection workup negative",
+        "keywords": ["hip replacement", "revision", "loosening", "periprosthetic fracture", "vancouver", "orif"],
+        "cpt": [],
+        "icd": [
+            {"code": "T84.046A", "desc": "Periprosthetic fracture around internal prosthetic joint, initial encounter"},
+            {"code": "T84.016A", "desc": "Mechanical loosening of internal prosthetic joint, initial encounter"},
+            {"code": "Z96.649", "desc": "Presence of unspecified artificial hip joint"},
+        ],
+        "rule": "Periprosthetic fracture is principal. T84.046A first, then T84.016A, Z96.649.",
+    },
+    "icd_13": {
+        "category": "icd10_sequencing",
+        "scenario": "38yo male, Crohn disease flare with small bowel obstruction, abscess ileocecal region percutaneous drain, malnutrition, DVT prophylaxis, dehydration",
+        "keywords": ["crohn", "small bowel obstruction", "abscess", "percutaneous drain", "malnutrition", "dehydration"],
+        "cpt": [],
+        "icd": [
+            {"code": "K56.609", "desc": "Unspecified intestinal obstruction"},
+            {"code": "K50.90", "desc": "Crohn disease unspecified without complications"},
+            {"code": "K63.2", "desc": "Abscess of intestine"},
+            {"code": "E44.1", "desc": "Moderate malnutrition"},
+            {"code": "E86.0", "desc": "Dehydration"},
+        ],
+        "rule": "Small bowel obstruction is principal. K56.609 first, then K50.90, K63.2, E44.1, E86.0.",
+    },
+    "icd_14": {
+        "category": "icd10_sequencing",
+        "scenario": "65yo male, heart failure decompensated, cardiorenal syndrome, acute kidney injury, hyponatremia, atrial fibrillation with RVR, COPD exacerbation, anemia",
+        "keywords": ["heart failure", "cardiorenal syndrome", "acute kidney injury", "hyponatremia", "atrial fibrillation", "copd"],
+        "cpt": [],
+        "icd": [
+            {"code": "I50.22", "desc": "Chronic systolic heart failure"},
+            {"code": "N17.9", "desc": "Acute kidney failure"},
+            {"code": "E87.1", "desc": "Hypo-osmolality and hyponatremia"},
+            {"code": "I48.0", "desc": "Paroxysmal atrial fibrillation"},
+            {"code": "J44.1", "desc": "COPD with acute exacerbation"},
+            {"code": "D63.8", "desc": "Anemia in chronic disease"},
+        ],
+        "rule": "Decompensated heart failure is principal. I50.22 first, then N17.9, E87.1, I48.0, J44.1, D63.8.",
+    },
+    "icd_15": {
+        "category": "icd10_sequencing",
+        "scenario": "80yo female, diabetic foot ulcer infected, osteomyelitis right calcaneus, sepsis E. coli, T2DM poorly controlled, peripheral vascular disease, CKD stage 4",
+        "keywords": ["diabetic foot ulcer", "osteomyelitis", "sepsis", "diabetes", "peripheral vascular disease", "ckd"],
+        "cpt": [],
+        "icd": [
+            {"code": "E11.621", "desc": "Type 2 diabetes with foot ulcer"},
+            {"code": "M86.17", "desc": "Other acute osteomyelitis, ankle and foot"},
+            {"code": "A41.51", "desc": "Sepsis due to E. coli"},
+            {"code": "E11.65", "desc": "Type 2 diabetes with hyperglycemia"},
+            {"code": "I73.9", "desc": "Peripheral vascular disease"},
+            {"code": "N18.4", "desc": "CKD stage 4"},
+        ],
+        "rule": "Sepsis from diabetic foot ulcer is principal. A41.51 first, then E11.621, M86.17, E11.65, I73.9, N18.4.",
+    },
+    "icd_16": {
+        "category": "icd10_sequencing",
+        "scenario": "50yo female, deep vein thrombosis right lower extremity, pulmonary embolism massive, anticoagulation heparin, inferior vena cava filter placed, cancer staging breast",
+        "keywords": ["deep vein thrombosis", "pulmonary embolism", "anticoagulation", "ivc filter", "breast cancer"],
+        "cpt": [],
+        "icd": [
+            {"code": "I26.99", "desc": "Other pulmonary embolism"},
+            {"code": "I82.401", "desc": "Acute DVT right femoral vein"},
+            {"code": "C50.911", "desc": "Malignant neoplasm right breast"},
+            {"code": "Z98.85", "desc": "Vena cava filter in situ"},
+        ],
+        "rule": "Massive PE is principal. I26.99 first, then I82.401, C50.911, Z98.85.",
+    },
+    "icd_17": {
+        "category": "icd10_sequencing",
+        "scenario": "25yo male, testicular torsion left, orchiectomy, infertility workup, varicocele right, anxiety disorder, anemia iron deficiency",
+        "keywords": ["testicular torsion", "orchiectomy", "infertility", "varicocele", "anxiety", "anemia"],
+        "cpt": [],
+        "icd": [
+            {"code": "N44.02", "desc": "Torsion of testis"},
+            {"code": "Z90.81", "desc": "Acquired absence of left testis"},
+            {"code": "I86.3", "desc": "Varicocele"},
+            {"code": "F41.9", "desc": "Anxiety disorder, unspecified"},
+            {"code": "D50.9", "desc": "Iron deficiency anemia, unspecified"},
+        ],
+        "rule": "Testicular torsion is principal. N44.02 first, then Z90.81, I86.3, F41.9, D50.9.",
+    },
+    "icd_18": {
+        "category": "icd10_sequencing",
+        "scenario": "62yo male, post-cardiac arrest anoxic brain injury, hypoxic-ischemic encephalopathy, ventilator dependence, aspiration pneumonia, neurogenic bladder, malnutrition",
+        "keywords": ["cardiac arrest", "anoxic brain injury", "hypoxic-ischemic", "ventilator", "aspiration pneumonia", "neurogenic bladder"],
+        "cpt": [],
+        "icd": [
+            {"code": "G93.1", "desc": "Anoxic brain damage, not elsewhere classified"},
+            {"code": "G92.8", "desc": "Other toxic encephalopathy"},
+            {"code": "Z99.11", "desc": "Dependence on respirator"},
+            {"code": "J69.0", "desc": "Pneumonitis due to aspiration"},
+            {"code": "N31.2", "desc": "Neurogenic bladder, upper motor neuron type"},
+            {"code": "E44.0", "desc": "Mild malnutrition"},
+        ],
+        "rule": "Anoxic brain injury is principal. G93.1 first, then G92.8, Z99.11, J69.0, N31.2, E44.0.",
+    },
+    "icd_19": {
+        "category": "icd10_sequencing",
+        "scenario": "48yo female, breast cancer post-mastectomy, chemotherapy-induced neutropenia, febrile neutropenia, cellulitis surgical site, cellulitis cellulitis, dehydration",
+        "keywords": ["breast cancer", "mastectomy", "febrile neutropenia", "cellulitis", "surgical site infection", "dehydration"],
+        "cpt": [],
+        "icd": [
+            {"code": "D70.0", "desc": "Chemotherapy-induced neutropenia"},
+            {"code": "C50.911", "desc": "Malignant neoplasm right breast"},
+            {"code": "L03.115", "desc": "Cellulitis right breast"},
+            {"code": "E86.0", "desc": "Dehydration"},
+        ],
+        "rule": "Febrile neutropenia is principal. D70.0 first, then C50.911, L03.115, E86.0.",
+    },
+    "icd_20": {
+        "category": "icd10_sequencing",
+        "scenario": "78yo male, Alzheimer dementia behavioral disturbance, aspiration pneumonia, malnutrition severe, PEG tube placement, DVT prophylaxis, pressure ulcer heel stage 2",
+        "keywords": ["alzheimer", "dementia", "aspiration pneumonia", "malnutrition", "peg tube", "pressure ulcer"],
+        "cpt": [],
+        "icd": [
+            {"code": "F03.91", "desc": "Unspecified dementia with behavioral disturbance"},
+            {"code": "J69.0", "desc": "Pneumonitis due to aspiration"},
+            {"code": "E43", "desc": "Severe malnutrition"},
+            {"code": "Z87.36", "desc": "Personal history of pressure ulcer"},
+            {"code": "L89.151", "desc": "Pressure ulcer heel stage 2"},
+        ],
+        "rule": "Aspiration pneumonia is principal. J69.0 first, then F03.91, E43, L89.151, Z87.36.",
+    },
+
+}
 
 def get_case_answer(case_key: str) -> Optional[Dict]:
     """Get the accurate answer for a specific case."""
