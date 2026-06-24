@@ -37,6 +37,7 @@ jobs:
       - name: Run flake8
         run: |
           flake8 main.py api/ core/ agents/ auth/ security/ storage/ \
+            billing/ compliance/ monitoring/ reports/ \
             --max-line-length=120 --ignore=E501,W503,E402 \
             --count --show-source --statistics
 

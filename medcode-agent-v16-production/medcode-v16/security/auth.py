@@ -15,8 +15,10 @@ Provides:
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import hmac
+import json
 import logging
 import os
 import threading
@@ -179,11 +181,9 @@ class JWTService:
         self._refresh_days = 7
 
     def _b64url_encode(self, data: bytes) -> str:
-        import base64
         return base64.urlsafe_b64encode(data).rstrip(b"=").decode("utf-8")
 
     def _b64url_decode(self, data: str) -> bytes:
-        import base64
         padding = 4 - len(data) % 4
         if padding != 4:
             data += "=" * padding
@@ -212,7 +212,6 @@ class JWTService:
         return token, payload.jti, payload.family_id
 
     def _encode_token(self, payload: TokenPayload) -> str:
-        import json
         header = self._b64url_encode(json.dumps({"alg": "HS256", "typ": "JWT"}).encode())
         body = self._b64url_encode(json.dumps(payload.to_dict()).encode())
         signature_input = f"{header}.{body}".encode()
@@ -235,7 +234,6 @@ class JWTService:
             if not hmac.compare_digest(expected_sig, actual_sig):
                 return None
 
-            import json
             payload_data = json.loads(self._b64url_decode(body_b64))
             payload = TokenPayload.from_dict(payload_data)
 

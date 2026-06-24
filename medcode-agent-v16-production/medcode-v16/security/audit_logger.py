@@ -10,7 +10,7 @@ from __future__ import annotations
 import logging
 import time
 import uuid
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger("medcode.audit")
