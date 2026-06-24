@@ -292,27 +292,64 @@ def _has_clinical_support(code: str, note_text: str, code_type: str) -> bool:
     return False
 
 
-def _remove_icd_redundancy(icd_candidates: List[Dict]) -> List[Dict]:
-    """Remove redundant ICD codes: if multiple codes share the same 3-char
-    prefix and none are from training cases, keep only the most specific
-    (longest) one."""
+def _remove_icd_redundancy(icd_candidates: List[Dict], note_text: str = "") -> List[Dict]:
+    """Remove redundant ICD codes:
+    1. Training case codes are NEVER removed
+    2. If one non-training code is a strict prefix of another (A41 vs A41.52), remove the shorter
+    3. For same-length non-training codes with same prefix: keep the one matching note text best
+    4. Different conditions with same prefix (E11.621 vs E11.40) are kept"""
     training_codes = {
         c.get("code") for c in icd_candidates
         if c.get("source", "").startswith("training_case_")
     }
-    code_set = {c.get("code") for c in icd_candidates}
+    code_set = {c.get("code", "") for c in icd_candidates if c.get("code")}
+    note_lower = note_text.lower()
     dropped = set()
-    prefixes: Dict[str, List[str]] = {}
+    code_desc_map = {}
+    for c in icd_candidates:
+        code = c.get("code", "")
+        if code:
+            code_desc_map[code] = c.get("description", "").lower()
+
+    for code_a in code_set:
+        if code_a in training_codes or code_a in dropped:
+            continue
+        for code_b in code_set:
+            if code_b in training_codes or code_b in dropped or code_a == code_b:
+                continue
+            if code_a.startswith(code_b + ".") or code_b.startswith(code_a + "."):
+                shorter = code_a if len(code_a) < len(code_b) else code_b
+                if shorter not in training_codes:
+                    dropped.add(shorter)
+
+    non_training_prefixes: Dict[str, List[str]] = {}
     for code in code_set:
-        if code in training_codes:
+        if code in dropped:
             continue
         prefix = code[:3]
-        prefixes.setdefault(prefix, []).append(code)
-    for prefix, codes in prefixes.items():
+        non_training_prefixes.setdefault(prefix, []).append(code)
+    for prefix, codes in non_training_prefixes.items():
         if len(codes) > 1:
-            codes_sorted = sorted(codes, key=len, reverse=True)
-            for code in codes_sorted[1:]:
-                dropped.add(code)
+            same_length = {}
+            for c in codes:
+                same_length.setdefault(len(c), []).append(c)
+            for length, group in same_length.items():
+                if len(group) > 1:
+                    best = group[0]
+                    best_desc = code_desc_map.get(best, "")
+                    best_words = set(w for w in best_desc.split() if len(w) > 3)
+                    best_score = len(best_words & set(note_lower.split()))
+                    for code in group[1:]:
+                        code_desc = code_desc_map.get(code, "")
+                        code_words = set(w for w in code_desc.split() if len(w) > 3)
+                        code_score = len(code_words & set(note_lower.split()))
+                        if code_score > best_score:
+                            if best not in training_codes:
+                                dropped.add(best)
+                            best = code
+                        else:
+                            if code not in training_codes:
+                                dropped.add(code)
     if dropped:
         return [c for c in icd_candidates if c.get("code") not in dropped]
     return icd_candidates
@@ -1683,7 +1720,7 @@ class MedcodeDeterministicPipelineV15:
                     _trace("15C_CPT_RELEVANCE", "filtered", {"removed": cpt_filtered, "remaining": len(cpt_candidates)})
 
                 # 2. ICD redundancy removal (prefix-based dedup)
-                icd_candidates = _remove_icd_redundancy(icd_candidates)
+                icd_candidates = _remove_icd_redundancy(icd_candidates, note_text)
 
                 # 3. ICD clinical relevance filter
                 # Training-case codes are exempt here — they were already
