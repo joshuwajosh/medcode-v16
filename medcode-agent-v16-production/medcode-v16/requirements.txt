@@ -48,6 +48,9 @@ gunicorn>=21.2.0
 # ── Structured Logging ──────────────────────────────────────────────
 python-json-logger>=2.0.0
 
+# ── FHIR Integration ────────────────────────────────────────────────
+fhir.resources>=7.0.0
+
 # ── ML / NLP (v5 additions - pure Python, no GPU required) ─────────────
 # Note: ml/clinical_nlp.py uses zero external deps (pure Python stdlib math).
 # Optional: install these for future embedding-based search upgrades:

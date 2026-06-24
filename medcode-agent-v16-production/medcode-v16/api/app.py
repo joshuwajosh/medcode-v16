@@ -52,6 +52,7 @@ from api.routes.clinical_notes import router as clinical_notes_router
 from api.routes.reports import router as reports_router
 from api.routes.batch import router as batch_router
 from api.routes.dashboard_api import router as dashboard_api_router
+from api.routes.fhir import router as fhir_router
 app.include_router(coding.router)
 app.include_router(coding.v1_router)
 app.include_router(debug.router)
@@ -70,6 +71,7 @@ app.include_router(clinical_notes_router)
 app.include_router(reports_router)
 app.include_router(batch_router)
 app.include_router(dashboard_api_router)
+app.include_router(fhir_router)
 
 # ── Serve frontend static files ─────────────────────────────────────────
 STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
