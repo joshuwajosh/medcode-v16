@@ -59,6 +59,7 @@ class BatchClaimProcessor:
             conn.executescript("""
                 CREATE TABLE IF NOT EXISTS batches (
                     batch_id TEXT PRIMARY KEY,
+                    organization_id TEXT DEFAULT '',
                     status TEXT DEFAULT 'pending',
                     total_claims INTEGER DEFAULT 0,
                     processed INTEGER DEFAULT 0,
@@ -103,6 +104,7 @@ class BatchClaimProcessor:
         self,
         claims: List[Dict[str, Any]],
         callback: Optional[Callable[[int, int, str], None]] = None,
+        organization_id: str = "",
     ) -> BatchResult:
         """
         Process a list of claim dicts. Non-blocking: returns immediately
@@ -121,9 +123,9 @@ class BatchClaimProcessor:
             conn = self._conn()
             try:
                 conn.execute(
-                    "INSERT INTO batches (batch_id, status, total_claims, created_at, updated_at) "
-                    "VALUES (?, 'processing', ?, ?, ?)",
-                    (batch_id, len(claims), now, now),
+                    "INSERT INTO batches (batch_id, organization_id, status, total_claims, created_at, updated_at) "
+                    "VALUES (?, ?, 'processing', ?, ?, ?)",
+                    (batch_id, organization_id, len(claims), now, now),
                 )
                 for idx, claim_data in enumerate(claims):
                     conn.execute(
@@ -285,14 +287,18 @@ class BatchClaimProcessor:
         finally:
             conn.close()
 
-    def list_batches(self, limit: int = 20) -> List[BatchSummary]:
+    def list_batches(self, limit: int = 20, organization_id: Optional[str] = None) -> List[BatchSummary]:
         conn = self._conn()
         try:
-            rows = conn.execute(
-                "SELECT batch_id, created_at, total_claims, status, "
-                "successful, failed FROM batches ORDER BY created_at DESC LIMIT ?",
-                (limit,),
-            ).fetchall()
+            query = ("SELECT batch_id, created_at, total_claims, status, "
+                     "successful, failed FROM batches")
+            params: list = []
+            if organization_id:
+                query += " WHERE organization_id = ?"
+                params.append(organization_id)
+            query += " ORDER BY created_at DESC LIMIT ?"
+            params.append(limit)
+            rows = conn.execute(query, params).fetchall()
             summaries = []
             for row in rows:
                 total = row["total_claims"] or 0

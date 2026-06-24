@@ -50,6 +50,7 @@ class Database:
             conn.executescript("""
                 CREATE TABLE IF NOT EXISTS sessions (
                     id TEXT PRIMARY KEY,
+                    organization_id TEXT DEFAULT '',
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     clinical_note TEXT,
                     note_type TEXT,
@@ -64,6 +65,7 @@ class Database:
                 CREATE TABLE IF NOT EXISTS coded_results (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     session_id TEXT REFERENCES sessions(id),
+                    organization_id TEXT DEFAULT '',
                     code TEXT,
                     code_name TEXT,
                     vocabulary TEXT,
@@ -78,6 +80,7 @@ class Database:
                 CREATE TABLE IF NOT EXISTS feedback (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     session_id TEXT REFERENCES sessions(id),
+                    organization_id TEXT DEFAULT '',
                     code TEXT,
                     action TEXT,
                     corrected_code TEXT,
@@ -97,20 +100,21 @@ class Database:
             conn.close()
 
     def save_session(self, session_id: str, note: str, note_type: str,
-                     mode: str, status: str = "pending") -> str:
+                     mode: str, status: str = "pending",
+                     organization_id: str = "") -> str:
         """Save a session record. Encrypts PHI fields before storage."""
         if not session_id:
             session_id = str(uuid.uuid4())
-        
+
         enc = get_encryption()
         encrypted_note = enc.encrypt(note[:500])
-        
+
         conn = self._get_conn()
         try:
             conn.execute(
-                """INSERT OR REPLACE INTO sessions (id, clinical_note, note_type, mode, status)
-                   VALUES (?, ?, ?, ?, ?)""",
-                (session_id, encrypted_note, note_type, mode, status),
+                """INSERT OR REPLACE INTO sessions (id, organization_id, clinical_note, note_type, mode, status)
+                   VALUES (?, ?, ?, ?, ?, ?)""",
+                (session_id, organization_id, encrypted_note, note_type, mode, status),
             )
             conn.commit()
             return session_id
@@ -211,18 +215,21 @@ class Database:
         finally:
             conn.close()
 
-    def get_history(self, limit: int = 20, offset: int = 0, decrypt: bool = True) -> list[dict]:
+    def get_history(self, limit: int = 20, offset: int = 0, decrypt: bool = True,
+                    organization_id: Optional[str] = None) -> list[dict]:
         """Get recent session history. Decrypts PHI fields if requested."""
         conn = self._get_conn()
         try:
-            rows = conn.execute(
-                """SELECT id, created_at, clinical_note, note_type, mode, status,
-                          processing_time_s, confidence_overall, needs_human_review
-                   FROM sessions
-                   ORDER BY created_at DESC
-                   LIMIT ? OFFSET ?""",
-                (limit, offset),
-            ).fetchall()
+            query = """SELECT id, created_at, clinical_note, note_type, mode, status,
+                              processing_time_s, confidence_overall, needs_human_review
+                       FROM sessions"""
+            params: list = []
+            if organization_id:
+                query += " WHERE organization_id = ?"
+                params.append(organization_id)
+            query += " ORDER BY created_at DESC LIMIT ? OFFSET ?"
+            params.extend([limit, offset])
+            rows = conn.execute(query, params).fetchall()
             sessions = [dict(r) for r in rows]
             
             if decrypt:

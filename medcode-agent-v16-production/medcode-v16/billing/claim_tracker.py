@@ -1,6 +1,6 @@
 """
 MedCode AI — Claim Lifecycle Tracking
-=======================================
+======================================
 SQLite-based claim database for tracking claim status
 through the complete revenue cycle.
 """
@@ -10,6 +10,8 @@ import sqlite3
 import time
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
+
+from billing.webhook_models import VALID_WEBHOOK_EVENTS
 
 
 # Valid claim status transitions
@@ -50,6 +52,7 @@ class ClaimTracker:
             conn.executescript("""
                 CREATE TABLE IF NOT EXISTS claims (
                     claim_id TEXT PRIMARY KEY,
+                    organization_id TEXT DEFAULT '',
                     patient_name TEXT,
                     payer_name TEXT,
                     provider_npi TEXT,
@@ -98,6 +101,7 @@ class ClaimTracker:
         provider_npi: str = "",
         total_charges: float = 0.0,
         claim_type: str = "professional",
+        organization_id: str = "",
     ) -> Dict[str, Any]:
         """
         Submit a new claim for tracking.
@@ -111,11 +115,11 @@ class ClaimTracker:
             conn.execute(
                 """
                 INSERT OR REPLACE INTO claims
-                (claim_id, patient_name, payer_name, provider_npi,
+                (claim_id, organization_id, patient_name, payer_name, provider_npi,
                  total_charges, status, claim_type, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, 'draft', ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, 'draft', ?, ?, ?)
                 """,
-                (claim_id, patient_name, payer_name, provider_npi,
+                (claim_id, organization_id, patient_name, payer_name, provider_npi,
                  total_charges, claim_type, now, now),
             )
             conn.execute(
@@ -137,6 +141,7 @@ class ClaimTracker:
         claim_id: str,
         new_status: str,
         notes: str = "",
+        organization_id: str = "",
     ) -> Dict[str, Any]:
         """
         Update claim status with validation of allowed transitions.
@@ -182,6 +187,14 @@ class ClaimTracker:
             conn.commit()
         finally:
             conn.close()
+
+        self._trigger_webhook(new_status, {
+            "claim_id": claim_id,
+            "old_status": old_status,
+            "new_status": new_status,
+            "organization_id": organization_id or "",
+            "updated_at": now,
+        })
 
         return {
             "claim_id": claim_id,
@@ -278,6 +291,7 @@ class ClaimTracker:
         self,
         status: Optional[str] = None,
         payer_name: Optional[str] = None,
+        organization_id: Optional[str] = None,
         limit: int = 100,
     ) -> List[Dict[str, Any]]:
         """List claims with optional filters."""
@@ -286,6 +300,9 @@ class ClaimTracker:
             query = "SELECT * FROM claims WHERE 1=1"
             params = []
 
+            if organization_id:
+                query += " AND organization_id = ?"
+                params.append(organization_id)
             if status:
                 query += " AND status = ?"
                 params.append(status)
@@ -300,6 +317,25 @@ class ClaimTracker:
             return [dict(row) for row in rows]
         finally:
             conn.close()
+
+    def _trigger_webhook(self, new_status: str, payload: dict):
+        """Trigger webhook event for claim status changes."""
+        event_map = {
+            "submitted": "claim.submitted",
+            "acknowledged": "claim.acknowledged",
+            "paid": "claim.paid",
+            "denied": "claim.denied",
+            "appealed": "claim.appealed",
+        }
+        event_type = event_map.get(new_status)
+        if not event_type:
+            return
+        try:
+            from billing.webhook_manager import WebhookManager
+            manager = WebhookManager(db_dir=self.db_dir)
+            manager.trigger_event(event_type, payload)
+        except Exception:
+            pass
 
     def get_claim_count(self) -> Dict[str, int]:
         """Get claim counts by status."""
