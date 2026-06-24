@@ -120,20 +120,23 @@ async def register(request: Request, body: RegisterRequest):
 
 @router.post("/refresh")
 async def refresh_token(body: RefreshRequest):
-    """Refresh an access token using a refresh token."""
+    """Refresh access token with rotation — returns new access + new refresh token."""
     auth = get_auth_service()
     result = auth.refresh_token(body.refresh_token)
     if result is None:
-        raise HTTPException(status_code=401, detail="Invalid refresh token")
+        raise HTTPException(status_code=401, detail="Invalid or revoked refresh token")
     return result
 
 
 @router.post("/logout")
 async def logout(request: Request):
-    """Invalidate the current session."""
+    """Invalidate the current session and revoke all refresh tokens for it."""
     session_id = getattr(request.state, "session_id", "")
+    auth = get_auth_service()
     session_mgr = get_session_manager()
+
     if session_id:
+        auth.revoke_all_session_tokens(session_id)
         session_mgr.invalidate_session(session_id)
 
     user_id = getattr(request.state, "user_id", "")
@@ -146,6 +149,33 @@ async def logout(request: Request):
         success=True,
     )
     return {"status": "logged_out"}
+
+
+class RevokeAllRequest(BaseModel):
+    user_id: str
+
+
+@router.post("/revoke-all")
+async def revoke_all_tokens(request: Request, body: RevokeAllRequest):
+    """Admin endpoint: revoke all refresh tokens for a user."""
+    user_id = getattr(request.state, "user_id", "")
+    role = getattr(request.state, "user_role", "")
+    if role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+
+    auth = get_auth_service()
+    count = auth.revoke_all_user_tokens(body.user_id)
+
+    audit = get_audit_store()
+    audit.append(
+        user_id=user_id,
+        role=role,
+        action="revoke_all_tokens",
+        resource_type="auth",
+        success=True,
+        details=f"Revoked {count} tokens for user {body.user_id}",
+    )
+    return {"status": "revoked", "count": count}
 
 
 @router.post("/emergency-access")

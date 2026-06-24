@@ -9,13 +9,15 @@ Provides:
   - Role-based access control (RBAC)
   - Session management with automatic expiry
   - Password hashing (bcrypt)
-  - Token refresh flow
+  - Token refresh with rotation and revocation
+  - Token family tracking for theft detection
 """
 
 from __future__ import annotations
 
 import hashlib
 import hmac
+import logging
 import os
 import time
 import uuid
@@ -23,6 +25,8 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set
+
+logger = logging.getLogger("medcode.security")
 
 
 class Role(str, Enum):
@@ -51,6 +55,19 @@ PERMISSIONS: Dict[str, Set[Role]] = {
 
 
 @dataclass
+class RefreshTokenRecord:
+    """Record for a refresh token in the rotation store."""
+    jti: str = ""
+    family_id: str = ""
+    user_id: str = ""
+    session_id: str = ""
+    issued_at: float = 0.0
+    expires_at: float = 0.0
+    revoked: bool = False
+    revoked_at: Optional[float] = None
+
+
+@dataclass
 class TokenPayload:
     """JWT token payload."""
     user_id: str = ""
@@ -61,9 +78,11 @@ class TokenPayload:
     issued_at: float = 0.0
     expires_at: float = 0.0
     token_type: str = "access"  # access | refresh
+    jti: str = ""
+    family_id: str = ""
 
     def to_dict(self) -> dict:
-        return {
+        d = {
             "sub": self.user_id,
             "role": self.role,
             "provider_id": self.provider_id,
@@ -73,6 +92,11 @@ class TokenPayload:
             "exp": self.expires_at,
             "type": self.token_type,
         }
+        if self.jti:
+            d["jti"] = self.jti
+        if self.family_id:
+            d["family_id"] = self.family_id
+        return d
 
     @classmethod
     def from_dict(cls, data: dict) -> "TokenPayload":
@@ -85,6 +109,8 @@ class TokenPayload:
             issued_at=data.get("iat", 0),
             expires_at=data.get("exp", 0),
             token_type=data.get("type", "access"),
+            jti=data.get("jti", ""),
+            family_id=data.get("family_id", ""),
         )
 
 
@@ -191,13 +217,23 @@ class JWTService:
         payload.token_type = "access"
         payload.issued_at = time.time()
         payload.expires_at = payload.issued_at + (self._expiry_minutes * 60)
+        if not payload.jti:
+            payload.jti = str(uuid.uuid4())
         return self._encode_token(payload)
 
-    def create_refresh_token(self, payload: TokenPayload) -> str:
+    def create_refresh_token(
+        self,
+        payload: TokenPayload,
+        family_id: Optional[str] = None,
+    ) -> tuple:
+        """Create refresh token with family tracking. Returns (token_str, jti, family_id)."""
         payload.token_type = "refresh"
         payload.issued_at = time.time()
         payload.expires_at = payload.issued_at + (self._refresh_days * 24 * 3600)
-        return self._encode_token(payload)
+        payload.jti = str(uuid.uuid4())
+        payload.family_id = family_id or str(uuid.uuid4())
+        token = self._encode_token(payload)
+        return token, payload.jti, payload.family_id
 
     def _encode_token(self, payload: TokenPayload) -> str:
         import json
@@ -245,6 +281,7 @@ class AuthService:
     """
     Authentication and authorization service.
     Manages users, sessions, and token lifecycle.
+    Implements refresh token rotation with family-based theft detection.
     """
 
     def __init__(self):
@@ -253,6 +290,8 @@ class AuthService:
         self._users: Dict[str, User] = {}
         self._sessions: Dict[str, Session] = {}
         self._failed_attempts: Dict[str, List[float]] = {}
+        self._refresh_tokens: Dict[str, RefreshTokenRecord] = {}
+        self._compromised_families: Set[str] = set()
 
     def create_user(
         self,
@@ -313,7 +352,7 @@ class AuthService:
         )
 
         access_token = self._jwt.create_access_token(payload)
-        refresh_token = self._jwt.create_refresh_token(payload)
+        refresh_token_str, jti, family_id = self._jwt.create_refresh_token(payload)
 
         session = Session(
             session_id=str(uuid.uuid4())[:12],
@@ -325,9 +364,18 @@ class AuthService:
         )
         self._sessions[session.session_id] = session
 
+        self._refresh_tokens[jti] = RefreshTokenRecord(
+            jti=jti,
+            family_id=family_id,
+            user_id=user.user_id,
+            session_id=session.session_id,
+            issued_at=payload.issued_at,
+            expires_at=payload.expires_at,
+        )
+
         return {
             "access_token": access_token,
-            "refresh_token": refresh_token,
+            "refresh_token": refresh_token_str,
             "token_type": "bearer",
             "expires_in": 1800,
             "session_id": session.session_id,
@@ -360,11 +408,91 @@ class AuthService:
         return payload.provider_id == resource_provider_id
 
     def refresh_token(self, refresh_token: str) -> Optional[Dict[str, str]]:
-        new_access = self._jwt.refresh_access_token(refresh_token)
-        if new_access is None:
+        """Refresh with rotation: validate old token, revoke it, issue new access + refresh."""
+        payload = self._jwt.decode_token(refresh_token)
+        if payload is None or payload.token_type != "refresh":
             return None
+
+        jti = payload.jti
+        family_id = payload.family_id
+
+        if family_id and family_id in self._compromised_families:
+            logger.warning(
+                "Refresh token reuse detected for compromised family %s — revoking all tokens",
+                family_id,
+            )
+            self._revoke_family(family_id)
+            return None
+
+        record = self._refresh_tokens.get(jti)
+        if record is None:
+            # Graceful migration: old tokens without jti/family_id still work
+            # Create a new record and issue a new refresh token
+            new_payload = TokenPayload(
+                user_id=payload.user_id,
+                role=payload.role,
+                provider_id=payload.provider_id,
+                organization_id=payload.organization_id,
+                session_id=payload.session_id,
+            )
+            access_token = self._jwt.create_access_token(new_payload)
+            new_refresh_str, new_jti, new_family_id = self._jwt.create_refresh_token(new_payload)
+            self._refresh_tokens[new_jti] = RefreshTokenRecord(
+                jti=new_jti,
+                family_id=new_family_id,
+                user_id=payload.user_id,
+                session_id=payload.session_id,
+                issued_at=new_payload.issued_at,
+                expires_at=new_payload.expires_at,
+            )
+            return {
+                "access_token": access_token,
+                "refresh_token": new_refresh_str,
+                "token_type": "bearer",
+                "expires_in": 1800,
+            }
+
+        if record.revoked:
+            logger.warning(
+                "Revoked refresh token %s reused — possible token theft, revoking family %s",
+                jti,
+                family_id,
+            )
+            if family_id:
+                self._compromised_families.add(family_id)
+                self._revoke_family(family_id)
+            return None
+
+        if time.time() > record.expires_at:
+            return None
+
+        record.revoked = True
+        record.revoked_at = time.time()
+
+        new_payload = TokenPayload(
+            user_id=payload.user_id,
+            role=payload.role,
+            provider_id=payload.provider_id,
+            organization_id=payload.organization_id,
+            session_id=payload.session_id,
+        )
+        access_token = self._jwt.create_access_token(new_payload)
+        new_refresh_str, new_jti, new_family_id = self._jwt.create_refresh_token(
+            new_payload, family_id=family_id,
+        )
+
+        self._refresh_tokens[new_jti] = RefreshTokenRecord(
+            jti=new_jti,
+            family_id=new_family_id,
+            user_id=payload.user_id,
+            session_id=payload.session_id,
+            issued_at=new_payload.issued_at,
+            expires_at=new_payload.expires_at,
+        )
+
         return {
-            "access_token": new_access,
+            "access_token": access_token,
+            "refresh_token": new_refresh_str,
             "token_type": "bearer",
             "expires_in": 1800,
         }
@@ -373,8 +501,50 @@ class AuthService:
         session = self._sessions.get(session_id)
         if session:
             session.is_active = False
+            self.revoke_all_session_tokens(session_id)
             return True
         return False
+
+    def revoke_refresh_token(self, jti: str) -> bool:
+        record = self._refresh_tokens.get(jti)
+        if record and not record.revoked:
+            record.revoked = True
+            record.revoked_at = time.time()
+            return True
+        return False
+
+    def revoke_all_user_tokens(self, user_id: str) -> int:
+        count = 0
+        for record in self._refresh_tokens.values():
+            if record.user_id == user_id and not record.revoked:
+                record.revoked = True
+                record.revoked_at = time.time()
+                count += 1
+        return count
+
+    def revoke_all_session_tokens(self, session_id: str) -> int:
+        count = 0
+        for record in self._refresh_tokens.values():
+            if record.session_id == session_id and not record.revoked:
+                record.revoked = True
+                record.revoked_at = time.time()
+                count += 1
+        return count
+
+    def is_refresh_token_revoked(self, jti: str) -> bool:
+        record = self._refresh_tokens.get(jti)
+        if record is None:
+            return True
+        return record.revoked
+
+    def _revoke_family(self, family_id: str) -> int:
+        count = 0
+        for record in self._refresh_tokens.values():
+            if record.family_id == family_id and not record.revoked:
+                record.revoked = True
+                record.revoked_at = time.time()
+                count += 1
+        return count
 
     def get_user(self, user_id: str) -> Optional[User]:
         return self._users.get(user_id)
@@ -387,6 +557,9 @@ class AuthService:
             "total_users": len(self._users),
             "active_sessions": sum(1 for s in self._sessions.values() if s.is_active and not s.is_expired),
             "total_sessions": len(self._sessions),
+            "refresh_tokens_tracked": len(self._refresh_tokens),
+            "active_refresh_tokens": sum(1 for r in self._refresh_tokens.values() if not r.revoked),
+            "compromised_families": len(self._compromised_families),
         }
 
 
