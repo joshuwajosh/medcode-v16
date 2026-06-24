@@ -99,6 +99,225 @@ import logging
 logger = logging.getLogger("medcode.pipeline.v16")
 
 
+# ── Clinical Relevance Engine ────────────────────────────────────────────
+# Maps CPT/ICD codes to keywords that must appear in the note text to
+# justify coding that code.  Codes sourced from training cases bypass
+# this filter (they are expert-curated).
+_CPT_CLINICAL_KEYWORDS: Dict[str, List[str]] = {
+    # Cardiac surgery
+    "33533": ["cabg", "coronary artery bypass", "bypass graft", "lima", "saphenous vein graft"],
+    "33534": ["cabg", "coronary artery bypass", "lima", "radial artery", "arterial graft"],
+    "33572": ["endarterectomy", "coronary endarterectomy"],
+    "33518": ["cabg", "coronary artery bypass", "saphenous vein"],
+    "33361": ["tavr", "transcatheter aortic valve", "aortic valve replacement"],
+    # PCI / cardiac cath
+    "92928": ["stent", "pci", "percutaneous coronary", "drug-eluting stent", "des"],
+    "92941": ["pci", "percutaneous coronary", "angioplasty", "balloon"],
+    "93458": ["catheterization", "cardiac cath", "coronary angiograph", "left heart cath"],
+    "93005": ["ecg", "electrocardiogram", "ekg", "heart rhythm"],
+    "93000": ["ecg", "electrocardiogram", "ekg"],
+    # Critical care
+    "99291": ["icu", "critical care", "intensive care", "life-threatening", "septic shock"],
+    "99292": ["icu", "critical care", "intensive care"],
+    # Surgery
+    "47562": ["cholecystectomy", "gallbladder", "gallstone", "cholelithiasis", "laparoscopic"],
+    "27447": ["knee", "arthroplasty", "knee replacement", "total knee"],
+    "27230": ["hip fracture", "femoral neck", "hip", "fracture"],
+    "43275": ["ercp", "endoscopic retrograde", "pancreatic duct", "biliary"],
+    "45385": ["colonoscopy", "polypectomy", "polyp", "sigmoidoscopy"],
+    "49560": ["hernia", "inguinal", "hernia repair"],
+    # Neonatal
+    "99469": ["neonate", "nicu", "newborn", "preterm", "gestational age", "neonatal"],
+    "99468": ["neonate", "nicu", "newborn", "preterm", "neonatal"],
+    # E/M ED
+    "99284": ["ed", "emergency department", "emergency room", "emergency visit", "triage", "spo2", "respiratory distress"],
+    "99283": ["ed", "emergency department", "emergency room", "emergency visit", "triage"],
+    "99285": ["ed", "emergency department", "emergency room", "emergency visit", "triage"],
+    # E/M office/clinic
+    "99215": ["established patient", "follow-up", "comprehensive", "high complexity", "mdm"],
+    "99214": ["established patient", "follow-up", "moderate complexity", "mdm"],
+    "99213": ["established patient", "follow-up", "low complexity", "moderate"],
+    "99212": ["established patient", "follow-up"],
+}
+
+_ICD_CLINICAL_KEYWORDS: Dict[str, List[str]] = {
+    # Cardiovascular
+    "I21.09": ["mi", "myocardial infarction", "heart attack", "stemi", "troponin", "acute coronary"],
+    "I21.01": ["mi", "myocardial infarction", "heart attack", "stemi", "troponin", "acute coronary", "left main"],
+    "I21.19": ["mi", "myocardial infarction", "heart attack", "stemi", "troponin", "inferior wall"],
+    "I21.4": ["nstemi", "non-stemi", "troponin", "acute coronary", "myocardial infarction"],
+    "I25.10": ["coronary artery disease", "atherosclerotic", "cad", "coronary", "ischemic cardiomyopathy", "cabg", "coronary artery bypass"],
+    "I35.0": ["aortic stenosis", "aortic valve", "valve"],
+    "I48.91": ["atrial fibrillation", "afib", "a-fib", "af"],
+    "I50.9": ["heart failure", "chf", "cardiac failure", "congestive"],
+    "R07.9": ["chest pain", "chest discomfort"],
+    "I63.51": ["stroke", "cerebrovascular", "cva", "hemiparesis", "ischemic stroke"],
+    "I69.354": ["stroke", "hemiparesis", "sequelae", "cva"],
+    "I63.9": ["stroke", "cerebrovascular", "cva", "ischemic"],
+    # Sepsis
+    "A41.52": ["sepsis", "septic", "e. coli", "ecoli", "bloodstream"],
+    "A41.0": ["sepsis", "septic", "mrsa", "methicillin"],
+    "R65.21": ["sepsis", "septic shock", "organ dysfunction", "sirs"],
+    "B95.61": ["mrsa", "methicillin-resistant", "s aureus"],
+    "J96.01": ["respiratory failure", "hypoxia", "acute respiratory", "respiratory distress"],
+    # Respiratory
+    "J45.41": ["asthma", "bronchospasm", "wheezing", "albuterol", "nebulizer", "respiratory distress"],
+    "J12.82": ["covid", "covid-19", "coronavirus", "sars-cov-2"],
+    "P22.0": ["respiratory distress", "rds", "newborn", "neonate", "surfactant"],
+    "P28.4": ["apnea", "prematurity", "newborn", "neonate"],
+    "Q25.0": ["patent ductus", "pda", "ductus arteriosus"],
+    "P59.9": ["jaundice", "bilirubin", "hyperbilirubinemia", "newborn", "neonate"],
+    "P92.9": ["feeding", "tpn", "trophic", "newborn", "neonate"],
+    "P07.15": ["birth weight", "preterm", "low birth weight", "neonate", "newborn"],
+    "P07.14": ["birth weight", "preterm", "low birth weight", "neonate", "newborn"],
+    "P07.16": ["birth weight", "preterm", "low birth weight", "neonate", "newborn"],
+    "P07.24": ["preterm", "immaturity", "gestational age", "neonate", "newborn"],
+    # Diabetes
+    "E11.621": ["diabetic", "diabetes", "ulcer", "foot ulcer", "neuropathy"],
+    "E11.65": ["diabetic", "diabetes", "hyperglycemia"],
+    "E11.40": ["diabetic", "diabetes", "neuropathy"],
+    "E11.9": ["diabetes", "diabetic"],
+    "E10.9": ["type 1 diabetes", "type i diabetes"],
+    # Orthopedics
+    "M17.11": ["knee osteoarthritis", "knee", "osteoarthritis", "arthroplasty"],
+    "M17.10": ["knee osteoarthritis", "knee", "osteoarthritis"],
+    "S72.001A": ["hip fracture", "femoral neck", "hip", "fracture"],
+    "S72.009A": ["hip fracture", "femoral neck", "hip", "fracture"],
+    "M80.061": ["osteoporosis", "hip", "bone density"],
+    # GI
+    "K80.20": ["gallstone", "cholelithiasis", "gallbladder", "biliary colic"],
+    "K86.1": ["pancreatitis", "pancreatic", "chronic pancreatitis"],
+    "Z12.11": ["screening", "colonoscopy", "fit", "polyp", "colorectal"],
+    "K63.5": ["polyp", "colon", "colonic"],
+    # Pre-eclampsia
+    "O14.14": ["pre-eclampsia", "preeclampsia", "eclampsia", "pregnancy"],
+    "O15.0": ["eclampsia", "seizure", "pregnancy", "convulsion"],
+    "O14.24": ["hellp", "pre-eclampsia", "liver", "platelet", "pregnancy"],
+    "O31.11": ["twins", "pregnancy", "cesarean", "c-section", "delivery"],
+    # Hernia
+    "K40.90": ["hernia", "inguinal"],
+    # Mental health
+    "F32.2": ["depression", "suicidal", "major depressive", "mdd"],
+    "R45.851": ["suicidal ideation", "suicidal", "suicide"],
+    # Renal
+    "N18.3": ["ckd", "chronic kidney", "renal", "creatinine"],
+}
+
+# ICD code prefix → required note keywords for training case relevance filtering.
+# Training case codes are filtered against this mapping to prevent false positives
+# when multiple training cases match on generic keywords.
+_ICD_NOTE_KEYWORDS: Dict[str, List[str]] = {
+    "J45": ["asthma", "wheeze", "bronchospasm", "nebulizer", "albuterol", "bronchodilator"],
+    "I48": ["atrial fibrillation", "afib", "a-fib", "anticoagulation", "irregular rhythm", "anticoag"],
+    "I21": ["myocardial infarction", "mi", "st elevation", "troponin", "stent", "acute coronary"],
+    "E11": ["diabetes", "glucose", "hba1c", "insulin", "metformin", "hyperglycemia"],
+    "N18": ["kidney", "renal", "ckd", "creatinine", "dialysis", "chronic kidney"],
+    "J18": ["pneumonia", "infiltrate", "consolidation", "antibiotic", "respiratory infection"],
+    "O82": ["cesarean", "c-section", "delivery", "labor", "obstetric", "cesarean section"],
+    "K80": ["gallstone", "cholelithiasis", "cholecystitis", "biliary", "gallbladder"],
+    "S72": ["hip fracture", "femur", "fall", "trauma", "fracture"],
+    "M17": ["knee", "osteoarthritis", "arthroplasty", "joint replacement", "knee replacement"],
+    "I25": ["coronary artery", "atherosclerotic", "cad", "coronary", "ischemic cardiomyopathy", "cabg", "angina"],
+    "I50": ["heart failure", "chf", "cardiac failure", "congestive", "nyha"],
+    "R07": ["chest pain", "chest discomfort", "chest tightness"],
+    "I63": ["stroke", "cerebrovascular", "cva", "hemiparesis", "ischemic stroke"],
+    "A41": ["sepsis", "septic", "bloodstream infection", "bacteremia"],
+    "F32": ["depression", "suicidal", "major depressive", "mdd", "antidepressant"],
+}
+
+
+def _filter_training_icd_by_note_relevance(
+    icd_candidates: List[Dict], note_text: str
+) -> List[Dict]:
+    """Filter ICD codes from training cases by note-text relevance.
+
+    Codes from training cases are kept only if the note text contains at
+    least one keyword that supports the diagnosis.  Codes without a keyword
+    mapping are kept (conservative fallback).  Non-training-case codes pass
+    through unchanged.
+    """
+    note_lower = note_text.lower()
+    filtered = []
+    for icd in icd_candidates:
+        if not icd.get("source", "").startswith("training_case_"):
+            filtered.append(icd)
+            continue
+        code = icd.get("code", "")
+        matched = False
+        for prefix, keywords in _ICD_NOTE_KEYWORDS.items():
+            if code.startswith(prefix):
+                if any(kw in note_lower for kw in keywords):
+                    filtered.append(icd)
+                matched = True
+                break
+        if not matched:
+            # No keyword mapping — keep conservatively
+            filtered.append(icd)
+    return filtered
+
+
+def _has_clinical_support(code: str, note_text: str, code_type: str) -> bool:
+    """Check if the note text contains keywords supporting this code.
+
+    Parameters
+    ----------
+    code : str
+        CPT or ICD-10 code (may include a decimal).
+    note_text : str
+        Full clinical note text.
+    code_type : str
+        ``'cpt'`` or ``'icd'``.
+
+    Returns
+    -------
+    bool
+        ``True`` if supporting keywords found, ``False`` otherwise.
+    """
+    mappings = _CPT_CLINICAL_KEYWORDS if code_type == 'cpt' else _ICD_CLINICAL_KEYWORDS
+
+    note_lower = note_text.lower()
+
+    if code in mappings:
+        return any(kw in note_lower for kw in mappings[code])
+
+    # Try prefix match for ICD codes (e.g. I21.09 -> I21)
+    if code_type == 'icd':
+        prefix = code[:3]
+        for key, keywords in mappings.items():
+            if key.startswith(prefix):
+                if any(kw in note_lower for kw in keywords):
+                    return True
+        return False
+
+    return False
+
+
+def _remove_icd_redundancy(icd_candidates: List[Dict]) -> List[Dict]:
+    """Remove redundant ICD codes: if multiple codes share the same 3-char
+    prefix and none are from training cases, keep only the most specific
+    (longest) one."""
+    training_codes = {
+        c.get("code") for c in icd_candidates
+        if c.get("source", "").startswith("training_case_")
+    }
+    code_set = {c.get("code") for c in icd_candidates}
+    dropped = set()
+    prefixes: Dict[str, List[str]] = {}
+    for code in code_set:
+        if code in training_codes:
+            continue
+        prefix = code[:3]
+        prefixes.setdefault(prefix, []).append(code)
+    for prefix, codes in prefixes.items():
+        if len(codes) > 1:
+            codes_sorted = sorted(codes, key=len, reverse=True)
+            for code in codes_sorted[1:]:
+                dropped.add(code)
+    if dropped:
+        return [c for c in icd_candidates if c.get("code") not in dropped]
+    return icd_candidates
+
+
 @dataclass
 class V16PipelineResult:
     """V16 Enterprise API contract."""
@@ -961,6 +1180,24 @@ class MedcodeDeterministicPipelineV15:
             except Exception as e:
                 _trace("5C_TRAINING_MATCH", "error", {"error": str(e)})
 
+            # ── Stage 5C2: Training Case ICD Relevance Filter ────────────
+            # Remove training-case ICD codes that have no supporting keywords
+            # in the current note text (prevents false positives from generic
+            # keyword matching across unrelated training cases).
+            try:
+                icd_before_filter = len(icd_candidates)
+                icd_candidates = _filter_training_icd_by_note_relevance(
+                    icd_candidates, note_text
+                )
+                icd_filtered_count = icd_before_filter - len(icd_candidates)
+                if icd_filtered_count:
+                    _trace("5C2_TRAINING_ICD_FILTER", "filtered", {
+                        "removed": icd_filtered_count,
+                        "remaining": len(icd_candidates),
+                    })
+            except Exception as e:
+                _trace("5C2_TRAINING_ICD_FILTER", "error", {"error": str(e)})
+
             icd_code_strs = [c.get("code", "") for c in icd_candidates if c.get("code")]
 
             # ── Stage 5C: V17 Deep Engine ICD Injection (post-Stage 5) ──
@@ -1429,6 +1666,45 @@ class MedcodeDeterministicPipelineV15:
             except Exception as e:
                 _trace("15B_ICD_DEDUP", "error", {"error": str(e)})
 
+            # ── Stage 15C: Clinical Relevance Filtering ──────────────────
+            # Filter CPT/ICD codes that have NO clinical evidence in the note.
+            # Training-case-sourced codes are always kept (expert-curated).
+            try:
+                # 1. CPT clinical relevance filter
+                cpt_before = len(cpt_candidates)
+                cpt_candidates = [
+                    c for c in cpt_candidates
+                    if c.get("source", "").startswith("training_case_")
+                    or _has_clinical_support(c.get("code", ""), note_text, 'cpt')
+                ]
+                cpt_code_strs = [c.get("code", "") for c in cpt_candidates if c.get("code")]
+                cpt_filtered = cpt_before - len(cpt_candidates)
+                if cpt_filtered:
+                    _trace("15C_CPT_RELEVANCE", "filtered", {"removed": cpt_filtered, "remaining": len(cpt_candidates)})
+
+                # 2. ICD redundancy removal (prefix-based dedup)
+                icd_candidates = _remove_icd_redundancy(icd_candidates)
+
+                # 3. ICD clinical relevance filter
+                # Training-case codes are exempt here — they were already
+                # filtered for note relevance in Stage 5C2.
+                icd_before = len(icd_candidates)
+                icd_candidates = [
+                    c for c in icd_candidates
+                    if c.get("source", "").startswith("training_case_")
+                    or _has_clinical_support(c.get("code", ""), note_text, 'icd')
+                ]
+                icd_code_strs = [c.get("code", "") for c in icd_candidates if c.get("code")]
+                icd_filtered = icd_before - len(icd_candidates)
+                if icd_filtered:
+                    _trace("15C_ICD_RELEVANCE", "filtered", {"removed": icd_filtered, "remaining": len(icd_candidates)})
+                if cpt_filtered or icd_filtered:
+                    _trace("15C_RELEVANCE", "done", {"cpt_removed": cpt_filtered, "icd_removed": icd_filtered})
+                else:
+                    _trace("15C_RELEVANCE", "passed", {"cpt": len(cpt_candidates), "icd": len(icd_candidates)})
+            except Exception as e:
+                _trace("15C_RELEVANCE", "error", {"error": str(e)})
+
             # ── Stage 16: Reasoning Trace ────────────────────────────────
             trace = self._explainer.build_trace(
                 note_text=note_text, extracted_facts=extracted_dict,
@@ -1454,8 +1730,8 @@ class MedcodeDeterministicPipelineV15:
             result.full_audit_trace = audit_trace
 
             # ── Finalize ──────────────────────────────────────────────────
-            result.cpt_codes = cpt_candidates[:10]
-            result.icd10_codes = icd_candidates[:8]
+            result.cpt_codes = cpt_candidates[:5]
+            result.icd10_codes = icd_candidates[:6]
 
         except Exception as e:
             logger.error(f"[{session_id}] Pipeline error: {e}", exc_info=True)
