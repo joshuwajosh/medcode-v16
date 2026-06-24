@@ -311,3 +311,12 @@ class ClaimTracker:
             return {row["status"]: row["count"] for row in rows}
         finally:
             conn.close()
+
+
+def get_claim_tracker():
+    """Backward-compatible factory. Returns PostgresClaimTracker if DATABASE_URL is postgresql."""
+    from core.config import DATABASE_URL
+    if DATABASE_URL.startswith("postgresql"):
+        from billing.postgres_claim_tracker import PostgresClaimTracker
+        return PostgresClaimTracker()
+    return ClaimTracker()

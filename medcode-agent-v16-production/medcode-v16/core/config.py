@@ -79,6 +79,19 @@ APP_PORT = int(os.getenv("APP_PORT", "8000"))
 APP_HOST = os.getenv("APP_HOST", "0.0.0.0")
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///medcode.db")
+
+# -- PostgreSQL (opt-in via DATABASE_URL) -----------------------------------
+POSTGRES_HOST = os.getenv("POSTGRES_HOST", "localhost")
+POSTGRES_PORT = int(os.getenv("POSTGRES_PORT", "5432"))
+POSTGRES_DB = os.getenv("POSTGRES_DB", "medcode")
+POSTGRES_USER = os.getenv("POSTGRES_USER", "medcode")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "")
+POSTGRES_SSL_MODE = os.getenv("POSTGRES_SSL_MODE", "disable")
+
+# -- Connection Pool Settings -----------------------------------------------
+DB_POOL_SIZE = int(os.getenv("DB_POOL_SIZE", "5"))
+DB_MAX_OVERFLOW = int(os.getenv("DB_MAX_OVERFLOW", "10"))
+
 MAX_BATCH_SIZE = int(os.getenv("MAX_BATCH_SIZE", "25"))
 DEFAULT_MODE = os.getenv("DEFAULT_MODE", "balanced")
 APP_VERSION = "5.0.0-ml"

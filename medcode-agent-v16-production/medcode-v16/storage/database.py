@@ -267,3 +267,11 @@ class Database:
     def close(self):
         """Close any remaining connections (no-op for connection-per-operation)."""
         pass
+
+
+def get_database():
+    """Backward-compatible factory. Returns PostgresDatabase if DATABASE_URL is postgresql."""
+    if DATABASE_URL.startswith("postgresql"):
+        from storage.postgres_database import PostgresDatabase
+        return PostgresDatabase()
+    return Database()
