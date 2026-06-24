@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedCode AI — Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 min-h-screen flex">
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gray-900 text-white flex-shrink-0 h-screen sticky top-0 flex flex-col">
+    <div class="px-5 py-6 border-b border-gray-700">
+      <h1 class="text-lg font-bold tracking-tight">MedCode AI</h1>
+      <p class="text-xs text-gray-400 mt-1">Admin Dashboard v19</p>
+    </div>
+    <nav class="flex-1 px-3 py-4 space-y-1" id="sidebar-nav">
+      <button id="tab-btn-overview" class="sidebar-link active" onclick="switchTab('overview')">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/></svg>
+        Overview
+      </button>
+      <button id="tab-btn-claims" class="sidebar-link" onclick="switchTab('claims')">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        Claims
+      </button>
+      <button id="tab-btn-coding" class="sidebar-link" onclick="switchTab('coding')">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+        Coding
+      </button>
+      <button id="tab-btn-users" class="sidebar-link" onclick="switchTab('users')">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        Users
+      </button>
+      <button id="tab-btn-reports" class="sidebar-link" onclick="switchTab('reports')">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        Reports
+      </button>
+      <button id="tab-btn-settings" class="sidebar-link" onclick="switchTab('settings')">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Settings
+      </button>
+    </nav>
+    <div class="px-5 py-4 border-t border-gray-700 text-xs text-gray-500">
+      MedCode AI v19.0.0-hipaa
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 min-w-0">
+
+    <!-- Top Bar -->
+    <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+      <h2 id="page-title" class="text-xl font-semibold text-gray-800">Overview</h2>
+      <div class="flex items-center gap-4 text-sm text-gray-500">
+        <span id="current-time"></span>
+        <a href="/docs" target="_blank" class="text-indigo-600 hover:text-indigo-800 font-medium">API Docs</a>
+      </div>
+    </header>
+
+    <!-- ═══════════ OVERVIEW TAB ═══════════ -->
+    <section id="section-overview" class="p-6 space-y-6">
+      <!-- Stat Cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+        <div class="stat-card">
+          <p class="text-sm text-gray-500 font-medium">Total Claims</p>
+          <p id="stat-total-claims" class="text-2xl font-bold text-gray-900 mt-1">—</p>
+        </div>
+        <div class="stat-card">
+          <p class="text-sm text-yellow-600 font-medium">Pending</p>
+          <p id="stat-pending" class="text-2xl font-bold text-gray-900 mt-1">—</p>
+        </div>
+        <div class="stat-card">
+          <p class="text-sm text-green-600 font-medium">Paid</p>
+          <p id="stat-paid" class="text-2xl font-bold text-gray-900 mt-1">—</p>
+        </div>
+        <div class="stat-card">
+          <p class="text-sm text-red-600 font-medium">Denied</p>
+          <p id="stat-denied" class="text-2xl font-bold text-gray-900 mt-1">—</p>
+        </div>
+        <div class="stat-card">
+          <p class="text-sm text-indigo-600 font-medium">Total Revenue</p>
+          <p id="stat-revenue" class="text-2xl font-bold text-gray-900 mt-1">—</p>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3 class="text-sm font-semibold text-gray-700 mb-4">Claims by Status</h3>
+          <div class="chart-container" style="max-height:280px"><canvas id="statusChart"></canvas></div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3 class="text-sm font-semibold text-gray-700 mb-4">Revenue Trend (30 Days)</h3>
+          <div class="chart-container" style="max-height:280px"><canvas id="revenueChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Activity Feed -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3 class="text-sm font-semibold text-gray-700 mb-4">Recent Activity</h3>
+        <div id="activity-feed" class="divide-y divide-gray-50">
+          <div class="flex justify-center py-8"><span class="spinner"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ CLAIMS TAB ═══════════ -->
+    <section id="section-claims" class="p-6 space-y-4 hidden">
+      <!-- Filters -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex flex-wrap gap-3 items-end">
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">Status</label>
+          <select id="filter-status" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="">All</option>
+            <option value="pending">Pending</option>
+            <option value="submitted">Submitted</option>
+            <option value="paid">Paid</option>
+            <option value="denied">Denied</option>
+            <option value="draft">Draft</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">Payer</label>
+          <input id="filter-payer" type="text" placeholder="Payer name" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">From</label>
+          <input id="filter-date-from" type="date" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">To</label>
+          <input id="filter-date-to" type="date" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+        <button onclick="filterClaims()" class="bg-indigo-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors">Filter</button>
+      </div>
+
+      <!-- Table -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Claim ID</th>
+              <th>Patient</th>
+              <th>Payer</th>
+              <th>Charges</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="claims-table-body">
+            <tr><td colspan="7" class="text-center py-8"><span class="spinner"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="claims-pagination" class="flex justify-center gap-1"></div>
+    </section>
+
+    <!-- ═══════════ CODING TAB ═══════════ -->
+    <section id="section-coding" class="p-6 space-y-4 hidden">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Session ID</th>
+              <th>Note Type</th>
+              <th>CPT Codes</th>
+              <th>ICD Codes</th>
+              <th>Confidence</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="coding-table-body">
+            <tr><td colspan="6" class="text-center py-8"><span class="spinner"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══════════ USERS TAB ═══════════ -->
+    <section id="section-users" class="p-6 space-y-4 hidden">
+      <div class="flex justify-end">
+        <button onclick="showAddUserModal()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors">+ Add User</button>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Role</th>
+              <th>Last Login</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-table-body">
+            <tr><td colspan="5" class="text-center py-8"><span class="spinner"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══════════ REPORTS TAB ═══════════ -->
+    <section id="section-reports" class="p-6 space-y-6 hidden">
+      <!-- Generate Buttons -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <button onclick="generateReport('hipaa-compliance')" class="stat-card text-left hover:shadow-md transition-shadow group">
+          <p class="text-sm font-medium text-red-600 group-hover:text-red-700">HIPAA Compliance</p>
+          <p class="text-xs text-gray-400 mt-1">Generate compliance report</p>
+        </button>
+        <button onclick="generateReport('claim-summary')" class="stat-card text-left hover:shadow-md transition-shadow group">
+          <p class="text-sm font-medium text-indigo-600 group-hover:text-indigo-700">Claims Summary</p>
+          <p class="text-xs text-gray-400 mt-1">Generate claims report</p>
+        </button>
+        <button onclick="generateReport('coding-accuracy')" class="stat-card text-left hover:shadow-md transition-shadow group">
+          <p class="text-sm font-medium text-green-600 group-hover:text-green-700">Coding Accuracy</p>
+          <p class="text-xs text-gray-400 mt-1">Generate accuracy report</p>
+        </button>
+        <button onclick="generateReport('patient')" class="stat-card text-left hover:shadow-md transition-shadow group">
+          <p class="text-sm font-medium text-blue-600 group-hover:text-blue-700">Patient Report</p>
+          <p class="text-xs text-gray-400 mt-1">Generate patient report</p>
+        </button>
+      </div>
+
+      <!-- Report History -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto">
+        <div class="px-6 py-4 border-b border-gray-100">
+          <h3 class="text-sm font-semibold text-gray-700">Report History</h3>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Generated</th>
+              <th>Status</th>
+              <th>Download</th>
+            </tr>
+          </thead>
+          <tbody id="report-history-body">
+            <tr><td colspan="4" class="text-center py-8 text-gray-400">No reports yet</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══════════ SETTINGS TAB ═══════════ -->
+    <section id="section-settings" class="p-6 space-y-6 hidden">
+      <!-- System Info -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3 class="text-sm font-semibold text-gray-700 mb-4">System Information</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <p class="text-xs text-gray-500">Version</p>
+            <p id="sys-version" class="text-sm font-medium text-gray-900 mt-0.5">—</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500">Database Status</p>
+            <p id="sys-db" class="text-sm font-medium text-gray-900 mt-0.5">—</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500">Uptime</p>
+            <p id="sys-uptime" class="text-sm font-medium text-gray-900 mt-0.5">—</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Flags -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3 class="text-sm font-semibold text-gray-700 mb-4">Feature Flags</h3>
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-700">PHI Encryption at Rest</span>
+            <div class="toggle bg-green-500"><span class="toggle-dot translate-x-5"></span></div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-700">Tamper-Evident Audit Logs</span>
+            <div class="toggle bg-green-500"><span class="toggle-dot translate-x-5"></span></div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-700">Rate Limiting</span>
+            <div class="toggle bg-green-500"><span class="toggle-dot translate-x-5"></span></div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-700">Emergency Access (Break-Glass)</span>
+            <div class="toggle bg-green-500"><span class="toggle-dot translate-x-5"></span></div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-700">LLM Gateway Enforcement</span>
+            <div class="toggle bg-green-500"><span class="toggle-dot translate-x-5"></span></div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-700">Auto-Code Denial Prediction</span>
+            <div class="toggle bg-gray-300"><span class="toggle-dot translate-x-0"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- API Keys -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3 class="text-sm font-semibold text-gray-700 mb-4">API Key Management</h3>
+        <p class="text-sm text-gray-500 mb-3">API keys are managed via environment variables and the auth middleware. No keys are stored in the database.</p>
+        <div class="space-y-2 text-sm">
+          <div class="flex items-center gap-2"><span class="text-gray-400">JWT Secret:</span> <span class="font-mono bg-gray-100 px-2 py-0.5 rounded">••••••••</span></div>
+          <div class="flex items-center gap-2"><span class="text-gray-400">Fernet Key:</span> <span class="font-mono bg-gray-100 px-2 py-0.5 rounded">••••••••</span></div>
+          <div class="flex items-center gap-2"><span class="text-gray-400">Emergency Code:</span> <span class="font-mono bg-gray-100 px-2 py-0.5 rounded">••••••••</span></div>
+        </div>
+      </div>
+
+      <!-- Security Settings -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3 class="text-sm font-semibold text-gray-700 mb-4">Security Settings</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+          <div><span class="text-gray-500">TLS/HTTPS:</span> <span class="text-green-600 font-medium">Enforced</span></div>
+          <div><span class="text-gray-500">HSTS:</span> <span class="text-green-600 font-medium">Enabled</span></div>
+          <div><span class="text-gray-500">CSP Headers:</span> <span class="text-green-600 font-medium">Enabled</span></div>
+          <div><span class="text-gray-500">X-Frame-Options:</span> <span class="text-green-600 font-medium">DENY</span></div>
+          <div><span class="text-gray-500">Session Timeout:</span> <span class="text-gray-900">30 minutes</span></div>
+          <div><span class="text-gray-500">Rate Limit:</span> <span class="text-gray-900">60 req/min</span></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════ MODALS ═══════════ -->
+
+  <!-- Claim Detail Modal -->
+  <div id="claim-modal" class="modal-backdrop hidden" onclick="if(event.target===this)closeModal('claim-modal')">
+    <div class="modal-content p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-800">Claim Detail</h3>
+        <button onclick="closeModal('claim-modal')" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="claim-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Coding Detail Modal -->
+  <div id="coding-modal" class="modal-backdrop hidden" onclick="if(event.target===this)closeModal('coding-modal')">
+    <div class="modal-content p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-800">Coding Session Detail</h3>
+        <button onclick="closeModal('coding-modal')" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="coding-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Add User Modal -->
+  <div id="add-user-modal" class="modal-backdrop hidden" onclick="if(event.target===this)closeModal('add-user-modal')">
+    <div class="modal-content p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-800">Add User</h3>
+        <button onclick="closeModal('add-user-modal')" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <form class="space-y-4" onsubmit="return false;">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+          <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="username">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <input type="password" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="••••••••">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+          <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="read_only">Read Only</option>
+            <option value="coder">Coder</option>
+            <option value="reviewer">Reviewer</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModal('add-user-modal')" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+          <button type="button" onclick="showToast('User creation via API','info');closeModal('add-user-modal')" class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Create User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Clock -->
+  <script>
+    setInterval(() => {
+      const el = document.getElementById('current-time');
+      if (el) el.textContent = new Date().toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }, 1000);
+  </script>
+  <script src="js/app.js"></script>
+</body>
+</html>

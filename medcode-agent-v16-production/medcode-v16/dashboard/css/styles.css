@@ -1,0 +1,115 @@
+/* MedCode AI Dashboard — Minimal Custom Styles */
+/* Tailwind CSS handles the bulk of styling via CDN */
+
+@layer base {
+  * { @apply box-border; }
+  body { @apply font-sans antialiased; }
+}
+
+/* Sidebar */
+.sidebar-link {
+  @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150;
+}
+.sidebar-link:hover {
+  @apply bg-gray-700;
+}
+.sidebar-link.active {
+  @apply bg-indigo-600 text-white;
+}
+.sidebar-link:not(.active) {
+  @apply text-gray-300;
+}
+
+/* Summary Cards */
+.stat-card {
+  @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6 transition-shadow;
+}
+.stat-card:hover {
+  @apply shadow-md;
+}
+
+/* Tables */
+.data-table {
+  @apply w-full text-sm text-left;
+}
+.data-table thead {
+  @apply bg-gray-50 text-gray-600 text-xs uppercase tracking-wider;
+}
+.data-table th {
+  @apply px-4 py-3 font-semibold;
+}
+.data-table td {
+  @apply px-4 py-3 border-t border-gray-100;
+}
+.data-table tbody tr {
+  @apply hover:bg-gray-50 transition-colors cursor-pointer;
+}
+
+/* Status Badges */
+.badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+.badge-paid { @apply bg-green-100 text-green-800; }
+.badge-pending { @apply bg-yellow-100 text-yellow-800; }
+.badge-denied { @apply bg-red-100 text-red-800; }
+.badge-submitted { @apply bg-blue-100 text-blue-800; }
+.badge-draft { @apply bg-gray-100 text-gray-700; }
+
+/* Toast Notifications */
+.toast-container {
+  @apply fixed top-4 right-4 z-50 flex flex-col gap-2;
+}
+.toast {
+  @apply px-4 py-3 rounded-lg shadow-lg text-sm font-medium transform transition-all duration-300;
+  animation: slideIn 0.3s ease-out;
+}
+.toast-success { @apply bg-green-600 text-white; }
+.toast-error { @apply bg-red-600 text-white; }
+.toast-info { @apply bg-indigo-600 text-white; }
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Loading Spinner */
+.spinner {
+  @apply inline-block w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin;
+}
+
+/* Modal */
+.modal-backdrop {
+  @apply fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center;
+}
+.modal-content {
+  @apply bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto;
+}
+
+/* Pagination */
+.page-btn {
+  @apply px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors;
+}
+.page-btn.active {
+  @apply bg-indigo-600 text-white border-indigo-600;
+}
+
+/* Toggle Switch */
+.toggle {
+  @apply relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer;
+}
+.toggle-dot {
+  @apply inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow;
+}
+
+/* Activity Feed */
+.activity-item {
+  @apply flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors;
+}
+.activity-dot {
+  @apply mt-1.5 w-2 h-2 rounded-full flex-shrink-0;
+}
+
+/* Chart Container */
+.chart-container {
+  @apply relative w-full;
+}
