@@ -88,14 +88,31 @@ async def login(request: Request, body: LoginRequest):
     }
 
 
+_ALLOWED_NON_ADMIN_ROLES = {"medical_coder", "reviewer", "auditor", "provider", "read_only"}
+
+
 @router.post("/register")
 async def register(request: Request, body: RegisterRequest):
-    """Register a new user account."""
+    """Register a new user account. Requires admin authorization."""
+    auth_header = request.headers.get("Authorization", "")
+    if not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Authorization header with Bearer token required")
+
+    token = auth_header[7:]
     auth = get_auth_service()
+    payload = auth.validate_token(token)
+    if payload is None:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    if payload.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required to create users")
+
     try:
         role = Role(body.role)
     except ValueError:
         raise HTTPException(status_code=400, detail=f"Invalid role: {body.role}")
+
+    if role == Role.ADMIN:
+        raise HTTPException(status_code=403, detail="Admin users can only be created via initial setup or emergency access")
 
     user = auth.create_user(
         username=body.username,
@@ -112,7 +129,7 @@ async def register(request: Request, body: RegisterRequest):
         action="user_registered",
         resource_type="auth",
         success=True,
-        details=f"New user: {body.username}",
+        details=f"New user: {body.username} created by admin {payload.user_id}",
     )
 
     return {"user": user.to_dict()}

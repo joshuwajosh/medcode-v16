@@ -34,12 +34,15 @@ PUBLIC_PATHS = {
     "/audit/events",
     "/code",
     "/batch",
+    "/api/v19/auth/login",
+    "/api/v19/auth/register",
+    "/api/v19/auth/refresh",
+    "/api/v19/auth/emergency-access",
+    "/api/v19/auth/emergency-access/active",
 }
 
 # Path prefixes that don't require authentication
 PUBLIC_PREFIXES = {
-    "/v1/",
-    "/api/",
     "/static/",
 }
 
@@ -73,12 +76,6 @@ class AuthenticationMiddleware(BaseHTTPMiddleware):
         path = request.url.path
 
         if self._is_public_path(path):
-            return await call_next(request)
-
-        if path.startswith("/v1/"):
-            return await call_next(request)
-
-        if "/api/" in path:
             return await call_next(request)
 
         auth_header = request.headers.get("Authorization", "")

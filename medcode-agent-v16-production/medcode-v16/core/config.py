@@ -135,3 +135,38 @@ LATERALITY_REQUIRED = [
     "H",    # Eye disorders
     "Q",    # Ear disorders
 ]
+
+
+def validate_production_secrets() -> None:
+    """Validate that production secrets are not using default/dev values."""
+    MEDCODE_ENV = os.getenv("MEDCODE_ENV", "development")
+    if MEDCODE_ENV != "production":
+        return
+
+    errors = []
+
+    if MEDCODE_SECRET_KEY == "dev_key_change_in_production":
+        errors.append(
+            "MEDCODE_SECRET_KEY is using the default dev value. "
+            "Set a strong random secret in your environment."
+        )
+
+    if JWT_SECRET == "dev_jwt_secret_change_in_production":
+        errors.append(
+            "JWT_SECRET is using the default dev value. "
+            "Set a strong random secret in your environment."
+        )
+
+    if not MEDCODE_ENCRYPTION_KEY:
+        errors.append(
+            "MEDCODE_ENCRYPTION_KEY is empty. "
+            "Set a valid encryption key in your environment."
+        )
+
+    if errors:
+        raise ValueError(
+            "PRODUCTION SECURITY CHECK FAILED:\n" + "\n".join(errors)
+        )
+
+
+validate_production_secrets()
