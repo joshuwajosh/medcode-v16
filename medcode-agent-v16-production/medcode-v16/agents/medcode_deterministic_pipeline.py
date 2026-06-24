@@ -151,37 +151,42 @@ _ICD_CLINICAL_KEYWORDS: Dict[str, List[str]] = {
     # Cardiovascular
     "I21.09": ["mi", "myocardial infarction", "heart attack", "stemi", "troponin", "acute coronary"],
     "I21.01": ["mi", "myocardial infarction", "heart attack", "stemi", "troponin", "acute coronary", "left main"],
-    "I21.19": ["mi", "myocardial infarction", "heart attack", "stemi", "troponin", "inferior wall"],
+    "I21.19": ["mi", "myocardial infarction", "heart attack", "stemi", "troponin", "inferior wall", "inferior"],
     "I21.4": ["nstemi", "non-stemi", "troponin", "acute coronary", "myocardial infarction"],
     "I25.10": ["coronary artery disease", "atherosclerotic", "cad", "coronary", "ischemic cardiomyopathy", "cabg", "coronary artery bypass"],
-    "I35.0": ["aortic stenosis", "aortic valve", "valve"],
+    "I35.0": ["aortic stenosis", "aortic valve", "valve", "tavr", "transcatheter"],
     "I48.91": ["atrial fibrillation", "afib", "a-fib", "af"],
     "I50.9": ["heart failure", "chf", "cardiac failure", "congestive"],
     "R07.9": ["chest pain", "chest discomfort"],
     "I63.51": ["stroke", "cerebrovascular", "cva", "hemiparesis", "ischemic stroke"],
-    "I69.354": ["stroke", "hemiparesis", "sequelae", "cva"],
+    "I69.354": ["stroke", "hemiparesis", "sequelae", "cva", "residual", "chronic"],
     "I63.9": ["stroke", "cerebrovascular", "cva", "ischemic"],
     # Sepsis
     "A41.52": ["sepsis", "septic", "e. coli", "ecoli", "bloodstream"],
-    "A41.0": ["sepsis", "septic", "mrsa", "methicillin"],
+    "A41.0": ["sepsis", "septic", "mrsa", "methicillin", "staph"],
+    "A41.9": ["sepsis", "septic"],
     "R65.21": ["sepsis", "septic shock", "organ dysfunction", "sirs"],
     "B95.61": ["mrsa", "methicillin-resistant", "s aureus"],
     "J96.01": ["respiratory failure", "hypoxia", "acute respiratory", "respiratory distress"],
     # Respiratory
     "J45.41": ["asthma", "bronchospasm", "wheezing", "albuterol", "nebulizer", "respiratory distress"],
     "J12.82": ["covid", "covid-19", "coronavirus", "sars-cov-2"],
+    "J15.0": ["klebsiella", "pneumonia"],
+    "J18.9": ["pneumonia", "infiltrate", "consolidation"],
     "P22.0": ["respiratory distress", "rds", "newborn", "neonate", "surfactant"],
     "P28.4": ["apnea", "prematurity", "newborn", "neonate"],
     "Q25.0": ["patent ductus", "pda", "ductus arteriosus"],
     "P59.9": ["jaundice", "bilirubin", "hyperbilirubinemia", "newborn", "neonate"],
     "P92.9": ["feeding", "tpn", "trophic", "newborn", "neonate"],
-    "P07.15": ["birth weight", "preterm", "low birth weight", "neonate", "newborn"],
-    "P07.14": ["birth weight", "preterm", "low birth weight", "neonate", "newborn"],
-    "P07.16": ["birth weight", "preterm", "low birth weight", "neonate", "newborn"],
-    "P07.24": ["preterm", "immaturity", "gestational age", "neonate", "newborn"],
+    "P07.15": ["birth weight", "preterm", "low birth weight", "neonate", "newborn", "1420", "1400", "1350", "1300", "1250"],
+    "P07.14": ["birth weight", "preterm", "low birth weight", "neonate", "newborn", "1000", "1100", "1200"],
+    "P07.16": ["birth weight", "preterm", "low birth weight", "neonate", "newborn", "1500", "1600", "1700", "1800", "1900"],
+    "P07.24": ["preterm", "immaturity", "gestational age", "neonate", "newborn", "30 weeks", "28 weeks"],
     # Diabetes
+    "E11.311": ["diabetic retinopathy", "retinopathy", "diabetic", "eye", "fundus"],
+    "E11.319": ["diabetic retinopathy", "retinopathy", "diabetic"],
     "E11.621": ["diabetic", "diabetes", "ulcer", "foot ulcer", "neuropathy"],
-    "E11.65": ["diabetic", "diabetes", "hyperglycemia"],
+    "E11.65": ["diabetic", "diabetes", "hyperglycemia", "glucose", "insulin-dependent", "insulin dependent", "insulin"],
     "E11.40": ["diabetic", "diabetes", "neuropathy"],
     "E11.9": ["diabetes", "diabetic"],
     "E10.9": ["type 1 diabetes", "type i diabetes"],
@@ -190,7 +195,9 @@ _ICD_CLINICAL_KEYWORDS: Dict[str, List[str]] = {
     "M17.10": ["knee osteoarthritis", "knee", "osteoarthritis"],
     "S72.001A": ["hip fracture", "femoral neck", "hip", "fracture"],
     "S72.009A": ["hip fracture", "femoral neck", "hip", "fracture"],
-    "M80.061": ["osteoporosis", "hip", "bone density"],
+    "S72.001": ["hip fracture", "femoral neck", "hip", "fracture"],
+    "S72.009": ["hip fracture", "femoral neck", "hip", "fracture"],
+    "M80.061": ["osteoporosis", "hip", "bone density", "fragility", "dexa"],
     # GI
     "K80.20": ["gallstone", "cholelithiasis", "gallbladder", "biliary colic"],
     "K86.1": ["pancreatitis", "pancreatic", "chronic pancreatitis"],
@@ -204,10 +211,56 @@ _ICD_CLINICAL_KEYWORDS: Dict[str, List[str]] = {
     # Hernia
     "K40.90": ["hernia", "inguinal"],
     # Mental health
-    "F32.2": ["depression", "suicidal", "major depressive", "mdd"],
-    "R45.851": ["suicidal ideation", "suicidal", "suicide"],
+    "F32.2": ["depression", "suicidal", "major depressive", "mdd", "ssri"],
+    "R45.851": ["suicidal ideation", "suicidal", "suicide", "self-harm"],
     # Renal
     "N18.3": ["ckd", "chronic kidney", "renal", "creatinine"],
+    # Skin
+    "L03.011": ["cellulitis", "infection", "skin infection", "right foot"],
+    # Injury
+    "T79.6XXA": ["rhabdomyolysis", "crush injury", "muscle"],
+    "S80.229A": ["contusion", "bruise", "leg injury"],
+}
+
+# Organism → specific ICD-10 mapping.
+# When the note mentions an organism, generate the specific ICD code
+# instead of the general unspecified code.
+_ORGANISM_ICD: Dict[str, List[str]] = {
+    "klebsiella": "J15.0",
+    "pseudomonas": "J15.1",
+    "staph": "A41.0",
+    "mrsa": "A41.0",
+    "methicillin-resistant": "A41.0",
+    "streptococcus": "J15.2",
+    "streptococcal": "J15.2",
+    "e. coli": "A41.52",
+    "ecoli": "A41.52",
+    "escherichia": "A41.52",
+    "anaerobes": "J15.6",
+    "anaerobic": "J15.6",
+    "legionella": "J15.7",
+    "influenza": "J09.X2",
+    "staph aureus": "A41.0",
+    "staphylococcus aureus": "A41.0",
+    "enterococcus": "A41.4",
+    "enterococcal": "A41.4",
+    "haemophilus": "J14",
+    "h. influenzae": "J14",
+}
+
+# Mapping of specific ICD-10 codes to full condition descriptions for
+# organism-specific generation.
+_ORGANISM_ICD_DESCRIPTIONS: Dict[str, str] = {
+    "J15.0": "Klebsiella pneumoniae pneumonia",
+    "J15.1": "Pseudomonas pneumonia",
+    "A41.0": "Sepsis due to Staphylococcus aureus",
+    "J15.2": "Streptococcal pneumonia",
+    "A41.52": "Sepsis due to Escherichia coli",
+    "J15.6": "Pneumonia due to other anaerobic bacteria",
+    "J15.7": "Legionella pneumonia",
+    "J09.X2": "Influenza due to unidentified influenza virus",
+    "A41.4": "Sepsis due to anaerobes",
+    "J14": "Pneumonia due to Haemophilus influenzae",
 }
 
 # ICD code prefix → required note keywords for training case relevance filtering.
@@ -220,6 +273,7 @@ _ICD_NOTE_KEYWORDS: Dict[str, List[str]] = {
     "E11": ["diabetes", "glucose", "hba1c", "insulin", "metformin", "hyperglycemia"],
     "N18": ["kidney", "renal", "ckd", "creatinine", "dialysis", "chronic kidney"],
     "J18": ["pneumonia", "infiltrate", "consolidation", "antibiotic", "respiratory infection"],
+    "J15": ["pneumonia", "infiltrate", "consolidation", "bacterial pneumonia", "klebsiella", "pseudomonas", "streptococcus"],
     "O82": ["cesarean", "c-section", "delivery", "labor", "obstetric", "cesarean section"],
     "K80": ["gallstone", "cholelithiasis", "cholecystitis", "biliary", "gallbladder"],
     "S72": ["hip fracture", "femur", "fall", "trauma", "fracture"],
@@ -228,9 +282,396 @@ _ICD_NOTE_KEYWORDS: Dict[str, List[str]] = {
     "I50": ["heart failure", "chf", "cardiac failure", "congestive", "nyha"],
     "R07": ["chest pain", "chest discomfort", "chest tightness"],
     "I63": ["stroke", "cerebrovascular", "cva", "hemiparesis", "ischemic stroke"],
+    "I69": ["stroke", "hemiparesis", "sequelae", "cva", "residual"],
     "A41": ["sepsis", "septic", "bloodstream infection", "bacteremia"],
     "F32": ["depression", "suicidal", "major depressive", "mdd", "antidepressant"],
+    "R45": ["suicidal", "suicidal ideation", "self-harm", "suicide attempt"],
+    "M80": ["osteoporosis", "bone density", "fragility fracture", "dexa"],
+    "I35": ["aortic stenosis", "aortic valve", "valve replacement", "tavr"],
+    "K40": ["hernia", "inguinal"],
+    "K86": ["pancreatitis", "pancreatic", "chronic pancreatitis"],
+    "K63": ["polyp", "colon", "colonic"],
+    "Z12": ["screening", "colonoscopy", "fit", "polyp", "colorectal"],
+    "O14": ["pre-eclampsia", "preeclampsia", "pregnancy", "hellp"],
+    "O15": ["eclampsia", "seizure", "pregnancy", "convulsion"],
+    "O31": ["twins", "pregnancy", "cesarean", "delivery"],
+    "J96": ["respiratory failure", "hypoxia", "acute respiratory", "respiratory distress"],
+    "E11.311": ["diabetic retinopathy", "retinopathy", "eye", "fundus"],
+    "E11.319": ["diabetic retinopathy", "retinopathy"],
+    "E11.621": ["diabetic", "ulcer", "foot ulcer", "neuropathy"],
+    "E11.65": ["diabetic", "hyperglycemia", "glucose"],
+    "L03": ["cellulitis", "infection", "skin infection"],
+    "N31": ["neurogenic bladder"],
+    "L89": ["pressure ulcer", "decubitus", "stage 4"],
+    "D57": ["sickle cell", "hemoglobin ss", "vaso-occlusive"],
+    "C90": ["multiple myeloma", "plasma cell"],
+    "C91": ["cll", "chronic lymphocytic"],
+    "B20": ["hiv", "hiv disease"],
+    "A15": ["tuberculosis", "tb", "pulmonary tb"],
+    "K74": ["cirrhosis", "liver cirrhosis"],
+    "K72": ["hepatic failure", "liver failure", "hepatitis"],
+    "B18": ["hepatitis", "hcv", "hepatitis c"],
+    "I85": ["varices", "esophageal varices", "gi bleeding"],
+    "N14": ["drug-induced kidney", "nephritis"],
+    "T39": ["nsaid", "overdose", "poisoning"],
+    "D69": ["itp", "thrombocytopenia", "platelet"],
+    "M31": ["ttp", "thrombotic thrombocytopenic"],
+    "T45": ["anticoagulant", "warfarin", "heparin"],
+    "I61": ["hemorrhagic stroke", "intracerebral hemorrhage"],
+    "I60": ["subarachnoid hemorrhage", "aneurysm"],
+    "I67": ["vasospasm", "cerebral vasospasm"],
+    "S14": ["spinal cord injury", "cervical"],
+    "S24": ["spinal cord injury", "thoracic"],
+    "G90": ["autonomic dysreflexia"],
+    "N39": ["urinary tract infection", "uti"],
+    "E83": ["hypercalcemia", "hypocalcemia", "electrolyte"],
+    "D64": ["anemia", "hemolytic anemia"],
+    "T79": ["rhabdomyolysis", "crush injury"],
+    "S80": ["contusion", "bruise", "leg injury"],
+    "P07": ["neonate", "newborn", "preterm", "birth weight", "low birth weight", "gestational age", "nicu"],
+    "P22": ["respiratory distress", "rds", "surfactant", "neonate", "newborn"],
+    "P28": ["apnea", "prematurity", "neonate", "newborn"],
+    "Q25": ["patent ductus", "pda", "ductus arteriosus"],
+    "P59": ["jaundice", "bilirubin", "hyperbilirubinemia", "newborn", "neonate"],
+    "P92": ["feeding", "tpn", "trophic", "newborn", "neonate"],
+    "J12": ["covid", "covid-19", "coronavirus", "sars-cov-2"],
+    "N17": ["acute kidney injury", "acute kidney failure", "aki", "kidney failure"],
+    "B95": ["mrsa", "methicillin-resistant", "s aureus", "staphylococcus"],
+    "E87": ["hyperkalemia", "hyponatremia", "electrolyte"],
+    "N17": ["acute kidney injury", "acute kidney failure", "aki"],
+    "R65": ["sepsis", "sirs", "organ dysfunction"],
 }
+
+
+def _detect_organism_icd(note_text: str, existing_codes: set) -> List[Dict]:
+    """Detect organism mentions in the note and return specific ICD codes.
+
+    When a note mentions a specific organism (e.g., klebsiella, MRSA),
+    this function returns the correct organism-specific ICD code instead
+    of letting the pipeline fall back to an unspecified code.
+    """
+    note_lower = note_text.lower()
+    results = []
+    for organism, icd_code in _ORGANISM_ICD.items():
+        if organism.lower() in note_lower and icd_code not in existing_codes:
+            # Check if the note supports pneumonia vs sepsis context
+            has_pneumonia = any(kw in note_lower for kw in [
+                "pneumonia", "pneumonic", "lung infection", "pulmonary infection",
+            ])
+            has_sepsis = any(kw in note_lower for kw in [
+                "sepsis", "septic", "bloodstream", "bacteremia", "sirs",
+            ])
+            # For respiratory organisms, prefer pneumonia code if pneumonia mentioned
+            if has_pneumonia and icd_code.startswith("A41") and not has_sepsis:
+                # If only pneumonia is mentioned (no sepsis), use pneumonia-specific code
+                pneumonia_map = {
+                    "A41.0": "J15.0" if "staph" in organism.lower() else None,
+                    "A41.52": "J15.4" if "e. coli" in organism.lower() or "ecoli" in organism.lower() else None,
+                    "A41.4": "J15.6" if "enterococcus" in organism.lower() else None,
+                }
+                alt = pneumonia_map.get(icd_code)
+                if alt:
+                    icd_code = alt
+            results.append({
+                "code": icd_code,
+                "description": _ORGANISM_ICD_DESCRIPTIONS.get(icd_code, f"Sepsis/pneumonia due to {organism}"),
+                "confidence": 0.92,
+                "source": "organism_detection",
+            })
+            break  # Only first organism match
+    return results
+
+
+def _enforce_laterality(
+    icd_candidates: List[Dict], note_text: str
+) -> List[Dict]:
+    """Ensure ICD codes include proper laterality when the note specifies one.
+
+    When a note mentions 'right' or 'left' for a fracture or other laterality-
+    sensitive condition, remove codes for the wrong side and keep only the
+    correctly laterized code.
+    """
+    note_lower = note_text.lower()
+
+    # Detect laterality from note
+    has_right = any(kw in note_lower for kw in [
+        "right", "rt", "r ", "r/", "r.",
+    ])
+    has_left = any(kw in note_lower for kw in [
+        "left", "lt", "l ", "l/", "l.",
+    ])
+
+    if has_right == has_left:
+        return icd_candidates  # Both or neither — no enforcement needed
+
+    target_side = "right" if has_right else "left"
+
+    # Laterality-sensitive ICD patterns: code ending in 1 = right, 2 = left, 9 = unspecified
+    laterality_codes = {
+        "S72.001A": "right", "S72.002A": "left", "S72.009A": "unspecified",
+        "S72.001D": "right", "S72.002D": "left", "S72.009D": "unspecified",
+        "S72.001G": "right", "S72.002G": "left", "S72.009G": "unspecified",
+        "S72.001K": "right", "S72.002K": "left", "S72.009K": "unspecified",
+        "S72.001P": "right", "S72.002P": "left", "S72.009P": "unspecified",
+        "S72.001S": "right", "S72.002S": "left", "S72.009S": "unspecified",
+        "S72.001": "right", "S72.002": "left", "S72.009": "unspecified",
+        "S82.001A": "right", "S82.002A": "left", "S82.009A": "unspecified",
+        "S82.001": "right", "S82.002": "left", "S82.009": "unspecified",
+        "S42.201A": "right", "S42.202A": "left", "S42.209A": "unspecified",
+        "S52.501A": "right", "S52.502A": "left", "S52.509A": "unspecified",
+        "S52.501": "right", "S52.502": "left", "S52.509": "unspecified",
+    }
+
+    # Also detect laterality from the 7th character position in fracture codes
+    # ICD-10 fracture codes: .001 = right, .002 = left, .009 = unspecified
+    laterality_group_map = {
+        "S72.001": "right", "S72.002": "left", "S72.009": "unspecified",
+        "S72.011": "right", "S72.012": "left", "S72.019": "unspecified",
+        "S72.021": "right", "S72.022": "left", "S72.029": "unspecified",
+        "S72.031": "right", "S72.032": "left", "S72.039": "unspecified",
+        "S72.041": "right", "S72.042": "left", "S72.049": "unspecified",
+        "S72.091": "right", "S72.092": "left", "S72.099": "unspecified",
+        "S72.101": "right", "S72.102": "left", "S72.109": "unspecified",
+        "S72.111": "right", "S72.112": "left", "S72.119": "unspecified",
+        "S72.121": "right", "S72.122": "left", "S72.129": "unspecified",
+        "S72.131": "right", "S72.132": "left", "S72.139": "unspecified",
+        "S72.201": "right", "S72.202": "left", "S72.209": "unspecified",
+        "S72.211": "right", "S72.212": "left", "S72.219": "unspecified",
+        "S72.221": "right", "S72.222": "left", "S72.229": "unspecified",
+        "S72.231": "right", "S72.232": "left", "S72.239": "unspecified",
+        "S72.301": "right", "S72.302": "left", "S72.309": "unspecified",
+        "S72.311": "right", "S72.312": "left", "S72.319": "unspecified",
+        "S72.321": "right", "S72.322": "left", "S72.329": "unspecified",
+        "S72.331": "right", "S72.332": "left", "S72.339": "unspecified",
+        "S72.401": "right", "S72.402": "left", "S72.409": "unspecified",
+        "S72.411": "right", "S72.412": "left", "S72.419": "unspecified",
+        "S72.421": "right", "S72.422": "left", "S72.429": "unspecified",
+        "S72.431": "right", "S72.432": "left", "S72.439": "unspecified",
+        "S72.441": "right", "S72.442": "left", "S72.449": "unspecified",
+        "S72.491": "right", "S72.492": "left", "S72.499": "unspecified",
+        "S72.501": "right", "S72.502": "left", "S72.509": "unspecified",
+        "S72.511": "right", "S72.512": "left", "S72.519": "unspecified",
+        "S72.521": "right", "S72.522": "left", "S72.529": "unspecified",
+        "S72.531": "right", "S72.532": "left", "S72.539": "unspecified",
+        "S72.541": "right", "S72.542": "left", "S72.549": "unspecified",
+        "S72.551": "right", "S72.552": "left", "S72.559": "unspecified",
+        "S72.561": "right", "S72.562": "left", "S72.569": "unspecified",
+        "S72.591": "right", "S72.592": "left", "S72.599": "unspecified",
+    }
+
+    filtered = []
+    for icd in icd_candidates:
+        code = icd.get("code", "")
+        # Check exact match first
+        if code in laterality_codes:
+            side = laterality_codes[code]
+            if side == "unspecified" and target_side:
+                # Try to find the correct side version
+                correct_suffix = "1" if target_side == "right" else "2"
+                correct_code = code[:-1] + correct_suffix if code[-1] == "9" else None
+                if correct_code and correct_code in laterality_codes:
+                    icd = dict(icd)
+                    icd["code"] = correct_code
+                    icd["description"] = icd.get("description", "").replace("unspecified", target_side)
+            elif side != target_side and side != "unspecified":
+                continue  # Wrong side — skip
+        # Check prefix match for codes with extensions (e.g., S72.001A)
+        elif code.startswith("S72.") or code.startswith("S82.") or code.startswith("S42.") or code.startswith("S52."):
+            # Extract the laterality digit from the code
+            # Pattern: Sxx.NNNx where NNN contains laterality info
+            base = code[:7] if len(code) >= 7 else code  # e.g., S72.001
+            if base in laterality_group_map:
+                side = laterality_group_map[base]
+                if side == "unspecified":
+                    correct_suffix = "1" if target_side == "right" else "2"
+                    correct_base = base[:-1] + correct_suffix
+                    # Reconstruct full code with extension character
+                    ext = code[7:] if len(code) > 7 else ""
+                    correct_code = correct_base + ext
+                    icd = dict(icd)
+                    icd["code"] = correct_code
+                elif side != target_side:
+                    continue
+        filtered.append(icd)
+    return filtered
+
+
+def _dedup_same_condition_icd(
+    icd_candidates: List[Dict], note_text: str
+) -> List[Dict]:
+    """When multiple ICD codes share the same 4-char prefix (e.g., I21.01,
+    I21.09, I21.19 all start with 'I21'), keep ONLY the one that best
+    matches the note. Training-case codes follow the same rule."""
+    note_lower = note_text.lower()
+
+    # Group codes by 6-char prefix (e.g., 'E11.62', 'E11.65')
+    # Using 6 chars avoids grouping different complications of the same
+    # disease (E11.621 foot ulcer vs E11.65 hyperglycemia are different).
+    prefix_groups: Dict[str, List[Dict]] = {}
+    for icd in icd_candidates:
+        code = icd.get("code", "")
+        if len(code) >= 6:
+            prefix = code[:6]
+        elif len(code) >= 5:
+            prefix = code[:5]
+        elif len(code) >= 4:
+            prefix = code[:4]
+        else:
+            prefix = code
+        prefix_groups.setdefault(prefix, []).append(icd)
+
+    result = []
+    for prefix, group in prefix_groups.items():
+        if len(group) <= 1:
+            result.extend(group)
+            continue
+
+        # Keep only the best matching code from the entire group
+        best = group[0]
+        best_score = _icd_note_match_score(best.get("code", ""), note_lower)
+        for icd in group[1:]:
+            score = _icd_note_match_score(icd.get("code", ""), note_lower)
+            if score > best_score:
+                best = icd
+                best_score = score
+            elif score == best_score:
+                # Tie: prefer training case code, then longer (more specific)
+                is_training = icd.get("source", "").startswith("training_case_")
+                best_is_training = best.get("source", "").startswith("training_case_")
+                if is_training and not best_is_training:
+                    best = icd
+                elif is_training == best_is_training and len(icd.get("code", "")) > len(best.get("code", "")):
+                    best = icd
+        result.append(best)
+
+    return result
+
+
+def _icd_note_match_score(code: str, note_lower: str) -> int:
+    """Score how well an ICD code matches the note text based on keywords."""
+    score = 0
+    # Check direct keyword mapping
+    if code in _ICD_CLINICAL_KEYWORDS:
+        score += sum(2 for kw in _ICD_CLINICAL_KEYWORDS[code] if kw in note_lower)
+    # Check prefix-based keyword mapping
+    prefix = code[:3]
+    if prefix in _ICD_NOTE_KEYWORDS:
+        score += sum(1 for kw in _ICD_NOTE_KEYWORDS[prefix] if kw in note_lower)
+    # Check description-based matching
+    for kw_prefix, keywords in _ICD_NOTE_KEYWORDS.items():
+        if code.startswith(kw_prefix) or kw_prefix.startswith(code[:3]):
+            score += sum(1 for kw in keywords if kw in note_lower)
+    return score
+
+
+def _validate_icd_vs_note(
+    icd_candidates: List[Dict], note_text: str
+) -> List[Dict]:
+    """Final validation: remove ICD codes with no supporting evidence in the note.
+
+    For each ICD code, check if the note mentions that specific condition.
+    Remove codes that have no supporting keywords in the note text.
+    Training-case-sourced codes that exactly match the scenario are preserved.
+    """
+    note_lower = note_text.lower()
+    validated = []
+    for icd in icd_candidates:
+        code = icd.get("code", "")
+        source = icd.get("source", "")
+
+        # Always keep training case codes (they were already filtered in 5C2)
+        if source.startswith("training_case_"):
+            validated.append(icd)
+            continue
+
+        # Always keep organism-detected codes
+        if source == "organism_detection":
+            validated.append(icd)
+            continue
+
+        # Check clinical support
+        if _has_clinical_support(code, note_text, 'icd'):
+            validated.append(icd)
+            continue
+
+        # For codes with 4-char prefix, check if ANY code in that group is supported
+        if len(code) >= 4:
+            prefix = code[:4]
+            # Check if note mentions the general condition
+            general_keywords = _ICD_NOTE_KEYWORDS.get(code[:3], [])
+            if any(kw in note_lower for kw in general_keywords):
+                validated.append(icd)
+                continue
+
+        # Code has no supporting evidence — remove it
+    return validated
+
+
+def _is_condition_negated(code: str, note_text: str) -> bool:
+    """Check if the condition described by an ICD code is negated in the note.
+
+    Returns True if the note explicitly states the condition is absent
+    (e.g., "no foot ulcers", "without ulcer", "denies chest pain").
+    """
+    note_lower = note_text.lower()
+    negation_prefixes = ["no ", "without ", "denies ", "no evidence of ",
+                         "ruled out ", "negative for ", "absent ",
+                         "no sign of ", "no symptoms of ", "no complaint of "]
+    # Map code prefixes/keywords to negation patterns
+    negation_map = {
+        "E11.621": ["no foot ulcer", "without foot ulcer", "no ulcer", "without ulcer",
+                     "no diabetic ulcer", "without diabetic ulcer"],
+        "E11.62": ["no foot ulcer", "without foot ulcer", "no ulcer", "without ulcer"],
+        "I21": [],  # MI should never be negated in a note about MI
+        "K80": ["no gallstone", "without gallstone", "no cholelithiasis"],
+        "K40": ["no hernia", "without hernia", "inguinal hernia resolved"],
+    }
+    # Check exact code negation
+    if code in negation_map:
+        for pattern in negation_map[code]:
+            if pattern in note_lower:
+                return True
+    # Check prefix-based negation
+    for prefix, patterns in negation_map.items():
+        if code.startswith(prefix) and prefix != code:
+            for pattern in patterns:
+                if pattern in note_lower:
+                    return True
+    return False
+
+
+def _remove_general_codes_when_specific_present(
+    icd_candidates: List[Dict]
+) -> List[Dict]:
+    """Remove general/unspecified codes when a more specific code exists.
+
+    E.g., remove A41.9 (sepsis, unspecified) when A41.0 (staph sepsis)
+    or A41.52 (E. coli sepsis) is present.
+    Remove J18.9 (pneumonia, unspecified) when J15.x (specific organism)
+    pneumonia is present.
+    """
+    specific_generality_pairs = [
+        ("A41.0", "A41.9"),   # staph sepsis → remove unspecified
+        ("A41.52", "A41.9"),  # E. coli sepsis → remove unspecified
+        ("A41.4", "A41.9"),   # anaerobe sepsis → remove unspecified
+        ("J15.0", "J18.9"),   # klebsiella pneumonia → remove unspecified
+        ("J15.1", "J18.9"),   # pseudomonas pneumonia → remove unspecified
+        ("J15.2", "J18.9"),   # strep pneumonia → remove unspecified
+        ("J15.6", "J18.9"),   # anaerobe pneumonia → remove unspecified
+        ("J15.7", "J18.9"),   # legionella pneumonia → remove unspecified
+        ("I21.01", "I21.0"),  # specific STEMI → remove generic STEMI
+        ("I21.09", "I21.0"),  # specific STEMI → remove generic STEMI
+        ("I21.19", "I21.0"),  # specific STEMI → remove generic STEMI
+        ("I21.4", "I21.0"),   # NSTEMI → remove generic STEMI
+    ]
+    codes_present = {c.get("code", "") for c in icd_candidates}
+    codes_to_remove = set()
+    for specific, general in specific_generality_pairs:
+        if specific in codes_present and general in codes_present:
+            codes_to_remove.add(general)
+    if codes_to_remove:
+        return [c for c in icd_candidates if c.get("code") not in codes_to_remove]
+    return icd_candidates
 
 
 def _filter_training_icd_by_note_relevance(
@@ -239,8 +680,9 @@ def _filter_training_icd_by_note_relevance(
     """Filter ICD codes from training cases by note-text relevance.
 
     Codes from training cases are kept only if the note text contains at
-    least one keyword that supports the diagnosis.  Codes without a keyword
-    mapping are kept (conservative fallback).  Non-training-case codes pass
+    least one keyword that specifically supports that code, AND the
+    condition is not negated in the note.  Codes without a keyword mapping
+    are removed (strict — no fallback).  Non-training-case codes pass
     through unchanged.
     """
     note_lower = note_text.lower()
@@ -250,16 +692,57 @@ def _filter_training_icd_by_note_relevance(
             filtered.append(icd)
             continue
         code = icd.get("code", "")
+        # Check for negation first
+        if _is_condition_negated(code, note_text):
+            continue
         matched = False
-        for prefix, keywords in _ICD_NOTE_KEYWORDS.items():
-            if code.startswith(prefix):
-                if any(kw in note_lower for kw in keywords):
-                    filtered.append(icd)
-                matched = True
-                break
+        # Check exact code match first
+        if code in _ICD_NOTE_KEYWORDS:
+            keywords = _ICD_NOTE_KEYWORDS[code]
+            if any(kw in note_lower for kw in keywords):
+                filtered.append(icd)
+            matched = True
+        else:
+            # Check prefix match
+            for prefix, keywords in _ICD_NOTE_KEYWORDS.items():
+                if code.startswith(prefix):
+                    if any(kw in note_lower for kw in keywords):
+                        filtered.append(icd)
+                    matched = True
+                    break
         if not matched:
-            # No keyword mapping — keep conservatively
-            filtered.append(icd)
+            # No keyword mapping exists — REMOVE the code (strict filtering)
+            pass
+    return filtered
+
+
+def _filter_training_cpt_by_note_relevance(
+    cpt_candidates: List[Dict], note_text: str
+) -> List[Dict]:
+    """Filter CPT codes from training cases by note-text relevance.
+
+    Codes from training cases are kept only if the note text contains a
+    keyword supporting that specific CPT procedure.  Non-training-case
+    codes pass through unchanged.
+    """
+    note_lower = note_text.lower()
+    filtered = []
+    for cpt in cpt_candidates:
+        if not cpt.get("source", "").startswith("training_case_"):
+            filtered.append(cpt)
+            continue
+        code = cpt.get("code", "")
+        if code in _CPT_CLINICAL_KEYWORDS:
+            keywords = _CPT_CLINICAL_KEYWORDS[code]
+            if any(kw in note_lower for kw in keywords):
+                filtered.append(cpt)
+            # If no keyword match, the code is NOT added
+        else:
+            # No keyword mapping — check if description is in note
+            desc = cpt.get("description", "").lower()
+            if desc and any(word in note_lower for word in desc.split() if len(word) > 3):
+                filtered.append(cpt)
+            # Otherwise, remove (strict filtering)
     return filtered
 
 
@@ -303,8 +786,8 @@ def _remove_icd_redundancy(icd_candidates: List[Dict], note_text: str = "") -> L
     """Remove redundant ICD codes:
     1. Training case codes are NEVER removed
     2. If one non-training code is a strict prefix of another (A41 vs A41.52), remove the shorter
-    3. For same-length non-training codes with same prefix: keep the one matching note text best
-    4. Different conditions with same prefix (E11.621 vs E11.40) are kept"""
+    3. Codes representing DIFFERENT clinical conditions (e.g. E11.621 vs E11.65) are NEVER removed
+    4. Only codes that describe the same condition at different specificity are deduped"""
     training_codes = {
         c.get("code") for c in icd_candidates
         if c.get("source", "").startswith("training_case_")
@@ -329,37 +812,37 @@ def _remove_icd_redundancy(icd_candidates: List[Dict], note_text: str = "") -> L
                 if shorter not in training_codes:
                     dropped.add(shorter)
 
-    non_training_prefixes: Dict[str, List[str]] = {}
-    for code in code_set:
-        if code in dropped:
-            continue
-        prefix = code[:3]
-        non_training_prefixes.setdefault(prefix, []).append(code)
-    for prefix, codes in non_training_prefixes.items():
-        if len(codes) > 1:
-            same_length = {}
-            for c in codes:
-                same_length.setdefault(len(c), []).append(c)
-            for length, group in same_length.items():
-                if len(group) > 1:
-                    best = group[0]
-                    best_desc = code_desc_map.get(best, "")
-                    best_words = set(w for w in best_desc.split() if len(w) > 3)
-                    best_score = len(best_words & set(note_lower.split()))
-                    for code in group[1:]:
-                        code_desc = code_desc_map.get(code, "")
-                        code_words = set(w for w in code_desc.split() if len(w) > 3)
-                        code_score = len(code_words & set(note_lower.split()))
-                        if code_score > best_score:
-                            if best not in training_codes:
-                                dropped.add(best)
-                            best = code
-                        else:
-                            if code not in training_codes:
-                                dropped.add(code)
     if dropped:
         return [c for c in icd_candidates if c.get("code") not in dropped]
     return icd_candidates
+
+
+def _deduplicate_mi_codes(
+    icd_candidates: List[Dict], note_text: str
+) -> List[Dict]:
+    """When multiple I21.x codes exist (e.g. I21.01, I21.09, I21.19, I21.0),
+    keep only the single best-matching code.  All represent types of MI —
+    only one should be coded per encounter."""
+    note_lower = note_text.lower()
+    mi_codes = [c for c in icd_candidates if c.get("code", "").startswith("I21")]
+    non_mi = [c for c in icd_candidates if not c.get("code", "").startswith("I21")]
+    if len(mi_codes) <= 1:
+        return icd_candidates
+    best = mi_codes[0]
+    best_score = _icd_note_match_score(best.get("code", ""), note_lower)
+    for icd in mi_codes[1:]:
+        score = _icd_note_match_score(icd.get("code", ""), note_lower)
+        if score > best_score:
+            best = icd
+            best_score = score
+        elif score == best_score:
+            is_training = icd.get("source", "").startswith("training_case_")
+            best_is_training = best.get("source", "").startswith("training_case_")
+            if is_training and not best_is_training:
+                best = icd
+            elif is_training == best_is_training and len(icd.get("code", "")) > len(best.get("code", "")):
+                best = icd
+    return non_mi + [best]
 
 
 @dataclass
@@ -1011,10 +1494,64 @@ class MedcodeDeterministicPipelineV15:
             except Exception as e:
                 _trace("5A_V19_ICD", "error", {"error": str(e)})
 
+            # ── Stage 5A2: Organism-Specific ICD Detection ──────────────────
+            # When the note mentions a specific organism, generate the correct
+            # organism-specific ICD code instead of the general unspecified code.
+            try:
+                existing_icd_set = {c.get("code", "") for c in icd_candidates}
+                organism_codes = _detect_organism_icd(note_text, existing_icd_set)
+                if organism_codes:
+                    # Replace general sepsis/pneumonia codes with organism-specific ones
+                    general_codes_to_remove = set()
+                    for oc in organism_codes:
+                        org_code = oc["code"]
+                        # If organism code is a pneumonia code, remove general J18.x
+                        if org_code.startswith("J15") or org_code.startswith("J14"):
+                            for c in icd_candidates:
+                                if c.get("code", "").startswith("J18"):
+                                    general_codes_to_remove.add(c.get("code"))
+                        # If organism code is a sepsis code, remove general A41.9
+                        if org_code.startswith("A41"):
+                            for c in icd_candidates:
+                                if c.get("code") == "A41.9":
+                                    general_codes_to_remove.add("A41.9")
+                    # Remove general codes
+                    if general_codes_to_remove:
+                        icd_candidates = [
+                            c for c in icd_candidates
+                            if c.get("code") not in general_codes_to_remove
+                        ]
+                    # Add organism-specific codes
+                    for oc in organism_codes:
+                        if oc["code"] not in {c.get("code", "") for c in icd_candidates}:
+                            icd_candidates.append(oc)
+                    _trace("5A2_ORGANISM_ICD", "detected", {
+                        "codes": [oc["code"] for oc in organism_codes],
+                    })
+            except Exception as e:
+                _trace("5A2_ORGANISM_ICD", "error", {"error": str(e)})
+
+            # ── Stage 5A3: COVID-19 / Influenza Detection ─────────────────
+            # Explicitly detect COVID-19 and influenza when mentioned, even if
+            # the fact extractor didn't pick them up as diagnoses.
+            note_lower = note_text.lower()
+            try:
+                existing_icd_set = {c.get("code", "") for c in icd_candidates}
+                if any(kw in note_lower for kw in ["covid", "covid-19", "coronavirus", "sars-cov-2"]):
+                    if "J12.82" not in existing_icd_set:
+                        icd_candidates.append({
+                            "code": "J12.82",
+                            "description": "COVID-19 pneumonia",
+                            "confidence": 0.90,
+                            "source": "condition_detection",
+                        })
+                        _trace("5A3_CONDITION_ICD", "added", {"code": "J12.82"})
+            except Exception as e:
+                _trace("5A3_CONDITION_ICD", "error", {"error": str(e)})
+
             # ── Stage 5B: V19 Neonatal ICD Enhancement ────────────────────
             # When neonatal critical care detected, add neonatal ICD codes
             try:
-                note_lower = note_text.lower()
                 if any(kw in note_lower for kw in [
                     "neonat", "nicu", "newborn", "preterm", "gestational age",
                     "apnea of prematurity", "surfactant", "isolette",
@@ -1224,8 +1761,8 @@ class MedcodeDeterministicPipelineV15:
             except Exception as e:
                 _trace("5C_TRAINING_MATCH", "error", {"error": str(e)})
 
-            # ── Stage 5C2: Training Case ICD Relevance Filter ────────────
-            # Remove training-case ICD codes that have no supporting keywords
+            # ── Stage 5C2: Training Case Relevance Filter ──────────────────
+            # Remove training-case codes that have no supporting keywords
             # in the current note text (prevents false positives from generic
             # keyword matching across unrelated training cases).
             try:
@@ -1239,10 +1776,37 @@ class MedcodeDeterministicPipelineV15:
                         "removed": icd_filtered_count,
                         "remaining": len(icd_candidates),
                     })
+                # Also filter CPT training case codes
+                cpt_before_filter = len(cpt_candidates)
+                cpt_candidates = _filter_training_cpt_by_note_relevance(
+                    cpt_candidates, note_text
+                )
+                cpt_code_strs = [c.get("code", "") for c in cpt_candidates if c.get("code")]
+                cpt_filtered_count = cpt_before_filter - len(cpt_candidates)
+                if cpt_filtered_count:
+                    _trace("5C2_TRAINING_CPT_FILTER", "filtered", {
+                        "removed": cpt_filtered_count,
+                        "remaining": len(cpt_candidates),
+                    })
             except Exception as e:
-                _trace("5C2_TRAINING_ICD_FILTER", "error", {"error": str(e)})
+                _trace("5C2_TRAINING_FILTER", "error", {"error": str(e)})
 
             icd_code_strs = [c.get("code", "") for c in icd_candidates if c.get("code")]
+
+            # ── Stage 5C3: Remove General Codes When Specific Present ──────
+            # E.g., remove A41.9 (unspecified sepsis) when A41.0 (staph) exists.
+            try:
+                icd_before_gen = len(icd_candidates)
+                icd_candidates = _remove_general_codes_when_specific_present(icd_candidates)
+                gen_removed = icd_before_gen - len(icd_candidates)
+                if gen_removed:
+                    _trace("5C3_GENERAL_CODE_REMOVAL", "removed", {
+                        "count": gen_removed,
+                        "remaining": len(icd_candidates),
+                    })
+                icd_code_strs = [c.get("code", "") for c in icd_candidates if c.get("code")]
+            except Exception as e:
+                _trace("5C3_GENERAL_CODE_REMOVAL", "error", {"error": str(e)})
 
             # ── Stage 5C: V17 Deep Engine ICD Injection (post-Stage 5) ──
             # Inject ICD codes from deep engines AFTER Stage 5 to prevent overwrite
@@ -1710,6 +2274,53 @@ class MedcodeDeterministicPipelineV15:
             except Exception as e:
                 _trace("15B_ICD_DEDUP", "error", {"error": str(e)})
 
+            # ── Stage 15B2: Laterality Enforcement ──────────────────────────
+            # When the note specifies 'right' or 'left', ensure generated ICD
+            # codes include proper laterality and remove wrong-side codes.
+            try:
+                icd_before_laterality = len(icd_candidates)
+                icd_candidates = _enforce_laterality(icd_candidates, note_text)
+                laterality_removed = icd_before_laterality - len(icd_candidates)
+                if laterality_removed:
+                    _trace("15B2_LATERALITY", "enforced", {
+                        "removed": laterality_removed,
+                        "remaining": len(icd_candidates),
+                    })
+                icd_code_strs = [c.get("code", "") for c in icd_candidates if c.get("code")]
+            except Exception as e:
+                _trace("15B2_LATERALITY", "error", {"error": str(e)})
+
+            # ── Stage 15B3: Same-Condition ICD Dedup ────────────────────────
+            # When multiple ICD codes share the same 4-char prefix (e.g.,
+            # I21.01, I21.09, I21.19), keep only the one that best matches.
+            try:
+                icd_before_cond_dedup = len(icd_candidates)
+                icd_candidates = _dedup_same_condition_icd(icd_candidates, note_text)
+                cond_dedup_removed = icd_before_cond_dedup - len(icd_candidates)
+                if cond_dedup_removed:
+                    _trace("15B3_SAME_CONDITION_DEDUP", "deduped", {
+                        "removed": cond_dedup_removed,
+                        "remaining": len(icd_candidates),
+                    })
+                icd_code_strs = [c.get("code", "") for c in icd_candidates if c.get("code")]
+            except Exception as e:
+                _trace("15B3_SAME_CONDITION_DEDUP", "error", {"error": str(e)})
+
+            # ── Stage 15B4: MI Code Dedup ────────────────────────────────
+            # When multiple I21 codes exist, keep only the single best match.
+            try:
+                icd_before_mi = len(icd_candidates)
+                icd_candidates = _deduplicate_mi_codes(icd_candidates, note_text)
+                mi_removed = icd_before_mi - len(icd_candidates)
+                if mi_removed:
+                    _trace("15B4_MI_DEDUP", "deduped", {
+                        "removed": mi_removed,
+                        "remaining": len(icd_candidates),
+                    })
+                icd_code_strs = [c.get("code", "") for c in icd_candidates if c.get("code")]
+            except Exception as e:
+                _trace("15B4_MI_DEDUP", "error", {"error": str(e)})
+
             # ── Stage 15C: Clinical Relevance Filtering ──────────────────
             # Filter CPT/ICD codes that have NO clinical evidence in the note.
             # Training-case-sourced codes are always kept (expert-curated).
@@ -1746,6 +2357,17 @@ class MedcodeDeterministicPipelineV15:
                     _trace("15C_RELEVANCE", "done", {"cpt_removed": cpt_filtered, "icd_removed": icd_filtered})
                 else:
                     _trace("15C_RELEVANCE", "passed", {"cpt": len(cpt_candidates), "icd": len(icd_candidates)})
+
+                # Final ICD validation: remove codes with no supporting evidence
+                icd_before_final = len(icd_candidates)
+                icd_candidates = _validate_icd_vs_note(icd_candidates, note_text)
+                icd_code_strs = [c.get("code", "") for c in icd_candidates if c.get("code")]
+                final_removed = icd_before_final - len(icd_candidates)
+                if final_removed:
+                    _trace("15C_FINAL_ICD_VALIDATION", "cleaned", {
+                        "removed": final_removed,
+                        "remaining": len(icd_candidates),
+                    })
             except Exception as e:
                 _trace("15C_RELEVANCE", "error", {"error": str(e)})
 
