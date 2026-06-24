@@ -92,8 +92,15 @@ from knowledge.training_cases_v19 import get_case_answer, search_cases as search
 from knowledge.cpt_book_engine import get_engine as get_cpt_book_engine, lookup_cpt as cpt_book_lookup, search_cpt as cpt_book_search
 from knowledge.icd_book_engine import get_engine as get_icd_book_engine, lookup_icd as icd_book_lookup, search_icd as icd_book_search
 
-# Load training cases at module level
-_TRAINING_CASES = _get_all_training_cases()
+# Load training cases at module level (fail-safe)
+try:
+    _TRAINING_CASES = _get_all_training_cases()
+except Exception as _tc_err:
+    _TRAINING_CASES = {}
+    import logging as _fallback_log
+    _fallback_log.getLogger("medcode.pipeline.v16").warning(
+        "Failed to load training cases: %s — pipeline will use engines only", _tc_err
+    )
 
 import logging
 logger = logging.getLogger("medcode.pipeline.v16")
