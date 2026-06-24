@@ -1,4 +1,4 @@
-﻿"""
+"""
 
     # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # BATCH 2: ICD-10 SEQUENCING CASES (25 cases)
@@ -3834,10 +3834,11 @@ ALL_CASES = {
         "cpt": [],
         "icd": [
             {"code": "A41.0", "desc": "Sepsis due to S. aureus"},
+            {"code": "R65.21", "desc": "Severe sepsis with septic shock"},
             {"code": "J96.01", "desc": "Acute respiratory failure with hypoxia"},
             {"code": "N17.0", "desc": "Acute kidney failure"},
         ],
-        "rule": "MRSA sepsis = A41.0. RF = J96.01. AKI = N17.0.",
+        "rule": "MRSA sepsis = A41.0. Severe sepsis with organ dysfunction = R65.21. RF = J96.01. AKI = N17.0.",
     },
     "real_patient_16": {
         "category": "cardiovascular",

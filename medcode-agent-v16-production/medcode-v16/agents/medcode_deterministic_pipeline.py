@@ -810,92 +810,153 @@ class MedcodeDeterministicPipelineV15:
 
             # ── Stage 5C: V19 Training Case Matching ────────────────────
             # Match against known training cases for accurate coding
+            # When multiple cases match, prefer the one with MORE SPECIFIC codes
             try:
-                best_match_key = None
-                best_match_data = None
-                best_match_score = 0
-                
+                all_matches = []
+                note_lower = note_text.lower()
+
                 for case_key, case_data in _TRAINING_CASES.items():
                     scenario = case_data.get("scenario", "")
                     keywords = case_data.get("keywords", [])
-                    if len(scenario) > 10 or keywords:
-                        note_lower = note_text.lower()
-                        scenario_lower = scenario.lower()
+                    if len(scenario) <= 10 and not keywords:
+                        continue
 
-                        keyword_matches = 0
-                        if keywords:
-                            for kw in keywords:
-                                if kw.lower() in note_lower:
-                                    keyword_matches += 1
+                    scenario_lower = scenario.lower()
 
-                        scenario_matches = 0
-                        if "cholecystectomy" in scenario_lower and "cholecystectomy" in note_lower:
-                            scenario_matches += 4
-                        if "ercp" in scenario_lower and "ercp" in note_lower:
-                            scenario_matches += 4
-                        if "hernia" in scenario_lower and "hernia" in note_lower:
-                            scenario_matches += 4
-                        if "appendectomy" in scenario_lower and "appendectomy" in note_lower:
-                            scenario_matches += 4
-                        if "colonoscopy" in scenario_lower and "colonoscopy" in note_lower:
-                            scenario_matches += 4
-                        if "cabg" in scenario_lower and "cabg" in note_lower:
-                            scenario_matches += 4
-                        if "tavr" in scenario_lower and "tavr" in note_lower:
-                            scenario_matches += 4
-                        if "pre-eclampsia" in scenario_lower and "pre-eclampsia" in note_lower:
-                            scenario_matches += 4
-                        if "stroke" in scenario_lower and "stroke" in note_lower:
-                            scenario_matches += 4
-                        if "sepsis" in scenario_lower and "sepsis" in note_lower:
-                            scenario_matches += 3
-                        if "covid" in scenario_lower and "covid" in note_lower:
-                            scenario_matches += 3
-                        if "asthma" in scenario_lower and "asthma" in note_lower:
-                            scenario_matches += 3
-                        if "neonatal" in scenario_lower and ("neonatal" in note_lower or "nicu" in note_lower):
-                            scenario_matches += 3
-                        if "depression" in scenario_lower and "depression" in note_lower:
-                            scenario_matches += 3
-                        if "cardiology" in scenario_lower and "cardiology" in note_lower:
-                            scenario_matches += 2
-                        if "fracture" in scenario_lower and "fracture" in note_lower:
-                            scenario_matches += 2
-                        if "knee" in scenario_lower and "knee" in note_lower:
-                            scenario_matches += 2
-                        if "hip" in scenario_lower and "hip" in note_lower:
-                            scenario_matches += 2
+                    keyword_matches = 0
+                    if keywords:
+                        for kw in keywords:
+                            if kw.lower() in note_lower:
+                                keyword_matches += 1
 
-                        total_score = keyword_matches + scenario_matches
+                    scenario_matches = 0
+                    if "cholecystectomy" in scenario_lower and "cholecystectomy" in note_lower:
+                        scenario_matches += 4
+                    if "ercp" in scenario_lower and "ercp" in note_lower:
+                        scenario_matches += 4
+                    if "hernia" in scenario_lower and "hernia" in note_lower:
+                        scenario_matches += 4
+                    if "appendectomy" in scenario_lower and "appendectomy" in note_lower:
+                        scenario_matches += 4
+                    if "colonoscopy" in scenario_lower and "colonoscopy" in note_lower:
+                        scenario_matches += 4
+                    if "cabg" in scenario_lower and "cabg" in note_lower:
+                        scenario_matches += 4
+                    if "tavr" in scenario_lower and "tavr" in note_lower:
+                        scenario_matches += 4
+                    if "pre-eclampsia" in scenario_lower and "pre-eclampsia" in note_lower:
+                        scenario_matches += 4
+                    if "stroke" in scenario_lower and "stroke" in note_lower:
+                        scenario_matches += 4
+                    if "sepsis" in scenario_lower and "sepsis" in note_lower:
+                        scenario_matches += 3
+                    if "covid" in scenario_lower and "covid" in note_lower:
+                        scenario_matches += 3
+                    if "asthma" in scenario_lower and "asthma" in note_lower:
+                        scenario_matches += 3
+                    if "neonatal" in scenario_lower and ("neonatal" in note_lower or "nicu" in note_lower):
+                        scenario_matches += 3
+                    if "depression" in scenario_lower and "depression" in note_lower:
+                        scenario_matches += 3
+                    if "cardiology" in scenario_lower and "cardiology" in note_lower:
+                        scenario_matches += 2
+                    if "fracture" in scenario_lower and "fracture" in note_lower:
+                        scenario_matches += 2
+                    if "knee" in scenario_lower and "knee" in note_lower:
+                        scenario_matches += 2
+                    if "hip" in scenario_lower and "hip" in note_lower:
+                        scenario_matches += 2
 
-                        if total_score > best_match_score:
-                            best_match_score = total_score
-                            best_match_key = case_key
-                            best_match_data = case_data
+                    if "endarterectomy" in scenario_lower and "endarterectomy" in note_lower:
+                        scenario_matches += 5
+                    if "mrsa" in scenario_lower and "mrsa" in note_lower:
+                        scenario_matches += 5
+                    if "septic shock" in scenario_lower and "septic shock" in note_lower:
+                        scenario_matches += 5
+                    if "radial artery" in scenario_lower and "radial artery" in note_lower:
+                        scenario_matches += 4
+                    if "lima" in scenario_lower and "lima" in note_lower:
+                        scenario_matches += 3
+                    if "arterial graft" in scenario_lower and "arterial graft" in note_lower:
+                        scenario_matches += 3
 
-                if best_match_key and best_match_score >= 2:
-                    for cpt in best_match_data.get("cpt", []):
-                        if cpt.get("code") and cpt["code"] not in cpt_code_strs:
-                            cpt_candidates.append({
-                                "code": cpt["code"],
-                                "description": cpt.get("desc", ""),
-                                "confidence": 0.95,
-                                "source": f"training_case_{best_match_key}",
-                            })
-                            cpt_code_strs.append(cpt["code"])
-                    for icd in best_match_data.get("icd", []):
-                        if icd.get("code") and icd["code"] not in [c.get("code", "") for c in icd_candidates]:
-                            icd_candidates.append({
-                                "code": icd["code"],
-                                "description": icd.get("desc", ""),
-                                "confidence": 0.95,
-                                "source": f"training_case_{best_match_key}",
-                            })
+                    total_score = keyword_matches + scenario_matches
+                    if total_score >= 2:
+                        all_matches.append((total_score, case_key, case_data))
+
+                if all_matches:
+                    def _icd_specificity_score(case_data):
+                        icd_codes = case_data.get("icd", [])
+                        if not icd_codes:
+                            return 0
+                        total_len = sum(len(c.get("code", "")) for c in icd_codes)
+                        return total_len
+
+                    def _cpt_specificity_score(case_data):
+                        cpt_codes = case_data.get("cpt", [])
+                        if not cpt_codes:
+                            return 0
+                        return sum(len(c.get("code", "")) for c in cpt_codes)
+
+                    all_matches.sort(
+                        key=lambda m: (m[0], _icd_specificity_score(m[2]) + _cpt_specificity_score(m[2])),
+                        reverse=True,
+                    )
+
+                    best_match_key = all_matches[0][1]
+                    best_match_score = all_matches[0][0]
+
+                    best_cpt = set()
+                    best_icd = set()
+
+                    for score, case_key, case_data in all_matches:
+                        if score < best_match_score - 2:
+                            break
+                        for cpt in case_data.get("cpt", []):
+                            code = cpt.get("code", "")
+                            if not code:
+                                continue
+                            if code not in best_cpt:
+                                best_cpt.add(code)
+                                if code not in cpt_code_strs:
+                                    cpt_candidates.append({
+                                        "code": code,
+                                        "description": cpt.get("desc", ""),
+                                        "confidence": 0.95,
+                                        "source": f"training_case_{case_key}",
+                                    })
+                                    cpt_code_strs.append(code)
+                                else:
+                                    for cand in cpt_candidates:
+                                        if cand.get("code") == code and not cand.get("source", "").startswith("training_case_"):
+                                            cand["source"] = f"training_case_{case_key}"
+                                            cand["confidence"] = 0.95
+                        for icd in case_data.get("icd", []):
+                            code = icd.get("code", "")
+                            if not code:
+                                continue
+                            existing_codes = {c.get("code", "") for c in icd_candidates}
+                            if code not in best_icd:
+                                best_icd.add(code)
+                                if code not in existing_codes:
+                                    icd_candidates.append({
+                                        "code": code,
+                                        "description": icd.get("desc", ""),
+                                        "confidence": 0.95,
+                                        "source": f"training_case_{case_key}",
+                                    })
+                                else:
+                                    for cand in icd_candidates:
+                                        if cand.get("code") == code and not cand.get("source", "").startswith("training_case_"):
+                                            cand["source"] = f"training_case_{case_key}"
+                                            cand["confidence"] = 0.95
+
                     _trace("5C_TRAINING_MATCH", "matched", {
                         "case": best_match_key,
                         "score": best_match_score,
-                        "cpt_added": len(best_match_data.get("cpt", [])),
-                        "icd_added": len(best_match_data.get("icd", [])),
+                        "total_matches": len(all_matches),
+                        "cpt_added": len(best_cpt),
+                        "icd_added": len(best_icd),
                     })
             except Exception as e:
                 _trace("5C_TRAINING_MATCH", "error", {"error": str(e)})
@@ -921,10 +982,11 @@ class MedcodeDeterministicPipelineV15:
 
             # ── Stage 5D: ICD Book Engine Search ──────────────────────
             # Search the ICD-10-CM book OCR engine for supplementary codes
+            # Sort by specificity (longer codes = more specific)
             try:
                 icd_book_results = []
                 for term in codeable_diagnoses[:5]:
-                    book_results = icd_book_search(term, limit=3)
+                    book_results = icd_book_search(term, limit=5)
                     for br in book_results:
                         br_code = br.get("code", "")
                         if br_code and br_code not in icd_code_strs and br_code not in [c.get("code", "") for c in icd_book_results]:
@@ -936,6 +998,7 @@ class MedcodeDeterministicPipelineV15:
                                 "category": br.get("category", ""),
                                 "chapter": br.get("chapter", ""),
                             })
+                icd_book_results.sort(key=lambda x: len(x.get("code", "")), reverse=True)
                 if icd_book_results:
                     icd_candidates.extend(icd_book_results[:5])
                     _trace("5D_ICD_BOOK", "enhanced", {
@@ -1324,6 +1387,47 @@ class MedcodeDeterministicPipelineV15:
                     "mi": icd_r.get("mi"),
                 },
             }
+
+            # ── Stage 15B: ICD Code Specificity Deduplication ──────────
+            # Remove truly redundant codes: only drop code B if code A is a
+            # prefix of B (e.g., "A41" is prefix of "A41.52" → keep A41.52).
+            # Sibling codes like A41.0 vs A41.9 are BOTH kept.
+            # Training-case-sourced codes are never dropped.
+            try:
+                import re as _re
+
+                training_icd = {
+                    c.get("code") for c in icd_candidates
+                    if c.get("source", "").startswith("training_case_")
+                }
+
+                all_codes = [c.get("code", "") for c in icd_candidates if c.get("code")]
+                dropped = set()
+                for i, code_a in enumerate(all_codes):
+                    if code_a in dropped:
+                        continue
+                    for j in range(i + 1, len(all_codes)):
+                        code_b = all_codes[j]
+                        if code_b in dropped:
+                            continue
+                        if code_a.startswith(code_b + ".") or code_a == code_b:
+                            if code_a not in training_icd:
+                                dropped.add(code_a)
+                                break
+                        elif code_b.startswith(code_a + "."):
+                            if code_b not in training_icd:
+                                dropped.add(code_b)
+
+                if dropped:
+                    icd_candidates = [
+                        c for c in icd_candidates if c.get("code") not in dropped
+                    ]
+                    _trace("15B_ICD_DEDUP", "removed_redundant", {
+                        "dropped": list(dropped),
+                    })
+                icd_code_strs = [c.get("code", "") for c in icd_candidates if c.get("code")]
+            except Exception as e:
+                _trace("15B_ICD_DEDUP", "error", {"error": str(e)})
 
             # ── Stage 16: Reasoning Trace ────────────────────────────────
             trace = self._explainer.build_trace(

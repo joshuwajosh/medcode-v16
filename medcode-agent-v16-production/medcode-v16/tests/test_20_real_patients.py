@@ -234,17 +234,13 @@ def run_case(case):
     cpt_generated = [c.get("code", "") for c in result.cpt_codes]
     icd_generated = [c.get("code", "") for c in result.icd10_codes]
 
-    # Check CPT accuracy (any expected CPT in generated)
-    # If no CPT expected, it passes automatically
-    cpt_match = True
-    if case["expected_cpt"]:
-        cpt_match = any(ec in cpt_generated for ec in case["expected_cpt"])
+    # STRICT matching: ALL expected CPT codes must be present
+    cpt_missing = [ec for ec in case["expected_cpt"] if ec not in cpt_generated] if case["expected_cpt"] else []
+    cpt_match = len(cpt_missing) == 0
 
-    # Check ICD accuracy (any expected ICD in generated)
-    # If no ICD expected, it passes automatically
-    icd_match = True
-    if case["expected_icd"]:
-        icd_match = any(ei in icd_generated for ei in case["expected_icd"])
+    # STRICT matching: ALL expected ICD codes must be present
+    icd_missing = [ei for ei in case["expected_icd"] if ei not in icd_generated] if case["expected_icd"] else []
+    icd_match = len(icd_missing) == 0
 
     overall_pass = cpt_match and icd_match
 
@@ -256,9 +252,11 @@ def run_case(case):
         "cpt_generated": cpt_generated[:5],
         "cpt_expected": case["expected_cpt"],
         "cpt_match": cpt_match,
+        "cpt_missing": cpt_missing,
         "icd_generated": icd_generated[:5],
         "icd_expected": case["expected_icd"],
         "icd_match": icd_match,
+        "icd_missing": icd_missing,
         "confidence": result.confidence,
         "processing_ms": result.processing_time_ms,
         "elapsed_s": round(elapsed, 2),
@@ -309,6 +307,14 @@ def main():
             exp_icd[:12], icd[:12],
             result["confidence"],
             result["elapsed_s"]))
+
+        if not result["passed"]:
+            if result["cpt_missing"]:
+                print("         CPT MISSING: {}".format(", ".join(result["cpt_missing"])))
+            if result["icd_missing"]:
+                print("         ICD MISSING: {}".format(", ".join(result["icd_missing"])))
+            print("         Generated CPT: {}".format(",".join(result["cpt_generated"][:5]) or "(none)"))
+            print("         Generated ICD: {}".format(",".join(result["icd_generated"][:8]) or "(none)"))
 
     # Summary
     print()
