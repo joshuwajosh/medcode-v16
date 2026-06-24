@@ -5,7 +5,7 @@ Generates HIPAA-compliant 837P (professional) and
 837I (institutional) electronic claim files.
 """
 from __future__ import annotations
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 import time
 
@@ -37,6 +37,8 @@ class EDI837Generator:
         self.interchange_control_number = 0
         self.group_control_number = 0
         self.transaction_set_control_number = 0
+        self._sender_id_padded = "MEDCODESENDER    "
+        self._receiver_id_padded = "PAYERRECEIVER    "
 
     def generate_837p(self, claim) -> Dict[str, Any]:
         """
@@ -57,7 +59,7 @@ class EDI837Generator:
         segments.append(self._isa_segment())
 
         # GS segment (Functional Group Header)
-        segments.append(self._gs_segment())
+        segments.append(self._gs_segment(c))
 
         # ST segment (Transaction Set Header - 837P = 837)
         segments.append(self._st_segment("837"))
@@ -113,7 +115,7 @@ class EDI837Generator:
             "claim_id": c.get("claim_id", ""),
             "payer_name": c.get("payer_name", ""),
             "total_charges": c.get("total_charges", 0.0),
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": datetime.now(timezone.utc).isoformat(),
             "isa_control_number": self.interchange_control_number,
             "gs_control_number": self.group_control_number,
             "st_control_number": self.transaction_set_control_number,
@@ -138,7 +140,7 @@ class EDI837Generator:
         segments.append(self._isa_segment())
 
         # GS segment
-        segments.append(self._gs_segment())
+        segments.append(self._gs_segment(c))
 
         # ST segment (837I = 837)
         segments.append(self._st_segment("837"))
@@ -194,7 +196,7 @@ class EDI837Generator:
             "claim_id": c.get("claim_id", ""),
             "payer_name": c.get("payer_name", ""),
             "total_charges": c.get("total_charges", 0.0),
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": datetime.now(timezone.utc).isoformat(),
             "isa_control_number": self.interchange_control_number,
             "gs_control_number": self.group_control_number,
             "st_control_number": self.transaction_set_control_number,
@@ -204,6 +206,8 @@ class EDI837Generator:
         """Convert Claim dataclass or dict to dict."""
         if isinstance(claim, dict):
             return claim
+        if hasattr(claim, "to_dict"):
+            return claim.to_dict()
         return {
             "claim_id": getattr(claim, "claim_id", ""),
             "patient_name": getattr(claim, "patient_name", ""),
@@ -233,6 +237,11 @@ class EDI837Generator:
             "claim_type": getattr(claim, "claim_type", "professional"),
         }
 
+    def set_sender_receiver(self, sender_id: str, receiver_id: str):
+        """Set sender and receiver identifiers for ISA segment."""
+        self._sender_id_padded = (sender_id or "MEDCODESENDER")[:16].ljust(16)
+        self._receiver_id_padded = (receiver_id or "PAYERRECEIVER")[:16].ljust(16)
+
     def _increment_counters(self):
         """Increment EDI control numbers."""
         self.interchange_control_number += 1
@@ -261,9 +270,9 @@ class EDI837Generator:
             "00",
             "          ",
             "ZZ",
-            "MEDCODESENDER    ",
+            self._sender_id_padded,
             "ZZ",
-            "PAYERRECEIVER    ",
+            self._receiver_id_padded,
             date_str,
             time_str,
             "^",
@@ -274,7 +283,7 @@ class EDI837Generator:
             ":",
         )
 
-    def _gs_segment(self) -> str:
+    def _gs_segment(self, c: Dict = None) -> str:
         """GS - Functional Group Header."""
         now = datetime.now()
         date_str = now.strftime("%Y%m%d")
@@ -284,8 +293,8 @@ class EDI837Generator:
         return self._seg(
             "GS",
             "HC",
-            "MEDCODE",
-            "PAYER",
+            c.get("sender_gs_id", "MEDCODE"),
+            c.get("receiver_gs_id", "PAYER"),
             date_str,
             time_str,
             gn,
@@ -317,9 +326,13 @@ class EDI837Generator:
 
     def _loop_1000a_submitter(self, c: Dict) -> List[str]:
         """1000A: Submitter Name."""
+        sender_name = c.get("sender_name", "MEDCODE AI")
+        sender_id = c.get("sender_id", "MEDCODE")
+        contact_name = c.get("sender_contact", "SUPPORT")
+        contact_phone = c.get("sender_phone", "5551234567")
         return [
-            self._seg("NM1", "41", "2", "MEDCODE AI", "", "", "", "46", "MEDCODE"),
-            self._seg("PER", "IC", "SUPPORT", "TE", "5551234567"),
+            self._seg("NM1", "41", "2", sender_name, "", "", "", "46", sender_id),
+            self._seg("PER", "IC", contact_name, "TE", contact_phone),
         ]
 
     def _loop_1000b_receiver(self, c: Dict) -> List[str]:
@@ -345,10 +358,14 @@ class EDI837Generator:
         last = parts[0] if parts else ""
         first = parts[1] if len(parts) > 1 else ""
 
+        address = c.get("provider_address", "123 Medical Center Dr")
+        city = c.get("provider_city", "Anytown")
+        state = c.get("provider_state", "CA")
+        zip_code = c.get("provider_zip", "90210")
         return [
             self._seg("NM1", "85", "2", last, first, "", "", "XX", npi),
-            self._seg("N3", "123 Medical Center Dr"),
-            self._seg("N4", "Anytown", "CA", "90210"),
+            self._seg("N3", address),
+            self._seg("N4", city, state, zip_code),
             self._seg("REF", "EI", npi),
         ]
 
@@ -368,10 +385,14 @@ class EDI837Generator:
         dob = c.get("patient_dob", c.get("date_of_birth", "")).replace("-", "")
         sex_code = self._map_sex(c.get("patient_sex", ""))
 
+        patient_address = c.get("patient_address", "456 Patient St")
+        patient_city = c.get("patient_city", "Anytown")
+        patient_state = c.get("patient_state", "CA")
+        patient_zip = c.get("patient_zip", "90210")
         return [
             self._seg("NM1", "IL", "1", last, first, "", "", "MI", ins_id),
-            self._seg("N3", "456 Patient St"),
-            self._seg("N4", "Anytown", "CA", "90210"),
+            self._seg("N3", patient_address),
+            self._seg("N4", patient_city, patient_state, patient_zip),
             self._seg("DMG", "D8", dob, sex_code),
             self._seg("REF", "SY", ins_id),
         ]
@@ -380,10 +401,14 @@ class EDI837Generator:
         """2010BB: Payer Name."""
         payer = c.get("payer_name", "PAYER")
         payer_id = payer.upper().replace(" ", "")[:15]
+        payer_address = c.get("payer_address", "Payer Address")
+        payer_city = c.get("payer_city", "Payer City")
+        payer_state = c.get("payer_state", "ST")
+        payer_zip = c.get("payer_zip", "00000")
         return [
             self._seg("NM1", "PR", "2", payer, "", "", "", "PI", payer_id),
-            self._seg("N3", "Payer Address"),
-            self._seg("N4", "Payer City", "ST", "00000"),
+            self._seg("N3", payer_address),
+            self._seg("N4", payer_city, payer_state, payer_zip),
         ]
 
     def _loop_2300_claim_info(self, c: Dict) -> List[str]:

@@ -5,11 +5,14 @@ Aggregated stats, activity feed, and chart data for the admin dashboard.
 """
 from __future__ import annotations
 
+import logging
 import os
 import time
 from typing import Optional
 
 from fastapi import APIRouter, Query
+
+logger = logging.getLogger("medcode.api.dashboard")
 
 router = APIRouter(prefix="/api/v19/dashboard", tags=["dashboard"])
 
@@ -24,6 +27,7 @@ async def dashboard_stats():
     paid_claims = 0
     denied_claims = 0
     total_revenue = 0.0
+    claims_error = None
 
     try:
         from billing.claim_tracker import ClaimTracker
@@ -39,8 +43,9 @@ async def dashboard_stats():
             elif s == "denied":
                 denied_claims += 1
             total_revenue += c.get("total_charges", 0) or 0
-    except Exception:
-        pass
+    except Exception as e:
+        claims_error = str(e)
+        logger.warning("dashboard stats claims query failed: %s", e)
 
     db_status = "Connected"
     try:
@@ -58,7 +63,7 @@ async def dashboard_stats():
     mins = (uptime_s % 3600) // 60
     uptime_str = f"{hours}h {mins}m" if hours else f"{mins}m"
 
-    return {
+    result = {
         "total_claims": total_claims,
         "pending_claims": pending_claims,
         "paid_claims": paid_claims,
@@ -68,6 +73,9 @@ async def dashboard_stats():
         "db_status": db_status,
         "uptime": uptime_str,
     }
+    if claims_error:
+        result["claims_error"] = claims_error
+    return result
 
 
 @router.get("/activity")
@@ -85,8 +93,8 @@ async def dashboard_activity(limit: int = Query(default=10, ge=1, le=100)):
                 "description": ev.get("details") or ev.get("action", "Event"),
                 "timestamp": ev.get("timestamp", ""),
             })
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning("dashboard activity audit query failed: %s", e)
 
     try:
         from billing.claim_tracker import ClaimTracker
@@ -98,8 +106,8 @@ async def dashboard_activity(limit: int = Query(default=10, ge=1, le=100)):
                 "description": f"Claim {c.get('claim_id', '—')} → {c.get('status', 'updated')}",
                 "timestamp": c.get("created_at", c.get("updated_at", "")),
             })
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning("dashboard activity claims query failed: %s", e)
 
     events.sort(key=lambda e: e.get("timestamp", ""), reverse=True)
     return {"events": events[:limit]}
@@ -124,12 +132,12 @@ async def dashboard_charts():
             if created:
                 day = created[:10]
                 daily_revenue[day] = daily_revenue.get(day, 0) + (c.get("total_charges", 0) or 0)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning("dashboard charts claims query failed: %s", e)
 
-    from datetime import datetime, timedelta
+    from datetime import datetime, timedelta, timezone
 
-    today = datetime.utcnow().date()
+    today = datetime.now(timezone.utc).date()
     trend = []
     for i in range(29, -1, -1):
         day = today - timedelta(days=i)

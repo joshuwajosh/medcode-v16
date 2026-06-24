@@ -14,6 +14,7 @@ Manages user sessions with:
 from __future__ import annotations
 
 import os
+import threading
 import time
 import uuid
 from dataclasses import dataclass
@@ -192,10 +193,13 @@ class SessionManager:
 
 
 _session_manager: Optional[SessionManager] = None
+_session_manager_lock = threading.Lock()
 
 
 def get_session_manager() -> SessionManager:
     global _session_manager
     if _session_manager is None:
-        _session_manager = SessionManager()
+        with _session_manager_lock:
+            if _session_manager is None:
+                _session_manager = SessionManager()
     return _session_manager

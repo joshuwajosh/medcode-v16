@@ -217,6 +217,8 @@ class CMS1500Generator:
         """Convert Claim dataclass or dict to dict."""
         if isinstance(claim, dict):
             return claim
+        if hasattr(claim, "to_dict"):
+            return claim.to_dict()
         return {
             "claim_id": getattr(claim, "claim_id", ""),
             "patient_name": getattr(claim, "patient_name", ""),

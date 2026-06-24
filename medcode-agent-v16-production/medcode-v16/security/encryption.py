@@ -17,6 +17,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import os
+import threading
 from dataclasses import dataclass
 from typing import Optional
 
@@ -132,13 +133,16 @@ PHI_FIELDS = [
 
 # Singleton instance
 _encryption: Optional[FieldLevelEncryption] = None
+_encryption_lock = threading.Lock()
 
 
 def get_encryption() -> FieldLevelEncryption:
     """Get or create the encryption singleton."""
     global _encryption
     if _encryption is None:
-        _encryption = FieldLevelEncryption()
+        with _encryption_lock:
+            if _encryption is None:
+                _encryption = FieldLevelEncryption()
     return _encryption
 
 

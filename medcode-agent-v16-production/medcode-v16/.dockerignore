@@ -1,0 +1,13 @@
+.env
+.git
+__pycache__
+*.pyc
+*.db
+data/
+logs/
+tests/
+books/
+aapc/
+.pytest_cache/
+*.json
+!requirements.txt

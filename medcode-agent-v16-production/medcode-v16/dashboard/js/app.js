@@ -176,7 +176,7 @@ async function loadClaims() {
   if (claimsFilters.date_to) params.set('date_to', claimsFilters.date_to);
 
   try {
-    const data = await apiFetch(`${API_V19}/billing/claim-list?${params}`);
+    const data = await apiFetch(`${API_V19}/billing/batches?${params}`);
     const claims = data.claims || [];
     const total = data.total || claims.length;
     renderClaimsTable(claims);
@@ -250,7 +250,7 @@ function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 async function loadCoding() {
   showLoading(document.getElementById('coding-table-body'));
   try {
-    const data = await apiFetch(`${API_V19}/history?limit=100`);
+    const data = await apiFetch(`/api/history?limit=100`);
     const sessions = data.sessions || [];
     renderCodingTable(sessions);
   } catch {
@@ -283,7 +283,7 @@ async function showCodingDetail(sessionId) {
   modal.classList.remove('hidden');
   body.innerHTML = '<div class="flex justify-center py-8"><span class="spinner"></span></div>';
   try {
-    const data = await apiFetch(`${API_V19}/session/${sessionId}`);
+    const data = await apiFetch(`/api/session/${sessionId}`);
     const codes = data.codes || data.cpt_codes || [];
     body.innerHTML = `<div class="space-y-4">
       <div class="grid grid-cols-2 gap-4 text-sm">

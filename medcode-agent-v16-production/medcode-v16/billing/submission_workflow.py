@@ -292,29 +292,41 @@ class ClaimSubmissionWorkflow:
     def _get_claim_id(self, claim) -> str:
         if isinstance(claim, dict):
             return claim.get("claim_id", "")
+        if hasattr(claim, "to_dict"):
+            return claim.to_dict().get("claim_id", "")
         return getattr(claim, "claim_id", "")
 
     def _get_patient_name(self, claim) -> str:
         if isinstance(claim, dict):
             return claim.get("patient_name", "")
+        if hasattr(claim, "to_dict"):
+            return claim.to_dict().get("patient_name", "")
         return getattr(claim, "patient_name", "")
 
     def _get_payer_name(self, claim) -> str:
         if isinstance(claim, dict):
             return claim.get("payer_name", "")
+        if hasattr(claim, "to_dict"):
+            return claim.to_dict().get("payer_name", "")
         return getattr(claim, "payer_name", "")
 
     def _get_provider_npi(self, claim) -> str:
         if isinstance(claim, dict):
             return claim.get("provider_npi", "")
+        if hasattr(claim, "to_dict"):
+            return claim.to_dict().get("provider_npi", "")
         return getattr(claim, "provider_npi", "")
 
     def _get_total_charges(self, claim) -> float:
         if isinstance(claim, dict):
             return claim.get("total_charges", 0.0)
+        if hasattr(claim, "to_dict"):
+            return claim.to_dict().get("total_charges", 0.0)
         return getattr(claim, "total_charges", 0.0)
 
     def _get_claim_type(self, claim) -> str:
         if isinstance(claim, dict):
             return claim.get("claim_type", "professional")
+        if hasattr(claim, "to_dict"):
+            return claim.to_dict().get("claim_type", "professional")
         return getattr(claim, "claim_type", "professional")

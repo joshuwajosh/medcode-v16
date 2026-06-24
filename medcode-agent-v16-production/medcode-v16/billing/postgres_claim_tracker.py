@@ -6,7 +6,7 @@ through the complete revenue cycle.
 """
 from __future__ import annotations
 from contextlib import contextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 from core.config import (
@@ -153,7 +153,7 @@ class PostgresClaimTracker:
         Returns:
             Dict with claim_id and status.
         """
-        now = datetime.utcnow().isoformat()
+        now = datetime.now(timezone.utc).isoformat()
         with self._get_conn() as conn:
             cur = conn.cursor()
             cur.execute(
@@ -195,7 +195,7 @@ class PostgresClaimTracker:
         Returns:
             Dict with claim_id, old_status, new_status, and error if any.
         """
-        now = datetime.utcnow().isoformat()
+        now = datetime.now(timezone.utc).isoformat()
         with self._get_conn() as conn:
             cur = conn.cursor()
             cur.execute(
@@ -283,7 +283,7 @@ class PostgresClaimTracker:
         created_by: str = "system",
     ) -> Dict[str, Any]:
         """Add a note to a claim."""
-        now = datetime.utcnow().isoformat()
+        now = datetime.now(timezone.utc).isoformat()
         with self._get_conn() as conn:
             cur = conn.cursor()
             cur.execute(

@@ -86,8 +86,8 @@ class SanitizationMiddleware(BaseHTTPMiddleware):
                 if qp_suspicious:
                     any_suspicious = True
                     all_warnings.extend(qp_warnings)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning("query param sanitization error: %s", e)
 
         # ── Sanitize request body ──
         body_blocked = False
@@ -134,8 +134,8 @@ class SanitizationMiddleware(BaseHTTPMiddleware):
                         any_suspicious = True
                         all_warnings.extend(result.warnings)
                         request.path_params[key] = result.clean_text
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning("path param sanitization error: %s", e)
 
         # ── Log suspicious inputs ──
         if any_suspicious:

@@ -11,6 +11,7 @@ patient care.
 from __future__ import annotations
 
 import os
+import threading
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -173,10 +174,13 @@ class EmergencyAccessService:
 
 
 _emergency: Optional[EmergencyAccessService] = None
+_emergency_lock = threading.Lock()
 
 
 def get_emergency_service() -> EmergencyAccessService:
     global _emergency
     if _emergency is None:
-        _emergency = EmergencyAccessService()
+        with _emergency_lock:
+            if _emergency is None:
+                _emergency = EmergencyAccessService()
     return _emergency

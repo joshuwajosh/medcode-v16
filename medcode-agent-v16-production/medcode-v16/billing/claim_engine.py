@@ -51,6 +51,43 @@ class Claim:
     validation_errors: List[str] = field(default_factory=list)
     validation_warnings: List[str] = field(default_factory=list)
 
+    def to_dict(self) -> Dict:
+        return {
+            "claim_id": self.claim_id,
+            "patient_name": self.patient_name,
+            "patient_dob": self.patient_dob,
+            "patient_sex": self.patient_sex,
+            "insurance_id": self.insurance_id,
+            "payer_name": self.payer_name,
+            "provider_npi": self.provider_npi,
+            "provider_name": self.provider_name,
+            "facility_npi": self.facility_npi,
+            "date_of_service": self.date_of_service,
+            "date_of_birth": self.date_of_birth,
+            "place_of_service": self.place_of_service,
+            "items": [
+                {
+                    "cpt_code": item.cpt_code,
+                    "cpt_description": item.cpt_description,
+                    "icd_codes": item.icd_codes,
+                    "modifiers": item.modifiers,
+                    "units": item.units,
+                    "charge_amount": item.charge_amount,
+                    "place_of_service": item.place_of_service,
+                    "diagnosis_pointers": item.diagnosis_pointers,
+                }
+                for item in self.items
+            ],
+            "total_charges": self.total_charges,
+            "total_allowed": self.total_allowed,
+            "claim_type": self.claim_type,
+            "status": self.status,
+            "denial_risk": self.denial_risk,
+            "denial_probability": self.denial_probability,
+            "validation_errors": self.validation_errors,
+            "validation_warnings": self.validation_warnings,
+        }
+
 
 @dataclass
 class DenialPrediction:

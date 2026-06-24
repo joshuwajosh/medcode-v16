@@ -13,6 +13,7 @@ Provides:
 from __future__ import annotations
 
 import os
+import time
 from typing import List, Optional
 
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -115,9 +116,6 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         return request.client.host if request.client else "unknown"
 
     def _check_rate_limit(self, client_id: str) -> bool:
-        import os
-        import time
-        
         if os.environ.get("TESTING") == "1":
             return True
         

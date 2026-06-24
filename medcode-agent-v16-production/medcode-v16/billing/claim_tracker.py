@@ -8,7 +8,7 @@ from __future__ import annotations
 import os
 import sqlite3
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 
@@ -105,7 +105,7 @@ class ClaimTracker:
         Returns:
             Dict with claim_id and status.
         """
-        now = datetime.utcnow().isoformat()
+        now = datetime.now(timezone.utc).isoformat()
         conn = self._conn()
         try:
             conn.execute(
@@ -144,7 +144,7 @@ class ClaimTracker:
         Returns:
             Dict with claim_id, old_status, new_status, and error if any.
         """
-        now = datetime.utcnow().isoformat()
+        now = datetime.now(timezone.utc).isoformat()
         conn = self._conn()
         try:
             row = conn.execute(
@@ -241,7 +241,7 @@ class ClaimTracker:
         created_by: str = "system",
     ) -> Dict[str, Any]:
         """Add a note to a claim."""
-        now = datetime.utcnow().isoformat()
+        now = datetime.now(timezone.utc).isoformat()
         conn = self._conn()
         try:
             conn.execute(

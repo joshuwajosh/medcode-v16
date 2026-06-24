@@ -7,6 +7,7 @@ States: CLOSED (normal) -> OPEN (failing) -> HALF_OPEN (testing recovery).
 
 from __future__ import annotations
 
+import threading
 import time
 import logging
 from dataclasses import dataclass, field
@@ -194,16 +195,17 @@ class CircuitBreaker:
 
     def reset(self) -> None:
         """Manually reset circuit breaker to CLOSED."""
+        previous_state = self._state
         self._state = CircuitState.CLOSED
         self._consecutive_failures = 0
         self._half_open_calls = 0
         self._stats.state_transitions.append({
-            "from": self._state.value,
+            "from": previous_state.value,
             "to": "closed",
             "time": time.time(),
             "reason": "manual_reset",
         })
-        logger.info("circuit_breaker[%s] manually reset to CLOSED", self.name)
+        logger.info("circuit_breaker[%s] manually reset %s -> CLOSED", self.name, previous_state.value)
 
 
 class CircuitBreakerOpenError(Exception):
@@ -213,16 +215,19 @@ class CircuitBreakerOpenError(Exception):
 
 # ── Global circuit breakers for LLM providers ──────────────────────────
 _llm_breakers: dict[str, CircuitBreaker] = {}
+_llm_breakers_lock = threading.Lock()
 
 
 def get_llm_breaker(provider: str) -> CircuitBreaker:
     """Get or create a circuit breaker for an LLM provider."""
     if provider not in _llm_breakers:
-        _llm_breakers[provider] = CircuitBreaker(
-            name=f"llm_{provider}",
-            failure_threshold=5,
-            recovery_timeout=60.0,
-        )
+        with _llm_breakers_lock:
+            if provider not in _llm_breakers:
+                _llm_breakers[provider] = CircuitBreaker(
+                    name=f"llm_{provider}",
+                    failure_threshold=5,
+                    recovery_timeout=60.0,
+                )
     return _llm_breakers[provider]
 
 

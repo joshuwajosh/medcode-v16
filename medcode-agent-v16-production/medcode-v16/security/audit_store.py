@@ -16,6 +16,7 @@ import hashlib
 import hmac
 import json
 import os
+import threading
 import time
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
@@ -314,11 +315,14 @@ class AuditStore:
 
 
 _store: Optional[AuditStore] = None
+_store_lock = threading.Lock()
 
 
 def get_audit_store() -> AuditStore:
     """Get or create the audit store singleton."""
     global _store
     if _store is None:
-        _store = AuditStore()
+        with _store_lock:
+            if _store is None:
+                _store = AuditStore()
     return _store

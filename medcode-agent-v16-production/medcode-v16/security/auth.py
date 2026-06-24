@@ -19,39 +19,16 @@ import hashlib
 import hmac
 import logging
 import os
+import threading
 import time
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
-from enum import Enum
 from typing import Any, Dict, List, Optional, Set
 
+from security.constants import Role, PERMISSIONS
+
 logger = logging.getLogger("medcode.security")
-
-
-class Role(str, Enum):
-    ADMIN = "admin"
-    MEDICAL_CODER = "medical_coder"
-    REVIEWER = "reviewer"
-    AUDITOR = "auditor"
-    PROVIDER = "provider"
-    READ_ONLY = "read_only"
-
-
-PERMISSIONS: Dict[str, Set[Role]] = {
-    "submit_note": {Role.ADMIN, Role.PROVIDER, Role.MEDICAL_CODER},
-    "view_codes": {Role.ADMIN, Role.MEDICAL_CODER, Role.REVIEWER, Role.PROVIDER},
-    "edit_codes": {Role.ADMIN, Role.MEDICAL_CODER},
-    "approve_review": {Role.ADMIN, Role.REVIEWER},
-    "reject_review": {Role.ADMIN, Role.REVIEWER},
-    "view_audit_log": {Role.ADMIN, Role.AUDITOR, Role.REVIEWER},
-    "export_codes": {Role.ADMIN, Role.MEDICAL_CODER},
-    "view_phi": {Role.ADMIN, Role.PROVIDER},
-    "manage_users": {Role.ADMIN},
-    "view_benchmark": {Role.ADMIN, Role.AUDITOR},
-    "run_pipeline": {Role.ADMIN, Role.MEDICAL_CODER, Role.PROVIDER},
-    "emergency_access": {Role.ADMIN},
-}
 
 
 @dataclass
@@ -157,8 +134,7 @@ class Session:
 
     @property
     def is_idle(self) -> bool:
-        timeout = 900  # 15 minutes
-        return (time.time() - self.last_activity) > timeout
+        return (time.time() - self.last_activity) > DEFAULT_INACTIVE_TIMEOUT
 
 
 class PasswordHasher:
@@ -292,6 +268,9 @@ class AuthService:
         self._failed_attempts: Dict[str, List[float]] = {}
         self._refresh_tokens: Dict[str, RefreshTokenRecord] = {}
         self._compromised_families: Set[str] = set()
+        self._lockout_threshold: int = 5
+        self._lockout_duration: int = 900
+        self._inactive_timeout: int = 900
 
     def create_user(
         self,
@@ -336,8 +315,8 @@ class AuthService:
 
         if not self._password_hasher.verify_password(password, user.password_hash):
             user.failed_login_attempts += 1
-            if user.failed_login_attempts >= 5:
-                user.locked_until = time.time() + 900
+            if user.failed_login_attempts >= self._lockout_threshold:
+                user.locked_until = time.time() + self._lockout_duration
             return None
 
         user.failed_login_attempts = 0
@@ -377,7 +356,7 @@ class AuthService:
             "access_token": access_token,
             "refresh_token": refresh_token_str,
             "token_type": "bearer",
-            "expires_in": 1800,
+            "expires_in": self._jwt._expiry_minutes * 60,
             "session_id": session.session_id,
             "user": user.to_dict(),
         }
@@ -449,7 +428,7 @@ class AuthService:
                 "access_token": access_token,
                 "refresh_token": new_refresh_str,
                 "token_type": "bearer",
-                "expires_in": 1800,
+                "expires_in": self._jwt._expiry_minutes * 60,
             }
 
         if record.revoked:
@@ -494,7 +473,7 @@ class AuthService:
             "access_token": access_token,
             "refresh_token": new_refresh_str,
             "token_type": "bearer",
-            "expires_in": 1800,
+            "expires_in": self._jwt._expiry_minutes * 60,
         }
 
     def logout(self, session_id: str) -> bool:
@@ -564,10 +543,13 @@ class AuthService:
 
 
 _auth: Optional[AuthService] = None
+_auth_lock = threading.Lock()
 
 
 def get_auth_service() -> AuthService:
     global _auth
     if _auth is None:
-        _auth = AuthService()
+        with _auth_lock:
+            if _auth is None:
+                _auth = AuthService()
     return _auth

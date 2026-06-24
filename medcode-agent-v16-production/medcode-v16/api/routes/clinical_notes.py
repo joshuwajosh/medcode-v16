@@ -8,17 +8,14 @@ from __future__ import annotations
 from typing import Optional
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 router = APIRouter(prefix="/api/v19/clinical-notes", tags=["clinical-notes"])
 
 
 class ClinicalNoteParseRequest(BaseModel):
-    note_text: str
+    note_text: str = Field(..., max_length=100000)
     note_type: Optional[str] = "progress"
-
-    class Config:
-        max_text_length = 100000
 
 
 def _get_parser():

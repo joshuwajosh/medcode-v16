@@ -14,6 +14,7 @@ Ensures no PHI reaches external LLM providers:
 from __future__ import annotations
 
 import re
+import threading
 import uuid
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
@@ -175,10 +176,13 @@ class LLMPhiFirewall:
 
 
 _firewall: Optional[LLMPhiFirewall] = None
+_firewall_lock = threading.Lock()
 
 
 def get_llm_phi_firewall() -> LLMPhiFirewall:
     global _firewall
     if _firewall is None:
-        _firewall = LLMPhiFirewall()
+        with _firewall_lock:
+            if _firewall is None:
+                _firewall = LLMPhiFirewall()
     return _firewall
