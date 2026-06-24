@@ -1,5 +1,5 @@
-"""
-MedCode AI — Claim Lifecycle Tracking
+﻿"""
+MedCode AI â€” Claim Lifecycle Tracking
 ======================================
 SQLite-based claim database for tracking claim status
 through the complete revenue cycle.
@@ -356,3 +356,4 @@ def get_claim_tracker():
         from billing.postgres_claim_tracker import PostgresClaimTracker
         return PostgresClaimTracker()
     return ClaimTracker()
+
