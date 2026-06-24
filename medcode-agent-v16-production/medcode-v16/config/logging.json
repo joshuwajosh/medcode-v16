@@ -1,0 +1,113 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "formatters": {
+        "json": {
+            "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
+            "format": "%(asctime)s %(name)s %(levelname)s %(message)s %(pathname)s:%(lineno)d"
+        },
+        "console": {
+            "format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S"
+        },
+        "access": {
+            "format": "%(asctime)s %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S"
+        }
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": "DEBUG",
+            "formatter": "console",
+            "stream": "ext://sys.stdout"
+        },
+        "app_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "INFO",
+            "formatter": "json",
+            "filename": "/app/logs/medcode.log",
+            "maxBytes": 10485760,
+            "backupCount": 30,
+            "encoding": "utf-8"
+        },
+        "error_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "ERROR",
+            "formatter": "json",
+            "filename": "/app/logs/error.log",
+            "maxBytes": 10485760,
+            "backupCount": 30,
+            "encoding": "utf-8"
+        },
+        "access_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "INFO",
+            "formatter": "access",
+            "filename": "/app/logs/access.log",
+            "maxBytes": 10485760,
+            "backupCount": 30,
+            "encoding": "utf-8"
+        },
+        "audit_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "INFO",
+            "formatter": "json",
+            "filename": "/app/logs/audit.log",
+            "maxBytes": 10485760,
+            "backupCount": 90,
+            "encoding": "utf-8"
+        }
+    },
+    "loggers": {
+        "": {
+            "level": "INFO",
+            "handlers": ["console", "app_file", "error_file"]
+        },
+        "uvicorn": {
+            "level": "WARNING",
+            "handlers": ["console", "access_file"],
+            "propagate": false
+        },
+        "uvicorn.access": {
+            "level": "INFO",
+            "handlers": ["access_file"],
+            "propagate": false
+        },
+        "medcode.audit": {
+            "level": "INFO",
+            "handlers": ["audit_file"],
+            "propagate": false
+        },
+        "medcode.security": {
+            "level": "INFO",
+            "handlers": ["console", "app_file", "error_file"],
+            "propagate": false
+        },
+        "medcode.api": {
+            "level": "INFO",
+            "handlers": ["console", "app_file"],
+            "propagate": false
+        },
+        "medcode.agents": {
+            "level": "INFO",
+            "handlers": ["console", "app_file"],
+            "propagate": false
+        },
+        "medcode.database": {
+            "level": "WARNING",
+            "handlers": ["console", "app_file", "error_file"],
+            "propagate": false
+        },
+        "httpx": {
+            "level": "WARNING",
+            "handlers": ["app_file"],
+            "propagate": false
+        },
+        "httpcore": {
+            "level": "WARNING",
+            "handlers": ["app_file"],
+            "propagate": false
+        }
+    }
+}

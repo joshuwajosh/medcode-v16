@@ -1,0 +1,81 @@
+version: "3.9"
+
+services:
+  # ── MedCode Application (dev — hot reload, debug) ────────────────
+  medcode:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file: .env
+    environment:
+      - APP_HOST=0.0.0.0
+      - APP_PORT=8000
+      - LOG_LEVEL=DEBUG
+      - DATABASE_URL=postgresql://medcode:changeme@postgres:5432/medcode
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+      - ./data:/app/data
+      - ./logs:/app/logs
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload --log-level debug
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - dev_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # ── PostgreSQL ───────────────────────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: medcode
+      POSTGRES_USER: medcode
+      POSTGRES_PASSWORD: changeme
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - dev_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medcode -d medcode"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ── Redis ────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    command: redis-server --maxmemory 128mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    networks:
+      - dev_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# ── Networks ───────────────────────────────────────────────────────
+networks:
+  dev_network:
+    driver: bridge
+
+# ── Volumes ────────────────────────────────────────────────────────
+volumes:
+  pgdata_dev:
+    driver: local
