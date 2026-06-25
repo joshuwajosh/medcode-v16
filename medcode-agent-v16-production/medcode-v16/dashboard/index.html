@@ -221,7 +221,7 @@
           <p class="text-sm font-medium text-green-600 group-hover:text-green-700">Coding Accuracy</p>
           <p class="text-xs text-gray-400 mt-1">Generate accuracy report</p>
         </button>
-        <button onclick="generateReport('patient')" class="stat-card text-left hover:shadow-md transition-shadow group">
+        <button onclick="showToast('Patient reports require a Session ID — use the Coding tab to select a session','info')" class="stat-card text-left hover:shadow-md transition-shadow group">
           <p class="text-sm font-medium text-blue-600 group-hover:text-blue-700">Patient Report</p>
           <p class="text-xs text-gray-400 mt-1">Generate patient report</p>
         </button>
@@ -364,27 +364,26 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
-      <form class="space-y-4" onsubmit="return false;">
+      <form class="space-y-4" id="add-user-form" onsubmit="return false;">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
-          <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="username">
+          <input id="new-username" type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="username">
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-          <input type="password" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="••••••••">
+          <input id="new-password" type="password" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="••••••••">
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
-          <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+          <select id="new-role" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
             <option value="read_only">Read Only</option>
-            <option value="coder">Coder</option>
+            <option value="medical_coder">Medical Coder</option>
             <option value="reviewer">Reviewer</option>
-            <option value="admin">Admin</option>
           </select>
         </div>
         <div class="flex justify-end gap-2 pt-2">
           <button type="button" onclick="closeModal('add-user-modal')" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
-          <button type="button" onclick="showToast('User creation via API','info');closeModal('add-user-modal')" class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Create User</button>
+          <button type="button" onclick="submitNewUser()" id="create-user-btn" class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Create User</button>
         </div>
       </form>
     </div>

@@ -90,10 +90,20 @@ class Database:
 
                 CREATE INDEX IF NOT EXISTS idx_sessions_created
                     ON sessions(created_at DESC);
+                CREATE INDEX IF NOT EXISTS idx_sessions_org
+                    ON sessions(organization_id);
                 CREATE INDEX IF NOT EXISTS idx_results_session
                     ON coded_results(session_id);
+                CREATE INDEX IF NOT EXISTS idx_results_code
+                    ON coded_results(code);
+                CREATE INDEX IF NOT EXISTS idx_results_vocabulary
+                    ON coded_results(vocabulary);
                 CREATE INDEX IF NOT EXISTS idx_feedback_session
                     ON feedback(session_id);
+                CREATE INDEX IF NOT EXISTS idx_feedback_code
+                    ON feedback(code);
+                CREATE INDEX IF NOT EXISTS idx_feedback_action
+                    ON feedback(action);
             """)
             conn.commit()
         finally:
@@ -107,7 +117,7 @@ class Database:
             session_id = str(uuid.uuid4())
 
         enc = get_encryption()
-        encrypted_note = enc.encrypt(note[:500])
+        encrypted_note = enc.encrypt(note)
 
         conn = self._get_conn()
         try:

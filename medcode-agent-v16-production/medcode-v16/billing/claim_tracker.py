@@ -1,4 +1,4 @@
-﻿"""
+"""
 MedCode AI â€” Claim Lifecycle Tracking
 ======================================
 SQLite-based claim database for tracking claim status
@@ -70,7 +70,7 @@ class ClaimTracker:
                     new_status TEXT NOT NULL,
                     notes TEXT,
                     timestamp TEXT,
-                    FOREIGN KEY (claim_id) REFERENCES claims(claim_id)
+                    FOREIGN KEY (claim_id) REFERENCES claims(claim_id) ON DELETE CASCADE
                 );
 
                 CREATE TABLE IF NOT EXISTS claim_notes (
@@ -80,7 +80,7 @@ class ClaimTracker:
                     content TEXT,
                     created_by TEXT DEFAULT 'system',
                     timestamp TEXT,
-                    FOREIGN KEY (claim_id) REFERENCES claims(claim_id)
+                    FOREIGN KEY (claim_id) REFERENCES claims(claim_id) ON DELETE CASCADE
                 );
             """)
             conn.commit()

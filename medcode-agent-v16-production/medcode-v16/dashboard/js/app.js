@@ -40,6 +40,7 @@ async function apiFetch(url, opts = {}) {
 
 function showToast(msg, type = 'info') {
   const c = document.getElementById('toast-container');
+  while (c.children.length >= 5) c.removeChild(c.firstChild);
   const t = document.createElement('div');
   t.className = `toast toast-${type}`;
   t.textContent = msg;
@@ -65,6 +66,13 @@ function statusBadge(status) {
 
 function fmtMoney(n) {
   return n != null ? '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2 }) : '—';
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = String(str);
+  return div.innerHTML;
 }
 
 // ── Tab Navigation ──────────────────────────────────────────────────────
@@ -98,18 +106,18 @@ async function loadOverview() {
     document.getElementById('stat-paid').textContent = (stats.paid_claims ?? 0).toLocaleString();
     document.getElementById('stat-denied').textContent = (stats.denied_claims ?? 0).toLocaleString();
     document.getElementById('stat-revenue').textContent = fmtMoney(stats.total_revenue);
-  } catch { /* toast shown by apiFetch */ }
+  } catch (e) { console.error('Failed to load overview stats:', e); }
 
   try {
     const charts = await apiFetch(`${API_BASE}/charts`);
     renderStatusChart(charts.by_status || {});
     renderRevenueChart(charts.revenue_trend || []);
-  } catch {}
+  } catch (e) { console.error('Failed to load charts:', e); }
 
   try {
     const act = await apiFetch(`${API_BASE}/activity?limit=10`);
     renderActivity(act.events || []);
-  } catch {}
+  } catch (e) { console.error('Failed to load activity:', e); }
 }
 
 function renderStatusChart(data) {
@@ -189,14 +197,14 @@ async function loadClaims() {
 function renderClaimsTable(claims) {
   const tbody = document.getElementById('claims-table-body');
   if (!claims.length) { tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-gray-400">No claims found</td></tr>'; return; }
-  tbody.innerHTML = claims.map(c => `<tr onclick="showClaimDetail('${c.claim_id}')">
-    <td class="font-mono text-xs">${c.claim_id || '—'}</td>
-    <td>${c.patient_name || 'REDACTED'}</td>
-    <td>${c.payer_name || '—'}</td>
+  tbody.innerHTML = claims.map(c => `<tr onclick="showClaimDetail('${escapeHtml(c.claim_id)}')">
+    <td class="font-mono text-xs">${escapeHtml(c.claim_id) || '—'}</td>
+    <td>${escapeHtml(c.patient_name) || 'REDACTED'}</td>
+    <td>${escapeHtml(c.payer_name) || '—'}</td>
     <td>${fmtMoney(c.total_charges)}</td>
     <td>${statusBadge(c.status)}</td>
     <td>${formatDate(c.created_at)}</td>
-    <td><button class="text-indigo-600 hover:text-indigo-800 text-xs font-medium" onclick="event.stopPropagation();showClaimDetail('${c.claim_id}')">View</button></td>
+    <td><button class="text-indigo-600 hover:text-indigo-800 text-xs font-medium" onclick="event.stopPropagation();showClaimDetail('${escapeHtml(c.claim_id)}')">View</button></td>
   </tr>`).join('');
 }
 
@@ -266,9 +274,9 @@ function renderCodingTable(sessions) {
     const icd = (s.icd_codes || []).map(c => c.code || c).join(', ') || '—';
     const conf = s.confidence || s.confidence_overall;
     const confPct = conf != null ? Math.round(conf * 100) + '%' : '—';
-    return `<tr onclick="showCodingDetail('${s.session_id}')">
-      <td class="font-mono text-xs">${s.session_id || '—'}</td>
-      <td>${s.note_type || s.encounter_type || '—'}</td>
+    return `<tr onclick="showCodingDetail('${escapeHtml(s.session_id)}')">
+      <td class="font-mono text-xs">${escapeHtml(s.session_id) || '—'}</td>
+      <td>${escapeHtml(s.note_type || s.encounter_type) || '—'}</td>
       <td class="font-mono text-xs">${cpt}</td>
       <td class="font-mono text-xs">${icd}</td>
       <td>${confPct}</td>
@@ -287,8 +295,8 @@ async function showCodingDetail(sessionId) {
     const codes = data.codes || data.cpt_codes || [];
     body.innerHTML = `<div class="space-y-4">
       <div class="grid grid-cols-2 gap-4 text-sm">
-        <div><span class="text-gray-500">Session:</span> <span class="font-mono">${sessionId}</span></div>
-        <div><span class="text-gray-500">Note Type:</span> ${data.note_type || '—'}</div>
+        <div><span class="text-gray-500">Session:</span> <span class="font-mono">${escapeHtml(sessionId)}</span></div>
+        <div><span class="text-gray-500">Note Type:</span> ${escapeHtml(data.note_type) || '—'}</div>
         <div><span class="text-gray-500">Confidence:</span> ${data.confidence != null ? Math.round(data.confidence * 100) + '%' : '—'}</div>
         <div><span class="text-gray-500">Date:</span> ${formatDate(data.created_at)}</div>
       </div>
@@ -327,6 +335,27 @@ function showAddUserModal() {
   document.getElementById('add-user-modal').classList.remove('hidden');
 }
 
+async function submitNewUser() {
+  const username = document.getElementById('new-username').value.trim();
+  const password = document.getElementById('new-password').value;
+  const role = document.getElementById('new-role').value;
+  if (!username || !password) { showToast('Username and password are required', 'error'); return; }
+  const btn = document.getElementById('create-user-btn');
+  btn.disabled = true; btn.textContent = 'Creating...';
+  try {
+    await apiFetch(`${API_V19}/auth/register`, {
+      method: 'POST',
+      body: JSON.stringify({ username, password, role }),
+    });
+    showToast(`User "${username}" created`, 'success');
+    closeModal('add-user-modal');
+    document.getElementById('new-username').value = '';
+    document.getElementById('new-password').value = '';
+    loadUsers();
+  } catch (e) { console.error('User creation failed:', e); }
+  finally { btn.disabled = false; btn.textContent = 'Create User'; }
+}
+
 // ── Reports Tab ─────────────────────────────────────────────────────────
 
 function loadReports() {
@@ -335,15 +364,19 @@ function loadReports() {
 
 async function loadReportHistory() {
   try {
-    const data = await apiFetch(`${API_BASE}/activity?limit=20`);
-    const reports = (data.events || []).filter(e => (e.type || '').includes('report'));
+    const data = await apiFetch(`${API_BASE}/activity?limit=50`);
+    const reports = (data.events || []).filter(e => {
+      const t = (e.type || '').toLowerCase();
+      const d = (e.description || '').toLowerCase();
+      return t.includes('report') || d.includes('report') || d.includes('generated');
+    });
     const tbody = document.getElementById('report-history-body');
     if (!reports.length) { tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-gray-400">No reports generated yet</td></tr>'; return; }
     tbody.innerHTML = reports.map(r => `<tr>
-      <td>${r.type || '—'}</td>
+      <td>${escapeHtml(r.type) || '—'}</td>
       <td>${formatDate(r.timestamp)}</td>
       <td>${statusBadge(r.status || 'completed')}</td>
-      <td><a href="${API_V19}/reports/${r.type}" class="text-indigo-600 hover:text-indigo-800 text-xs font-medium">Download</a></td>
+      <td><a href="${API_V19}/reports/${escapeHtml(r.type)}" class="text-indigo-600 hover:text-indigo-800 text-xs font-medium" target="_blank">Download</a></td>
     </tr>`).join('');
   } catch {
     document.getElementById('report-history-body').innerHTML = '<tr><td colspan="4" class="text-center py-4 text-gray-400">No data</td></tr>';
@@ -374,7 +407,7 @@ async function loadSettings() {
     document.getElementById('sys-version').textContent = data.version || '19.0.0-hipaa';
     document.getElementById('sys-db').textContent = data.db_status || 'Connected';
     document.getElementById('sys-uptime').textContent = data.uptime || '—';
-  } catch {}
+  } catch (e) { console.error('Failed to load settings:', e); }
 }
 
 // ── Init ────────────────────────────────────────────────────────────────
@@ -382,6 +415,23 @@ async function loadSettings() {
 document.addEventListener('DOMContentLoaded', () => {
   tabs.forEach(t => {
     document.getElementById('tab-btn-' + t)?.addEventListener('click', () => switchTab(t));
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-backdrop:not(.hidden)').forEach(m => m.classList.add('hidden'));
+    }
+  });
+  document.querySelectorAll('.toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const dot = toggle.querySelector('.toggle-dot');
+      if (toggle.classList.contains('bg-green-500')) {
+        toggle.classList.replace('bg-green-500', 'bg-gray-300');
+        dot.classList.replace('translate-x-5', 'translate-x-0');
+      } else {
+        toggle.classList.replace('bg-gray-300', 'bg-green-500');
+        dot.classList.replace('translate-x-0', 'translate-x-5');
+      }
+    });
   });
   switchTab('overview');
 });

@@ -93,6 +93,7 @@ class PostgresDatabase:
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS sessions (
                     id VARCHAR(64) PRIMARY KEY,
+                    organization_id TEXT DEFAULT '',
                     created_at TIMESTAMPTZ DEFAULT NOW(),
                     clinical_note TEXT,
                     note_type TEXT,
@@ -106,7 +107,7 @@ class PostgresDatabase:
 
                 CREATE TABLE IF NOT EXISTS coded_results (
                     id SERIAL PRIMARY KEY,
-                    session_id VARCHAR(64) REFERENCES sessions(id),
+                    session_id VARCHAR(64) REFERENCES sessions(id) ON DELETE CASCADE,
                     code TEXT,
                     code_name TEXT,
                     vocabulary TEXT,
@@ -120,7 +121,7 @@ class PostgresDatabase:
 
                 CREATE TABLE IF NOT EXISTS feedback (
                     id SERIAL PRIMARY KEY,
-                    session_id VARCHAR(64) REFERENCES sessions(id),
+                    session_id VARCHAR(64) REFERENCES sessions(id) ON DELETE CASCADE,
                     code TEXT,
                     action TEXT,
                     corrected_code TEXT,
@@ -130,10 +131,20 @@ class PostgresDatabase:
 
                 CREATE INDEX IF NOT EXISTS idx_sessions_created
                     ON sessions(created_at DESC);
+                CREATE INDEX IF NOT EXISTS idx_sessions_org
+                    ON sessions(organization_id);
                 CREATE INDEX IF NOT EXISTS idx_results_session
                     ON coded_results(session_id);
+                CREATE INDEX IF NOT EXISTS idx_results_code
+                    ON coded_results(code);
+                CREATE INDEX IF NOT EXISTS idx_results_vocabulary
+                    ON coded_results(vocabulary);
                 CREATE INDEX IF NOT EXISTS idx_feedback_session
                     ON feedback(session_id);
+                CREATE INDEX IF NOT EXISTS idx_feedback_code
+                    ON feedback(code);
+                CREATE INDEX IF NOT EXISTS idx_feedback_action
+                    ON feedback(action);
             """)
 
     def save_session(self, session_id: str, note: str, note_type: str,

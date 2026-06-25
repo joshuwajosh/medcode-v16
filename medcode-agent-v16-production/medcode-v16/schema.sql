@@ -8,6 +8,7 @@
 
 CREATE TABLE IF NOT EXISTS sessions (
     id VARCHAR(64) PRIMARY KEY,
+    organization_id TEXT DEFAULT '',
     created_at TIMESTAMPTZ DEFAULT NOW(),
     clinical_note TEXT,
     note_type TEXT,
@@ -22,6 +23,7 @@ CREATE TABLE IF NOT EXISTS sessions (
 CREATE TABLE IF NOT EXISTS coded_results (
     id SERIAL PRIMARY KEY,
     session_id VARCHAR(64) REFERENCES sessions(id) ON DELETE CASCADE,
+    organization_id TEXT DEFAULT '',
     code TEXT,
     code_name TEXT,
     vocabulary TEXT,
@@ -36,6 +38,7 @@ CREATE TABLE IF NOT EXISTS coded_results (
 CREATE TABLE IF NOT EXISTS feedback (
     id SERIAL PRIMARY KEY,
     session_id VARCHAR(64) REFERENCES sessions(id) ON DELETE CASCADE,
+    organization_id TEXT DEFAULT '',
     code TEXT,
     action TEXT,
     corrected_code TEXT,
@@ -49,6 +52,7 @@ CREATE TABLE IF NOT EXISTS feedback (
 
 CREATE TABLE IF NOT EXISTS claims (
     claim_id VARCHAR(64) PRIMARY KEY,
+    organization_id TEXT DEFAULT '',
     patient_name TEXT,
     payer_name TEXT,
     provider_npi TEXT,
@@ -97,6 +101,72 @@ CREATE TABLE IF NOT EXISTS audit_log (
 );
 
 -- ============================================================
+-- Webhook Tables
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS webhooks (
+    id VARCHAR(64) PRIMARY KEY,
+    organization_id TEXT NOT NULL,
+    url TEXT NOT NULL,
+    events TEXT NOT NULL,
+    secret TEXT NOT NULL,
+    active INTEGER DEFAULT 1,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS webhook_deliveries (
+    id VARCHAR(64) PRIMARY KEY,
+    webhook_id VARCHAR(64) NOT NULL REFERENCES webhooks(id) ON DELETE CASCADE,
+    event_type VARCHAR(64) NOT NULL,
+    status VARCHAR(16) DEFAULT 'pending',
+    response_code INTEGER,
+    delivered_at TIMESTAMPTZ
+);
+
+-- ============================================================
+-- Tenant Tables
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS tenants (
+    id VARCHAR(64) PRIMARY KEY,
+    name TEXT NOT NULL,
+    plan VARCHAR(32) DEFAULT 'free',
+    settings JSONB DEFAULT '{}',
+    active INTEGER DEFAULT 1,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ============================================================
+-- Batch Processing Tables
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS batches (
+    batch_id VARCHAR(64) PRIMARY KEY,
+    organization_id TEXT DEFAULT '',
+    status VARCHAR(32) DEFAULT 'pending',
+    total_claims INTEGER DEFAULT 0,
+    processed INTEGER DEFAULT 0,
+    successful INTEGER DEFAULT 0,
+    failed INTEGER DEFAULT 0,
+    progress_pct REAL DEFAULT 0.0,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    completed_at TIMESTAMPTZ,
+    error TEXT,
+    result_json TEXT
+);
+
+CREATE TABLE IF NOT EXISTS batch_claims (
+    id SERIAL PRIMARY KEY,
+    batch_id VARCHAR(64) NOT NULL REFERENCES batches(batch_id) ON DELETE CASCADE,
+    claim_index INTEGER NOT NULL,
+    claim_id VARCHAR(64),
+    status VARCHAR(32) DEFAULT 'pending',
+    result_json TEXT
+);
+
+-- ============================================================
 -- Indexes
 -- ============================================================
 
@@ -114,3 +184,23 @@ CREATE INDEX IF NOT EXISTS idx_audit_time ON audit_log(event_time DESC);
 CREATE INDEX IF NOT EXISTS idx_audit_type ON audit_log(event_type);
 CREATE INDEX IF NOT EXISTS idx_audit_actor ON audit_log(actor);
 CREATE INDEX IF NOT EXISTS idx_audit_resource ON audit_log(resource_type, resource_id);
+
+CREATE INDEX IF NOT EXISTS idx_webhooks_org ON webhooks(organization_id);
+CREATE INDEX IF NOT EXISTS idx_deliveries_webhook ON webhook_deliveries(webhook_id);
+CREATE INDEX IF NOT EXISTS idx_deliveries_status ON webhook_deliveries(status);
+CREATE INDEX IF NOT EXISTS idx_tenants_name ON tenants(name);
+CREATE INDEX IF NOT EXISTS idx_tenants_plan ON tenants(plan);
+
+CREATE INDEX IF NOT EXISTS idx_sessions_org ON sessions(organization_id);
+CREATE INDEX IF NOT EXISTS idx_claims_org ON claims(organization_id);
+
+CREATE INDEX IF NOT EXISTS idx_batches_org ON batches(organization_id);
+CREATE INDEX IF NOT EXISTS idx_batches_status ON batches(status);
+CREATE INDEX IF NOT EXISTS idx_batches_created ON batches(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_batch_claims_batch ON batch_claims(batch_id);
+CREATE INDEX IF NOT EXISTS idx_batch_claims_status ON batch_claims(status);
+
+CREATE INDEX IF NOT EXISTS idx_results_code ON coded_results(code);
+CREATE INDEX IF NOT EXISTS idx_results_vocabulary ON coded_results(vocabulary);
+CREATE INDEX IF NOT EXISTS idx_feedback_code ON feedback(code);
+CREATE INDEX IF NOT EXISTS idx_feedback_action ON feedback(action);

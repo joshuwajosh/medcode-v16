@@ -126,6 +126,40 @@ async def place_of_service_codes():
     return {"pos_codes": POS_DESCRIPTIONS}
 
 
+# ── Dashboard List Endpoint ────────────────────────────────────────
+
+
+@router.get("/batches")
+async def list_claims_batches(
+    page: int = 1,
+    limit: int = 20,
+    status: Optional[str] = None,
+    payer: Optional[str] = None,
+    date_from: Optional[str] = None,
+    date_to: Optional[str] = None,
+):
+    """List claims for the admin dashboard claims tab."""
+    from billing.claim_tracker import ClaimTracker
+
+    tracker = ClaimTracker()
+    all_claims = tracker.list_claims(limit=5000)
+
+    if status:
+        all_claims = [c for c in all_claims if (c.get("status") or "").lower() == status.lower()]
+    if payer:
+        all_claims = [c for c in all_claims if payer.lower() in (c.get("payer_name") or "").lower()]
+    if date_from:
+        all_claims = [c for c in all_claims if (c.get("created_at") or "") >= date_from]
+    if date_to:
+        all_claims = [c for c in all_claims if (c.get("created_at") or "") <= date_to + "T23:59:59"]
+
+    total = len(all_claims)
+    start = (max(1, page) - 1) * limit
+    claims = all_claims[start: start + limit]
+
+    return {"claims": claims, "total": total, "page": page, "limit": limit}
+
+
 # ── CMS-1500 / UB-04 / EDI 837 / Submission Workflow Routes ────────
 
 
