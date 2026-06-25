@@ -106,8 +106,20 @@ class Database:
                     ON feedback(action);
             """)
             conn.commit()
+            self._migrate_add_organization_id(conn)
         finally:
             conn.close()
+
+    def _migrate_add_organization_id(self, conn):
+        """Add organization_id column to tables created before it was added."""
+        for table in ("sessions", "coded_results", "feedback"):
+            try:
+                conn.execute(
+                    f"ALTER TABLE {table} ADD COLUMN organization_id TEXT DEFAULT ''"
+                )
+                conn.commit()
+            except Exception:
+                pass
 
     def save_session(self, session_id: str, note: str, note_type: str,
                      mode: str, status: str = "pending",
@@ -152,18 +164,20 @@ class Database:
         finally:
             conn.close()
 
-    def save_results(self, session_id: str, results: list[dict]):
+    def save_results(self, session_id: str, results: list[dict],
+                     organization_id: str = ""):
         """Save coded results for a session."""
         conn = self._get_conn()
         try:
             for i, r in enumerate(results):
                 conn.execute(
                     """INSERT INTO coded_results
-                       (session_id, code, code_name, vocabulary, code_type,
+                       (session_id, organization_id, code, code_name, vocabulary, code_type,
                         sequence_order, llm_score, is_billable, reasoning, confidence_level)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                     (
                         session_id,
+                        organization_id,
                         r.get("code", ""),
                         r.get("name", ""),
                         r.get("vocabulary", "ICD10CM"),
@@ -180,15 +194,16 @@ class Database:
             conn.close()
 
     def save_feedback(self, session_id: str, code: str, action: str,
-                      corrected_code: str = None, corrected_by: str = "user"):
+                      corrected_code: str = None, corrected_by: str = "user",
+                      organization_id: str = ""):
         """Save user feedback on a coded result."""
         conn = self._get_conn()
         try:
             conn.execute(
                 """INSERT INTO feedback
-                   (session_id, code, action, corrected_code, corrected_by)
-                   VALUES (?, ?, ?, ?, ?)""",
-                (session_id, code, action, corrected_code, corrected_by),
+                   (session_id, organization_id, code, action, corrected_code, corrected_by)
+                   VALUES (?, ?, ?, ?, ?, ?)""",
+                (session_id, organization_id, code, action, corrected_code, corrected_by),
             )
             conn.commit()
         finally:
