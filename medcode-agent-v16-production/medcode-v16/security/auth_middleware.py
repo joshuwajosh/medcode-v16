@@ -17,6 +17,9 @@ from security.auth import get_auth_service
 
 # Paths that don't require authentication
 PUBLIC_PATHS = {
+    "/api/v19/dashboard/stats",
+    "/api/v19/dashboard/activity",
+    "/api/v19/dashboard/charts",
     "/",
     "/health",
     "/ready",
