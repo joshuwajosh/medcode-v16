@@ -71,7 +71,7 @@ async def get_batch_status(batch_id: str):
 
 
 @router.get("/batches")
-async def list_batches(limit: int = Query(default=20, ge=1, le=100)):
+async def list_batches(limit: int = 20):
     """List recent batch processing jobs."""
     processor = _get_processor()
     batches = processor.list_batches(limit=limit)

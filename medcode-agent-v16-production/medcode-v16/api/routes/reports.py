@@ -54,7 +54,7 @@ async def hipaa_compliance_report():
 async def claim_summary_report(
     status: Optional[str] = Query(default=None, description="Filter by claim status"),
     payer: Optional[str] = Query(default=None, description="Filter by payer name"),
-    limit: int = Query(default=100, ge=1, le=500),
+    limit: int = 100,
 ):
     """Generate a claim summary PDF report."""
     from reports.pdf_generator import generate_report
