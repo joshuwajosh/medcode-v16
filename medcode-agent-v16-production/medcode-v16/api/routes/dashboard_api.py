@@ -1,5 +1,5 @@
-"""
-MedCode AI V19 — Dashboard API Routes
+﻿"""
+MedCode AI V19 â€” Dashboard API Routes
 =======================================
 Aggregated stats, activity feed, and chart data for the admin dashboard.
 """
@@ -79,9 +79,10 @@ async def dashboard_stats():
 
 
 @router.get("/activity")
-async def dashboard_activity(limit: int = Query(default=10, ge=1, le=100)):
+async def dashboard_activity(limit: int = 10):
     """Recent activity feed from audit log and claim history."""
     events = []
+    limit = max(1, min(limit, 100))
 
     try:
         from audit.security_events import SecurityEventRegistry
@@ -103,7 +104,7 @@ async def dashboard_activity(limit: int = Query(default=10, ge=1, le=100)):
         for c in recent:
             events.append({
                 "type": c.get("status", "updated"),
-                "description": f"Claim {c.get('claim_id', '—')} → {c.get('status', 'updated')}",
+                "description": f"Claim {c.get('claim_id', 'â€”')} â†’ {c.get('status', 'updated')}",
                 "timestamp": c.get("created_at", c.get("updated_at", "")),
             })
     except Exception as e:
@@ -148,3 +149,5 @@ async def dashboard_charts():
         "by_status": by_status,
         "revenue_trend": trend,
     }
+
+
