@@ -20,6 +20,7 @@ PUBLIC_PATHS = {
     "/api/v19/dashboard/stats",
     "/api/v19/dashboard/activity",
     "/api/v19/dashboard/charts",
+    "/api/v19/auth/stats",
     "/",
     "/health",
     "/ready",

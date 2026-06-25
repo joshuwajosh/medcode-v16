@@ -84,6 +84,13 @@ class BatchClaimProcessor:
                 );
             """)
             conn.commit()
+
+            # Migration: add organization_id column if missing
+            try:
+                conn.execute("ALTER TABLE batches ADD COLUMN organization_id TEXT DEFAULT ''")
+                conn.commit()
+            except Exception:
+                pass  # Column already exists
         finally:
             conn.close()
 

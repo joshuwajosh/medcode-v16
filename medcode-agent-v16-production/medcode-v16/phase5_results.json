@@ -1,0 +1,209 @@
+{
+  "results": [
+    {
+      "endpoint": "GET /health",
+      "name": "GET /health",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "endpoint": "GET /fhir/metadata",
+      "name": "GET /fhir/metadata",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "endpoint": "GET /api/v19/dashboard/stats",
+      "name": "GET /api/v19/dashboard/stats",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "endpoint": "GET /api/v19/dashboard/activity",
+      "name": "GET /api/v19/dashboard/activity",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "endpoint": "GET /api/v19/dashboard/charts",
+      "name": "GET /api/v19/dashboard/charts",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "endpoint": "POST /api/v19/auth/login",
+      "name": "POST /auth/login",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "{\"access_token\":\"eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJzdWIiOiAiNjRhMDZmMGEtNzA0IiwgInJvbGUiOiAiYWRtaW4iLCAicHJvdmlkZXJfaWQiOiAiIiwgIm9yZ19pZCI6ICIiLCAic2Vzc2lvbl9pZCI6ICIiLCAiaWF0IjogMTc4MjM2NT"
+    },
+    {
+      "endpoint": "POST /api/v19/auth/refresh",
+      "name": "POST /auth/refresh (invalid)",
+      "expected_status": 401,
+      "got_status": 401,
+      "pass": true,
+      "detail": "{\"detail\":\"Invalid or revoked refresh token\"}"
+    },
+    {
+      "endpoint": "GET /api/v19/auth/stats",
+      "name": "GET /auth/stats (public)",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "{\"users\":{\"total_users\":1,\"active_sessions\":2,\"total_sessions\":2,\"refresh_tokens_tracked\":2,\"active_refresh_tokens\":2,\"compromised_families\":0},\"sessions\":{\"total_sessions\":1,\"active_sessions\":1,\"inac"
+    },
+    {
+      "endpoint": "POST /api/v19/billing/generate-claim",
+      "name": "POST /billing/generate-claim",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "{\"claim_id\":\"CLM-1782365565\",\"total_charges\":120,\"items\":[{\"cpt_code\":\"99213\",\"description\":\"Office Visit\",\"icd_codes\":[\"J06.9\"],\"modifiers\":[],\"charge\":120}],\"place_of_service\":\"11\",\"status\":\"draft\"}"
+    },
+    {
+      "endpoint": "POST /api/v19/billing/validate-claim",
+      "name": "POST /billing/validate-claim",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "{\"claim_id\":\"CLM-1782365565\",\"validation\":{\"passed\":false,\"errors\":[\"Missing date of service\",\"Missing provider NPI\",\"Missing payer name\"],\"warnings\":[],\"checks_performed\":[\"required_fields\",\"dx_proce"
+    },
+    {
+      "endpoint": "POST /api/v19/billing/cms1500",
+      "name": "POST /billing/cms1500",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "{\"form_type\":\"CMS-1500\",\"version\":\"02/12\",\"claim_id\":\"CLM-1782365565\",\"boxes\":{\"1\":\"CI\",\"2\":\"PATIENT, REDACTED\",\"3\":\"\",\"4\":\"\",\"5\":\"\",\"6\":\"Self\",\"7\":\"PATIENT, REDACTED\",\"8\":\"\",\"9\":\"\",\"9a\":\"\",\"9c\":\"\",\"1"
+    },
+    {
+      "endpoint": "POST /api/v19/billing/edi-837",
+      "name": "POST /billing/edi-837",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "{\"edi_type\":\"837P\",\"edi_content\":\"ISA*00*          *00*          *ZZ*MEDCODESENDER    *ZZ*PAYERRECEIVER    *260625*1102*^*00501*000000001*0*P*:~\\r\\nGS*HC*MEDCODE*PAYER*20260625*1102*1*X*005010X222A1~\\"
+    },
+    {
+      "endpoint": "POST /api/v19/billing/submit-claim",
+      "name": "POST /billing/submit-claim",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "{\"workflow_steps\":[{\"name\":\"generate_claim\",\"success\":true,\"claim\":{\"claim_id\":\"CLM-1782365565\",\"patient_name\":\"PATIENT, REDACTED\",\"patient_dob\":\"\",\"patient_sex\":\"\",\"insurance_id\":\"\",\"payer_name\":\"\",\""
+    },
+    {
+      "endpoint": "POST /api/v19/billing/batch",
+      "name": "POST /billing/batch",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "{\"batch_id\":\"BATCH-0A3E4F7B0B86\",\"total_claims\":1,\"status\":\"processing\",\"message\":\"Batch submitted. Use GET /batch/{batch_id} to check status.\"}"
+    },
+    {
+      "endpoint": "GET /api/v19/billing/batches",
+      "name": "GET /billing/batches",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "{\"batches\":[{\"batch_id\":\"BATCH-0A3E4F7B0B86\",\"created_at\":\"2026-06-25T05:32:45.318063+00:00\",\"total_claims\":1,\"status\":\"completed\",\"success_rate\":100.0},{\"batch_id\":\"BATCH-A4A20F4EB6AF\",\"created_at\":\""
+    },
+    {
+      "endpoint": "GET /api/v19/billing/denial-patterns",
+      "name": "GET /billing/denial-patterns",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "{\"patterns\":[{\"name\":\"missing_modifier\",\"category\":\"documentation\",\"prevention\":\"Add appropriate modifier to separate services\"},{\"name\":\"bundling_violation\",\"category\":\"coding\",\"prevention\":\"Check NC"
+    },
+    {
+      "endpoint": "GET /api/v19/billing/pos-codes",
+      "name": "GET /billing/pos-codes",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "{\"pos_codes\":{\"11\":\"Office\",\"12\":\"Home\",\"21\":\"Inpatient Hospital\",\"22\":\"Outpatient Hospital\",\"23\":\"Emergency Department\",\"31\":\"Skilled Nursing Facility\",\"32\":\"Nursing Facility\",\"41\":\"Ambulance - Land\""
+    },
+    {
+      "endpoint": "GET /api/v19/reports/hipaa-compliance",
+      "name": "GET /reports/hipaa-compliance",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "endpoint": "GET /api/v19/reports/claim-summary",
+      "name": "GET /reports/claim-summary",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "endpoint": "POST /api/v19/webhooks",
+      "name": "POST /webhooks",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "{\"id\":\"wh_6ed5a1049a444b9a\",\"organization_id\":\"org-test\",\"url\":\"https://example.com/webhook\",\"events\":[\"claim.submitted\"],\"active\":true,\"created_at\":\"2026-06-25T05:32:45.910600+00:00\"}"
+    },
+    {
+      "endpoint": "GET /api/v19/webhooks",
+      "name": "GET /webhooks",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "[{\"id\":\"wh_6ed5a1049a444b9a\",\"organization_id\":\"org-test\",\"url\":\"https://example.com/webhook\",\"events\":[\"claim.submitted\"],\"active\":true,\"created_at\":\"2026-06-25T05:32:45.910600+00:00\"},{\"id\":\"wh_4120"
+    },
+    {
+      "endpoint": "POST /api/v19/tenants",
+      "name": "POST /tenants",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "{\"id\":\"org_6457c32987ee\",\"name\":\"Test Organization\",\"plan\":\"enterprise\",\"settings\":{},\"active\":true,\"created_at\":\"2026-06-25T05:32:45.947114+00:00\",\"updated_at\":\"2026-06-25T05:32:45.947114+00:00\"}"
+    },
+    {
+      "endpoint": "GET /api/v19/tenants",
+      "name": "GET /tenants",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "[{\"id\":\"org_6457c32987ee\",\"name\":\"Test Organization\",\"plan\":\"enterprise\",\"settings\":{},\"active\":true,\"created_at\":\"2026-06-25T05:32:45.947114+00:00\",\"updated_at\":\"2026-06-25T05:32:45.947114+00:00\"},{\""
+    },
+    {
+      "endpoint": "POST /api/v19/clinical-notes/parse",
+      "name": "POST /clinical-notes/parse",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "{\"encounter_type\":\"office\",\"cpt_codes\":[{\"code\":\"99213\",\"desc\":\"Office visit established low MDM\",\"confidence\":0.65,\"reasoning\":\"Low complexity indicators detected\",\"source\":\"em_engine\"}],\"icd_codes\":"
+    },
+    {
+      "endpoint": "POST /api/v19/code",
+      "name": "POST /code (V19)",
+      "expected_status": 200,
+      "got_status": 200,
+      "pass": true,
+      "detail": "{\"note_id\":\"a224f306-7b28-4a41-89e0-5f08c35187f5\",\"status\":\"FINALIZED\",\"finalized\":true,\"session_id\":\"\",\"user_id\":\"64a06f0a-704\",\"cpt_codes\":[{\"code\":\"99283\",\"description\":\"ED visit moderate complexit"
+    }
+  ],
+  "summary": {
+    "total": 25,
+    "passed": 25,
+    "failed": 0
+  }
+}
