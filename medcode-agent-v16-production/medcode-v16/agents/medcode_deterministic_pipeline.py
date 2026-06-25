@@ -2386,7 +2386,7 @@ class MedcodeDeterministicPipelineV15:
             # ── Stage 17: Audit ──────────────────────────────────────────
             try:
                 audit_data = self._audit.audit(
-                    cpt_codes=cpt_code_strs, icd_codes=icd_code_strs, note_text=note_text,
+                    cpt_codes=cpt_code_strs, facts={}, validation={},
                 ) if hasattr(self._audit, "audit") else {}
                 result.audit = audit_data if isinstance(audit_data, dict) else {}
             except Exception as e:
