@@ -1,6 +1,6 @@
 """
 MedCode AI — Shared Security Constants
-======================================
+=====================================
 Single source of truth for Role enum and PERMISSIONS dict.
 Previously duplicated between security/auth.py and security/access_control.py.
 """
@@ -9,6 +9,11 @@ from __future__ import annotations
 
 from enum import Enum
 from typing import Dict, Set
+
+
+# API Key Configuration
+API_KEY_HEADER = "X-API-Key"
+API_KEY_PREFIX = "mk_"
 
 
 class Role(str, Enum):

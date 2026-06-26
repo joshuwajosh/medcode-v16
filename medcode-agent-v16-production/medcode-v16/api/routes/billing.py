@@ -1,12 +1,12 @@
 """
 MedCode AI V19 — Billing API Routes
-=====================================
+====================================
 AAPC Module 5 & 8: Billing automation and performance analytics
 """
 from __future__ import annotations
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 router = APIRouter(prefix="/api/v19/billing", tags=["billing"])
 
@@ -26,10 +26,10 @@ class ValidateClaimRequest(BaseModel):
 
 
 @router.post("/generate-claim")
-async def generate_claim(body: GenerateClaimRequest):
+async def generate_claim(body: GenerateClaimRequest) -> Dict[str, Any]:
     """Generate a medical claim from coded data."""
     from billing.claim_engine import get_claim_generator
-    
+
     generator = get_claim_generator()
     claim = generator.generate_claim(
         cpt_codes=body.cpt_codes,
@@ -56,10 +56,10 @@ async def generate_claim(body: GenerateClaimRequest):
 
 
 @router.post("/validate-claim")
-async def validate_claim(body: ValidateClaimRequest):
+async def validate_claim(body: ValidateClaimRequest) -> Dict[str, Any]:
     """Validate a claim before submission."""
     from billing.claim_engine import get_claim_generator, get_claim_validator, get_denial_predictor
-    
+
     generator = get_claim_generator()
     claim = generator.generate_claim(
         cpt_codes=body.cpt_codes,
@@ -67,13 +67,13 @@ async def validate_claim(body: ValidateClaimRequest):
         patient_info=body.patient_info,
         provider_info=body.provider_info,
     )
-    
+
     validator = get_claim_validator()
     validation = validator.validate(claim)
-    
+
     predictor = get_denial_predictor()
     denial = predictor.predict_denial(claim, validation)
-    
+
     return {
         "claim_id": claim.claim_id,
         "validation": {
@@ -93,20 +93,20 @@ async def validate_claim(body: ValidateClaimRequest):
 
 
 @router.post("/analyze-batch")
-async def analyze_claims_batch(claims: List[Dict]):
+async def analyze_claims_batch(claims: List[Dict]) -> Dict[str, Any]:
     """Analyze a batch of claims for revenue cycle insights."""
     from billing.claim_engine import get_revenue_optimizer
-    
+
     optimizer = get_revenue_optimizer()
     analysis = optimizer.analyze_claims_batch(claims)
     return analysis
 
 
 @router.get("/denial-patterns")
-async def denial_patterns():
+async def denial_patterns() -> Dict[str, Any]:
     """Get common denial patterns and prevention strategies."""
     from billing.claim_engine import DENIAL_PATTERNS
-    
+
     return {
         "patterns": [
             {
@@ -120,7 +120,7 @@ async def denial_patterns():
 
 
 @router.get("/pos-codes")
-async def place_of_service_codes():
+async def place_of_service_codes() -> Dict[str, Any]:
     """Get place of service code descriptions."""
     from billing.claim_engine import POS_DESCRIPTIONS
     return {"pos_codes": POS_DESCRIPTIONS}
@@ -137,7 +137,7 @@ async def list_claims_batches(
     payer: Optional[str] = None,
     date_from: Optional[str] = None,
     date_to: Optional[str] = None,
-):
+) -> Dict[str, Any]:
     """List claims for the admin dashboard claims tab."""
     from billing.claim_tracker import ClaimTracker
 
@@ -171,7 +171,7 @@ class CMS1500Request(BaseModel):
 
 
 @router.post("/cms1500")
-async def generate_cms1500(body: CMS1500Request):
+async def generate_cms1500(body: CMS1500Request) -> Dict[str, Any]:
     """Generate CMS-1500 (professional claim) form data."""
     from billing.claim_engine import get_claim_generator
     from billing.cms1500_generator import CMS1500Generator
@@ -196,7 +196,7 @@ class UB04Request(BaseModel):
 
 
 @router.post("/ub04")
-async def generate_ub04(body: UB04Request):
+async def generate_ub04(body: UB04Request) -> Dict[str, Any]:
     """Generate UB-04 (institutional claim) form data."""
     from billing.claim_engine import get_claim_generator
     from billing.ub04_generator import UB04Generator
@@ -223,7 +223,7 @@ class EDI837Request(BaseModel):
 
 
 @router.post("/edi-837")
-async def generate_edi_837(body: EDI837Request):
+async def generate_edi_837(body: EDI837Request) -> Dict[str, Any]:
     """Generate EDI 837 (professional or institutional) file."""
     from billing.claim_engine import get_claim_generator
     from billing.edi_837 import EDI837Generator
@@ -253,7 +253,7 @@ class SubmitClaimRequest(BaseModel):
 
 
 @router.post("/submit-claim")
-async def submit_claim(body: SubmitClaimRequest):
+async def submit_claim(body: SubmitClaimRequest) -> Dict[str, Any]:
     """Execute full claim submission workflow: generate -> validate -> EDI -> track."""
     from billing.submission_workflow import ClaimSubmissionWorkflow
 
@@ -269,7 +269,7 @@ async def submit_claim(body: SubmitClaimRequest):
 
 
 @router.get("/claim-status/{claim_id}")
-async def get_claim_status(claim_id: str):
+async def get_claim_status(claim_id: str) -> Dict[str, Any]:
     """Check claim status and history."""
     from billing.claim_tracker import ClaimTracker
 
@@ -287,7 +287,7 @@ async def get_claim_status(claim_id: str):
 
 
 @router.get("/payer-rules/{payer}")
-async def get_payer_rules(payer: str):
+async def get_payer_rules(payer: str) -> Dict[str, Any]:
     """Get payer-specific rules and requirements."""
     from billing.payer_rules import PayerRules
 

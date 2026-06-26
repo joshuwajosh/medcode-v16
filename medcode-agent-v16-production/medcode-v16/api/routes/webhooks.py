@@ -1,13 +1,13 @@
 """
 MedCode AI V19 — Webhook API Routes
-=====================================
+====================================
 REST endpoints for managing webhook registrations and delivery history.
 """
 from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 router = APIRouter(prefix="/api/v19/webhooks", tags=["webhooks"])
 
@@ -38,7 +38,7 @@ class DeliveryResponse(BaseModel):
 
 
 @router.post("", response_model=WebhookResponse)
-async def register_webhook(body: RegisterWebhookRequest):
+async def register_webhook(body: RegisterWebhookRequest) -> WebhookResponse:
     """Register a new webhook endpoint for claim status events."""
     from billing.webhook_manager import WebhookManager
 
@@ -57,7 +57,7 @@ async def register_webhook(body: RegisterWebhookRequest):
 
 
 @router.get("", response_model=List[WebhookResponse])
-async def list_webhooks(organization_id: str):
+async def list_webhooks(organization_id: str) -> List[WebhookResponse]:
     """List all active webhooks for an organization."""
     from billing.webhook_manager import WebhookManager
 
@@ -67,7 +67,7 @@ async def list_webhooks(organization_id: str):
 
 
 @router.delete("/{webhook_id}")
-async def unregister_webhook(webhook_id: str):
+async def unregister_webhook(webhook_id: str) -> Dict[str, str]:
     """Deactivate a webhook."""
     from billing.webhook_manager import WebhookManager
 
@@ -79,7 +79,7 @@ async def unregister_webhook(webhook_id: str):
 
 
 @router.get("/{webhook_id}/deliveries", response_model=List[DeliveryResponse])
-async def get_deliveries(webhook_id: str, limit: int = 50):
+async def get_deliveries(webhook_id: str, limit: int = 50) -> List[DeliveryResponse]:
     """Get delivery history for a webhook."""
     from billing.webhook_manager import WebhookManager
 

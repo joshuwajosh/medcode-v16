@@ -1,0 +1,381 @@
+version: "3.9"
+
+# =============================================================================
+# MedCode AI V16 — Production Docker Compose
+# =============================================================================
+# Usage: docker-compose -f docker-compose.production.yml up -d
+# =============================================================================
+
+services:
+  # ── Nginx Reverse Proxy ──────────────────────────────────────────
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: medcode-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - nginx_logs:/var/log/nginx
+      - static_files:/app/api/static:ro
+    depends_on:
+      medcode:
+        condition: service_healthy
+    networks:
+      - frontend
+      - backend
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.5"
+        reservations:
+          memory: 128M
+          cpus: "0.25"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+        tag: "nginx"
+    labels:
+      - "com.medcode.service=nginx"
+      - "com.medcode.env=production"
+    stop_grace_period: 30s
+    security_opt:
+      - no-new-privileges:true
+
+  # ── MedCode Application ──────────────────────────────────────────
+  medcode:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILD_DATE=${BUILD_DATE:-$(date -u +"%Y-%m-%dT%H:%M:%SZ")}
+        - VERSION=${VERSION:-latest}
+    container_name: medcode-app
+    expose:
+      - "8000"
+    env_file: .env
+    environment:
+      - APP_HOST=0.0.0.0
+      - APP_PORT=8000
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - DATABASE_URL=postgresql://medcode:${DB_PASSWORD}@postgres:5432/medcode
+      - REDIS_URL=redis://redis:6379/0
+      - APP_ENV=production
+    volumes:
+      - ./data:/app/data
+      - medcode_logs:/app/logs
+      - static_files:/app/api/static
+      - backup_data:/app/backups
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - backend
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: "2.0"
+        reservations:
+          memory: 1G
+          cpus: "1.0"
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "10"
+        tag: "medcode"
+    labels:
+      - "com.medcode.service=app"
+      - "com.medcode.env=production"
+    stop_grace_period: 60s
+    security_opt:
+      - no-new-privileges:true
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+
+  # ── PostgreSQL ───────────────────────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: medcode-postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME:-medcode}
+      POSTGRES_USER: ${DB_USER:-medcode}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+      POSTGRES_LOG_DESTINATION: "stderr"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - postgres_logs:/var/log/postgresql
+      - postgres_backups:/backups
+    expose:
+      - "5432"
+    networks:
+      - backend
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-medcode} -d ${DB_NAME:-medcode}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "1.0"
+        reservations:
+          memory: 512M
+          cpus: "0.5"
+    shm_size: 256m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+        tag: "postgres"
+    labels:
+      - "com.medcode.service=postgres"
+      - "com.medcode.env=production"
+    stop_grace_period: 30s
+    security_opt:
+      - no-new-privileges:true
+    command: >
+      postgres
+      -c shared_buffers=256MB
+      -c effective_cache_size=768MB
+      -c maintenance_work_mem=128MB
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=16MB
+      -c default_statistics_target=100
+      -c random_page_cost=1.1
+      -c effective_io_concurrency=200
+      -c work_mem=4MB
+      -c huge_pages=try
+      -c min_wal_size=1GB
+      -c max_wal_size=4GB
+
+  # ── Redis ────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: medcode-redis
+    command: >
+      redis-server
+      --maxmemory ${REDIS_MAX_MEMORY:-256mb}
+      --maxmemory-policy ${REDIS_EVICTION_POLICY:-allkeys-lru}
+      --appendonly yes
+      --appendfsync everysec
+      --requirepass ${REDIS_PASSWORD:?Set REDIS_PASSWORD in .env}
+      --tcp-backlog 511
+      --timeout 300
+    volumes:
+      - redis_data:/data
+      - redis_logs:/var/log/redis
+    expose:
+      - "6379"
+    networks:
+      - backend
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:?Set REDIS_PASSWORD in .env}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "0.5"
+        reservations:
+          memory: 256M
+          cpus: "0.25"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+        tag: "redis"
+    labels:
+      - "com.medcode.service=redis"
+      - "com.medcode.env=production"
+    stop_grace_period: 30s
+    security_opt:
+      - no-new-privileges:true
+
+  # ── Prometheus (Optional Monitoring) ─────────────────────────────
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: medcode-prometheus
+    profiles:
+      - monitoring
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring
+      - backend
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "0.5"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+        tag: "prometheus"
+    labels:
+      - "com.medcode.service=prometheus"
+      - "com.medcode.env=production"
+
+  # ── Grafana (Optional Monitoring Dashboard) ──────────────────────
+  grafana:
+    image: grafana/grafana:latest
+    container_name: medcode-grafana
+    profiles:
+      - monitoring
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana:/etc/grafana/provisioning:ro
+    ports:
+      - "3000:3000"
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    networks:
+      - monitoring
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.5"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+        tag: "grafana"
+    labels:
+      - "com.medcode.service=grafana"
+      - "com.medcode.env=production"
+
+# ── Networks ───────────────────────────────────────────────────────
+networks:
+  frontend:
+    driver: bridge
+    name: medcode-frontend
+  backend:
+    driver: bridge
+    internal: true
+    name: medcode-backend
+  monitoring:
+    driver: bridge
+    name: medcode-monitoring
+    internal: true
+
+# ── Volumes ────────────────────────────────────────────────────────
+volumes:
+  pgdata:
+    driver: local
+    name: medcode-pgdata
+    labels:
+      com.medcode.type: database
+      com.medcode.backup: "true"
+  redis_data:
+    driver: local
+    name: medcode-redis-data
+    labels:
+      com.medcode.type: cache
+      com.medcode.backup: "true"
+  medcode_logs:
+    driver: local
+    name: medcode-app-logs
+    labels:
+      com.medcode.type: logs
+  nginx_logs:
+    driver: local
+    name: medcode-nginx-logs
+    labels:
+      com.medcode.type: logs
+  static_files:
+    driver: local
+    name: medcode-static
+    labels:
+      com.medcode.type: static
+  postgres_logs:
+    driver: local
+    name: medcode-postgres-logs
+    labels:
+      com.medcode.type: logs
+  redis_logs:
+    driver: local
+    name: medcode-redis-logs
+    labels:
+      com.medcode.type: logs
+  postgres_backups:
+    driver: local
+    name: medcode-postgres-backups
+    labels:
+      com.medcode.type: backup
+      com.medcode.backup: "true"
+  backup_data:
+    driver: local
+    name: medcode-backups
+    labels:
+      com.medcode.type: backup
+      com.medcode.backup: "true"
+  prometheus_data:
+    driver: local
+    name: medcode-prometheus-data
+    labels:
+      com.medcode.type: monitoring
+  grafana_data:
+    driver: local
+    name: medcode-grafana-data
+    labels:
+      com.medcode.type: monitoring

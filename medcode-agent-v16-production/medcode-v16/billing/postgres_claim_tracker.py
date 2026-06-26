@@ -104,6 +104,7 @@ class PostgresClaimTracker:
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS claims (
                     claim_id VARCHAR(64) PRIMARY KEY,
+                    organization_id TEXT DEFAULT '',
                     patient_name TEXT,
                     payer_name TEXT,
                     provider_npi TEXT,
@@ -147,6 +148,7 @@ class PostgresClaimTracker:
         provider_npi: str = "",
         total_charges: float = 0.0,
         claim_type: str = "professional",
+        organization_id: str = "",
     ) -> Dict[str, Any]:
         """
         Submit a new claim for tracking.
@@ -159,10 +161,11 @@ class PostgresClaimTracker:
             cur.execute(
                 """
                 INSERT INTO claims
-                (claim_id, patient_name, payer_name, provider_npi,
+                (claim_id, organization_id, patient_name, payer_name, provider_npi,
                  total_charges, status, claim_type, created_at, updated_at)
-                VALUES (%s, %s, %s, %s, %s, 'draft', %s, %s, %s)
+                VALUES (%s, %s, %s, %s, %s, %s, 'draft', %s, %s, %s)
                 ON CONFLICT (claim_id) DO UPDATE SET
+                    organization_id = EXCLUDED.organization_id,
                     patient_name = EXCLUDED.patient_name,
                     payer_name = EXCLUDED.payer_name,
                     provider_npi = EXCLUDED.provider_npi,
@@ -171,7 +174,7 @@ class PostgresClaimTracker:
                     claim_type = EXCLUDED.claim_type,
                     updated_at = EXCLUDED.updated_at
                 """,
-                (claim_id, patient_name, payer_name, provider_npi,
+                (claim_id, organization_id, patient_name, payer_name, provider_npi,
                  total_charges, claim_type, now, now),
             )
             cur.execute(
@@ -189,6 +192,7 @@ class PostgresClaimTracker:
         claim_id: str,
         new_status: str,
         notes: str = "",
+        organization_id: str = "",
     ) -> Dict[str, Any]:
         """
         Update claim status with validation of allowed transitions.
@@ -231,6 +235,13 @@ class PostgresClaimTracker:
                 """,
                 (claim_id, old_status, new_status, notes, now),
             )
+        self._trigger_webhook(new_status, {
+            "claim_id": claim_id,
+            "old_status": old_status,
+            "new_status": new_status,
+            "organization_id": organization_id or "",
+            "updated_at": now,
+        })
         return {
             "claim_id": claim_id,
             "old_status": old_status,
@@ -316,6 +327,7 @@ class PostgresClaimTracker:
         self,
         status: Optional[str] = None,
         payer_name: Optional[str] = None,
+        organization_id: Optional[str] = None,
         limit: int = 100,
     ) -> List[Dict[str, Any]]:
         """List claims with optional filters."""
@@ -324,6 +336,9 @@ class PostgresClaimTracker:
             query = "SELECT * FROM claims WHERE 1=1"
             params = []
 
+            if organization_id:
+                query += " AND organization_id = %s"
+                params.append(organization_id)
             if status:
                 query += " AND status = %s"
                 params.append(status)
@@ -346,6 +361,25 @@ class PostgresClaimTracker:
             cur.execute("SELECT status, COUNT(*) FROM claims GROUP BY status")
             rows = cur.fetchall()
             return {row[0]: row[1] for row in rows}
+
+    def _trigger_webhook(self, new_status: str, payload: dict):
+        """Trigger webhook event for claim status changes."""
+        event_map = {
+            "submitted": "claim.submitted",
+            "acknowledged": "claim.acknowledged",
+            "paid": "claim.paid",
+            "denied": "claim.denied",
+            "appealed": "claim.appealed",
+        }
+        event_type = event_map.get(new_status)
+        if not event_type:
+            return
+        try:
+            from billing.webhook_manager import WebhookManager
+            manager = WebhookManager()
+            manager.trigger_event(event_type, payload)
+        except Exception:
+            pass
 
     def close(self):
         """Close the connection pool."""
