@@ -58,6 +58,16 @@ async def startup():
 
     # Initialize database
     app.state.db = Database()
+
+    # Create default admin user if none exists
+    try:
+        from security.auth import get_auth_service, Role
+        auth = get_auth_service()
+        if not auth.list_users():
+            auth.create_user("admin", "admin123", role=Role.ADMIN)
+            print("  Default admin user created")
+    except Exception as e:
+        print("  Warning: Could not create admin user: " + str(e))
     app.state.start_time = time.strftime("%Y-%m-%d %H:%M:%S")
 
     # Initialize V12 deterministic orchestrator

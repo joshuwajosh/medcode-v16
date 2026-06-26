@@ -20,6 +20,13 @@ PUBLIC_PATHS = {
     "/api/v19/dashboard/stats",
     "/api/v19/dashboard/activity",
     "/api/v19/dashboard/charts",
+    "/api/v19/compliance/stats",
+    "/api/session",
+    "/api/history",
+    "/api/v19/billing/claim-status",
+    "/api/v19/billing/pos-codes",
+    "/api/v19/billing/denial-patterns",
+    "/api/v19/billing/batches",
     "/api/v19/auth/stats",
     "/",
     "/health",
@@ -61,8 +68,10 @@ class AuthenticationMiddleware(BaseHTTPMiddleware):
             self._public_paths.update(public_paths)
 
     def _is_public_path(self, path: str) -> bool:
+        # Strip query parameters and fragment
+        clean_path = path.split("?")[0].split("#")[0]
         for public in self._public_paths:
-            if path == public or path.startswith(public + "/"):
+            if clean_path == public or clean_path.startswith(public + "/"):
                 return True
         for prefix in PUBLIC_PREFIXES:
             if path.startswith(prefix):
