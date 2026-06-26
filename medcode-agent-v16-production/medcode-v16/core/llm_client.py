@@ -13,6 +13,7 @@ Features:
 """
 
 import json
+import logging
 import os
 import random
 import re
@@ -20,6 +21,8 @@ import time
 from typing import Optional, Tuple
 
 import requests
+
+logger = logging.getLogger('medcode.llm')
 
 from core.config import (
     DEEPSEEK_API_KEY, DEEPSEEK_URL, DEEPSEEK_MODEL,
@@ -77,7 +80,7 @@ class LLMClient:
             active.append("Mistral")
         if OPENROUTER_KEY:
             active.append("OpenRouter")
-        print(f"  [LLM] Providers: {', '.join(active) if active else 'NONE!'}")
+        logger.info("Providers: %s", ', '.join(active) if active else 'NONE!')
 
     def call_llm(
         self,
@@ -109,11 +112,11 @@ class LLMClient:
                     self._stats["provider_used"] = name
                     return result
                 msg = "rate limited" if result == "rate_limited" else (result[:50] if result else "empty")
-                print(f"  [LLM] {name} failed ({msg})")
+                logger.warning("%s failed (%s)", name, msg)
             except Exception as e:
-                print(f"  [LLM] {name} exception: {str(e)[:70]}")
+                logger.error("%s exception: %s", name, str(e)[:70])
 
-        print("  [LLM] All providers exhausted.")
+        logger.error("All providers exhausted.")
         return ""
 
     def call_llm_json(

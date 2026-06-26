@@ -8,11 +8,14 @@ Wrapper around the OMOPHub SDK for:
   - Code validation
 """
 
+import logging
 import os
 from dataclasses import dataclass, field
 from typing import Optional
 
 from core.config import OMOPHUB_API_KEY, OMOPHUB_TIMEOUT
+
+logger = logging.getLogger('medcode.omop')
 from core.models import CodeCandidate
 
 
@@ -100,12 +103,12 @@ class OMOPClient:
         try:
             from omophub import OMOPHubClient
             self._sdk = OMOPHubClient(api_key=self.api_key)
-            print("  [OMOP] SDK initialized")
+            logger.info("SDK initialized")
         except ImportError:
-            print("  [OMOP] WARNING: omophub SDK not installed. Using REST fallback.")
+            logger.warning("omophub SDK not installed. Using REST fallback.")
             self._sdk = None
         except Exception as e:
-            print(f"  [OMOP] WARNING: SDK init failed: {e}")
+            logger.warning("SDK init failed: %s", e)
             self._sdk = None
 
     def semantic_search(
@@ -141,7 +144,7 @@ class OMOPClient:
                 if sr.results:
                     return sr
             except Exception as e:
-                print(f"  [OMOP] SDK search error: {e}")
+                logger.error("SDK search error: %s", e)
 
         # Try local SQLite OMOP vocabulary search (Tier 2)
         local_result = self._local_search(query, vocabulary_ids, limit)
@@ -160,7 +163,7 @@ class OMOPClient:
                 if results:
                     return results
             except Exception as e:
-                print(f"  [OMOP] get_parents error: {e}")
+                logger.error("get_parents error: %s", e)
         rest_result = self._rest_hierarchy(vocabulary_id, code, "parents")
         if rest_result:
             return rest_result
@@ -182,7 +185,7 @@ class OMOPClient:
                 if results:
                     return results
             except Exception as e:
-                print(f"  [OMOP] get_children error: {e}")
+                logger.error("get_children error: %s", e)
         rest_result = self._rest_hierarchy(vocabulary_id, code, "children")
         if rest_result:
             return rest_result
@@ -252,7 +255,7 @@ class OMOPClient:
                                                         vocabulary_id=tvocab, similarity_score=1.0, confidence="HIGH"))
                     return mapped
             except Exception as e:
-                print(f"  [OMOP] map_code error: {e}")
+                logger.error("map_code error: %s", e)
         return []
 
     def resolve_fhir_coding(self, system: str, code: str) -> Optional[ConceptResult]:
@@ -279,7 +282,7 @@ class OMOPClient:
                         confidence="HIGH",
                     )
             except Exception as e:
-                print(f"  [OMOP] resolve_fhir error: {e}")
+                logger.error("resolve_fhir error: %s", e)
         return None
 
     def suggest(self, prefix: str, limit: int = 8) -> list[dict]:
@@ -300,7 +303,7 @@ class OMOPClient:
                         })
                 return result
             except Exception as e:
-                print(f"  [OMOP] suggest error: {e}")
+                logger.error("suggest error: %s", e)
         from search.icd10_database import search
         raw = search(prefix, limit=limit)
         return [{
@@ -377,7 +380,7 @@ class OMOPClient:
                 data = resp.json()
                 return self._parse_search_response(data, query)
         except Exception as e:
-            print(f"  [OMOP] REST search error: {e}")
+            logger.error("REST search error: %s", e)
 
         return result
 
@@ -392,7 +395,7 @@ class OMOPClient:
             if resp.status_code == 200:
                 return self._parse_hierarchy_response(resp.json())
         except Exception as e:
-            print(f"  [OMOP] REST {direction} error: {e}")
+            logger.error("REST %s error: %s", direction, e)
         return []
 
     def _local_search(self, query: str, vocabulary_ids: list[str], limit: int) -> SearchResult:
@@ -445,7 +448,7 @@ class OMOPClient:
                         ))
                     if result.results:
                         result.total = len(result.results)
-                        print(f"  [OMOP] SQLite FTS: {len(result.results)} results for '{query}'")
+                        logger.debug("SQLite FTS: %d results for '%s'", len(result.results), query)
                         conn.close()
                         return result
                 except Exception:
@@ -482,7 +485,7 @@ class OMOPClient:
                 result.results.sort(key=lambda r: r.similarity_score, reverse=True)
                 result.results = result.results[:limit]
                 result.total = len(result.results)
-                print(f"  [OMOP] SQLite LIKE: {len(result.results)} results for '{query}'")
+                logger.debug("SQLite LIKE: %d results for '%s'", len(result.results), query)
                 conn.close()
                 return result
 
@@ -534,11 +537,11 @@ class OMOPClient:
                 result.results.sort(key=lambda r: r.similarity_score, reverse=True)
                 result.results = result.results[:limit]
                 result.total = len(result.results)
-                print(f"  [OMOP] SQLite word-match: {len(result.results)} results for '{query}'")
+                logger.debug("SQLite word-match: %d results for '%s'", len(result.results), query)
                 return result
 
         except Exception as e:
-            print(f"  [OMOP] SQLite search error: {e}")
+            logger.error("SQLite search error: %s", e)
             try:
                 conn.close()
             except Exception:
@@ -553,8 +556,8 @@ class OMOPClient:
 
         result.total = len(result.results)
         if result.results:
-            print(f"  [OMOP] Static DB fallback: {len(result.results)} results for '{query}'")
+            logger.debug("Static DB fallback: %d results for '%s'", len(result.results), query)
         else:
-            print(f"  [OMOP] Static DB: no results for '{query}'")
+            logger.debug("Static DB: no results for '%s'", query)
 
         return result

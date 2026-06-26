@@ -19,10 +19,13 @@ Usage:
     python main.py              # runs via uvicorn programmatically
 """
 
+import logging
 import sys
 import os
 import time
 import uvicorn
+
+logger = logging.getLogger('medcode.main')
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -65,9 +68,9 @@ async def startup():
         auth = get_auth_service()
         if not auth.list_users():
             auth.create_user("admin", "admin123", role=Role.ADMIN)
-            print("  Default admin user created")
+            logger.info("Default admin user created")
     except Exception as e:
-        print("  Warning: Could not create admin user: " + str(e))
+        logger.warning("Could not create admin user: %s", e)
     app.state.start_time = time.strftime("%Y-%m-%d %H:%M:%S")
 
     # Initialize V12 deterministic orchestrator
